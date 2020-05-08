@@ -1,6 +1,9 @@
 # Custom
 *.toc
 
+# Database
+whoosh_index/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -64,6 +67,7 @@ coverage.xml
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+migrations/
 
 # Flask stuff:
 instance/

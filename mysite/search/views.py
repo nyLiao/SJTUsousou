@@ -8,9 +8,9 @@ def hello(request):
     return render(request, 'hello.html')
 
 
-class SearchView(SearchView):
-    template_name = 'search.html'
-
-    def get(self, request, *args, **kwargs):
-        query = request.GET.get('q')
-        return super().get(request, *args, **kwargs)
+# class mySearchView(SearchView):
+#     template_name = 'search/search.html'
+#
+#     def get(self, request, *args, **kwargs):
+#         query = request.GET.get('q')
+#         return super().get(request, *args, **kwargs)

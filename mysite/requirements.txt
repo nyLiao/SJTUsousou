@@ -1,3 +1,5 @@
 django-haystack==3.0
 whoosh
 jieba
+scrapy
+scrapy_djangoitem
