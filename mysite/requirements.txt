@@ -1,0 +1,3 @@
+django-haystack==3.0
+whoosh
+jieba
