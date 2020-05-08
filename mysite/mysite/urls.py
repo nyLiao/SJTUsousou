@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import include
 
 from search import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', views.hello),
-    path('search/', views.SearchView.as_view(), name='search')
+    # path('search/', views.mySearchView.as_view(), name='search')
+    path('search/', include('haystack.urls')),
 ]
