@@ -94,6 +94,8 @@ DATABASES = {
 }
 '''
 
+// 请在终端使用端口转发：ssh -L 8025:localhost:3306 root@39.100.88.210，然后才能连接到数据库。ssh密码可以问GJM要
+// 或更改此处配置
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
