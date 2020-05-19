@@ -37,6 +37,8 @@ urlpatterns = [
     path('reset/', toreset),
     path('single/', tosingle),
     path('search/', SearchView(), name='haystack_search'),
+    path('contactsuccess/', contactsuccess),
+    path('contactfail/', contactfail),
     url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
     url(r'^media/(?P<path>.*)$', static.serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
     url(r'^favicon\.ico$', RedirectView.as_view(url=r'static/images/favicon.ico')),
