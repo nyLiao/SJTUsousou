@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+SJTU soso
+{% endblock %}
+{% load highlight %}
+{% block content %}
+<section class="search">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <aside>
+                    <h2 class="aside-title">Search</h2>
+                    <div class="aside-body">
+                        <p>Search with other keywords or use filters for more accurate results.</p>
+                        <form class="search" autocomplete="off" method="get" action="{% url 'haystack_search' %}">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" name="q" class="form-control" placeholder="Type something ...">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="ion-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </aside>
+                <aside>
+                    <h2 class="aside-title">Filter</h2>
+                    <div class="aside-body">
+                        <form class="checkbox-group">
+                            <div class="group-title">Date</div>
+                            <div class="form-group">
+                                <label><input type="radio" name="date" checked> Anytime</label>
+                            </div>
+                            <div class="form-group">
+                                <label><input type="radio" name="date"> Today</label>
+                            </div>
+                            <div class="form-group">
+                                <label><input type="radio" name="date"> Last Week</label>
+                            </div>
+                            <div class="form-group">
+                                <label><input type="radio" name="date"> Last Month</label>
+                            </div>
+                            <br>
+                            <div class="group-title">Categories</div>
+                            <div class="form-group">
+                                <label><input type="checkbox" name="category" checked> All Categories</label>
+                            </div>
+                            <div class="form-group">
+                                <label><input type="checkbox" name="category"> Lifestyle</label>
+                            </div>
+                            <div class="form-group">
+                                <label><input type="checkbox" name="category"> Travel</label>
+                            </div>
+                            <div class="form-group">
+                                <label><input type="checkbox" name="category"> Computer</label>
+                            </div>
+                            <div class="form-group">
+                                <label><input type="checkbox" name="category"> Film</label>
+                            </div>
+                            <div class="form-group">
+                                <label><input type="checkbox" name="category"> Sport</label>
+                            </div>
+                        </form>
+                    </div>
+                </aside>
+            </div>
+            <div class="col-md-9">
+                <div class="nav-tabs-group">
+                    <ul class="nav-tabs-list">
+                        <li class="active"><a href="#">All</a></li>
+                        <li><a href="#">Latest</a></li>
+                        <li><a href="#">Popular</a></li>
+                        <li><a href="#">Trending</a></li>
+                        <li><a href="#">Videos</a></li>
+                    </ul>
+                    <div class="nav-tabs-right">
+                        <select class="form-control">
+                            <option>Limit</option>
+                            <option>10</option>
+                            <option>20</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="search-result">
+                    Search results for keyword  "{{ query }}"  found.
+                </div>
+                <div class="row">
+                    {% if query %}
+                        {% for sitepage in page.object_list %}
+                        <article class="col-md-12 article-list">
+                            <div class="inner">
+                                <figure>
+                                    <a href="/single/">
+                                        <img src="/static/images/news/img09.jpg">
+                                    </a>
+                                </figure>
+                                <div class="details">
+                                    <div class="detail">
+                                        <div class="category">
+                                            <a href="#">Healthy</a>
+                                        </div>
+                                        <time>  </time>
+                                    </div>
+                                    <h1><a href="{{ sitepage.object.url }}" target="_blank">{{ sitepage.object.title }}</a></h1>
+                                    <p>
+                                        {% highlight sitepage.object.text with query %}
+                                    </p>
+                                    <footer>
+                                        <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>783</div></a>
+                                        <a class="btn btn-primary more" href="{{ sitepage.object.url }}" target="_blank">
+                                            <div>More</div>
+                                            <div><i class="ion-ios-arrow-thin-right"></i></div>
+                                        </a>
+                                    </footer>
+                                </div>
+                            </div>
+                        </article>
+                        {% empty %}
+                        <div class="blog">
+                            <h3>未搜索到相关网页</h3>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+          <div class="col-md-12 text-center">
+            <ul class="pagination">
+            {% if page.has_previous %}
+                <li class="prev"><a href="?q={{ query }}&page={{ page.previous_page_number }}"><i class="ion-ios-arrow-left"></i></a></li>
+            {% else %}
+                <li class="prev"><a href="#"><i class="ion-ios-arrow-left"></i></a></li>
+            {% endif %}
+              <li class="active"><a href="#">{{ page.number }}</a></li>
+            {% if page.has_next %}
+                <li class="next"><a href="?q={{ query }}&page={{ page.next_page_number }}"><i class="ion-ios-arrow-right"></i></a></li>
+            {% else %}
+                <li class="next"><a href="#"><i class="ion-ios-arrow-right"></i></a></li>
+            {% endif %}
+            </ul>
+            <div class="pagination-help-text">
+                Search Page {{ page.number }} of {{ page.paginator.num_pages }}
+            </div>
+          </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    span.highlighted {
+        color: red;
+    }
+</style>
+{% endblock %}
