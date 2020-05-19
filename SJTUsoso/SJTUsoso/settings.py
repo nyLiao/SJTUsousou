@@ -94,6 +94,8 @@ DATABASES = {
 }
 '''
 
+// 请在终端使用端口转发：ssh -L 8025:localhost:3306 root@39.100.88.210，然后才能连接到数据库。ssh密码可以问GJM要
+// 或更改此处配置
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -224,6 +226,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.163.com'  # 如果是 163 改成 smtp.163.com
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'mekakuactor@163.com'  # 在这里填入您的QQ邮箱账号
-EMAIL_HOST_PASSWORD = 'XXFEOIHNFEURGJWV'  # 请在这里填上您自己邮箱的授权码
+EMAIL_HOST_PASSWORD = ''  # 请在这里填上您自己邮箱的授权码
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_USE_SSL = True
