@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404, redirect, HttpResponse
-from blog.models import *
+from .models import *
 import json
 from django.core.mail import send_mail
 from SJTUsoso import settings
@@ -26,32 +26,14 @@ def contactsuccess(req):
 def contactfail(req):
     return render(req, 'contact.html')
 
-def tohome(req):
-    return render(req, 'index.html')
-
-def tologin(req):
-    return render(req, 'login.html')
-
-def toregister(req):
-    return render(req, 'register.html')
-
 def tocontact(req):
     return render(req, 'contact.html')
 
 def tocategory(req):
     return render(req, 'category.html')
 
-def toforgot(req):
-    return render(req, 'forgot.html')
-
-def toreset(req):
-    return render(req, 'reset.html')
-
 def tosingle(req):
     return render(req, 'single.html')
-
-def tosearch(req):
-    return render(req, 'search.html')
 
 def to403(req):
     return render(req, '403.html')
@@ -64,9 +46,6 @@ def to500(req):
 
 def to503(req):
     return render(req, '503.html')
-
-def toHome(req):
-    return render(req, 'index.html')
 
 def topage(req):
     return render(req, 'page.html')

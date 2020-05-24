@@ -44,14 +44,14 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'mdeditor',
-
+    'captcha',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -94,16 +94,18 @@ DATABASES = {
 }
 '''
 
-// 请在终端使用端口转发：ssh -L 8025:localhost:3306 root@39.100.88.210，然后才能连接到数据库。ssh密码可以问GJM要
-// 或更改此处配置
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'soft',
-        'USER':'soft',
-        'PASSWORD':'soft',
-        'HOST': '127.0.0.1',
-        'PORT': '8025',
+        'NAME': 'SJTUsoso',
+        'USER':'soso',
+        'PASSWORD':'SJTUsoso',
+        'HOST': '39.100.88.210',
+        'PORT': '3306',
+        'TEST': {
+            'CHARSET': 'utf8',
+            'COLLATION': 'utf8_general_ci'
+        }
     }
 }
 
@@ -143,7 +145,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
 TIME_ZONE = 'Asia/Shanghai'
 
@@ -226,6 +228,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.163.com'  # 如果是 163 改成 smtp.163.com
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'mekakuactor@163.com'  # 在这里填入您的QQ邮箱账号
-EMAIL_HOST_PASSWORD = ''  # 请在这里填上您自己邮箱的授权码
+EMAIL_HOST_PASSWORD = 'XXFEOIHNFEURGJWV'  # 请在这里填上您自己邮箱的授权码
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_USE_SSL = True

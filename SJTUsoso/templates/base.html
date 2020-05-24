@@ -43,6 +43,7 @@
 						</div>
 						<div class="col-md-6 col-sm-12">
 							<form class="search" autocomplete="off" method="get" action="{% url 'haystack_search' %}">
+                                {% csrf_token %}
 								<div class="form-group">
                                         <div class="input-group">
                                             <input type="text" name="q" class="form-control" placeholder="Type something here">
@@ -65,8 +66,13 @@
 						</div>
 						<div class="col-md-3 col-sm-12 text-right">
 							<ul class="nav-icons">
-								<li><a href="/register/"><i class="ion-person-add"></i><div>Register</div></a></li>
-								<li><a href="/login/"><i class="ion-person"></i><div>Login</div></a></li>
+                                {% if request.session.is_login %}
+                                    <li class="ion-person"><a href="#">当前在线：{{ request.session.user_name }}</a></li>
+                                    <li class="ion-person"><a href="/logout/">登出</a></li>
+                                {% else %}
+                                    <li class="ion-person"><a href="/login/">登录</a></li>
+                                    <li class="ion-person-add"><a href="/register/">注册</a></li>
+                                {% endif %}
 							</ul>
 						</div>
 					</div>
@@ -92,75 +98,30 @@
 							<li class="for-tablet nav-title"><a>Menu</a></li>
 							<li class="for-tablet"><a href="/login/">Login</a></li>
 							<li class="for-tablet"><a href="/register/">Register</a></li>
-							<li><a href="/category/">Standard</a></li>
+							<li><a href="{% url 'home'%}">主页</a></li>
 							<li class="dropdown magz-dropdown">
-								<a href="/category/">Pages <i class="ion-ios-arrow-right"></i></a>
+								<a href="/category/">导航 <i class="ion-ios-arrow-right"></i></a>
 								<ul class="dropdown-menu">
-									<li><a href="{% url 'home'%}">Home</a></li>
-									<li class="dropdown magz-dropdown">
-										<a href="#">Authentication <i class="ion-ios-arrow-right"></i></a>
-										<ul class="dropdown-menu">
-											<li><a href="/login/">Login</a></li>
-											<li><a href="/register/">Register</a></li>
-											<li><a href="/forgot/">Forgot Password</a></li>
-											<li><a href="/reset/">Reset Password</a></li>
-										</ul>
-									</li>
-									<li><a href="/category/">Category</a></li>
-									<li><a href="/single/">Single</a></li>
-									<li><a href="/page/">Page</a></li>
-									<li><a href="/search/">Search</a></li>
-									<li><a href="/contact/">Contact</a></li>
-									<li class="dropdown magz-dropdown">
-										<a href="#">Error <i class="ion-ios-arrow-right"></i></a>
-										<ul class="dropdown-menu">
-											<li><a href="/403/">403</a></li>
-											<li><a href="/404/">404</a></li>
-											<li><a href="/500/">500</a></li>
-											<li><a href="/503/">503</a></li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-							<li class="dropdown magz-dropdown"><a href="#">Dropdown <i class="ion-ios-arrow-right"></i></a>
-								<ul class="dropdown-menu">
-									<li><a href="/category/">Internet</a></li>
-									<li class="dropdown magz-dropdown"><a href="/category/">Troubleshoot <i class="ion-ios-arrow-right"></i></a>
-										<ul class="dropdown-menu">
-											<li><a href="/category/">Software</a></li>
-											<li class="dropdown magz-dropdown"><a href="/category/">Hardware <i class="ion-ios-arrow-right"></i></a>
+									<li><a href="{% url 'home'%}">主页</a></li>
+                                    <li><a href="/search/">Soso搜索</a></li>
+									<li class="dropdown magz-dropdown"><a href="/category/">Soso博客 <i class="ion-ios-arrow-right"></i></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="/category/">博客主页</a></li>
+                                            <li class="dropdown magz-dropdown"><a href="/category/">博客类型 <i class="ion-ios-arrow-right"></i></a>
 												<ul class="dropdown-menu">
-													<li><a href="/category/">Main Board</a></li>
-													<li><a href="/category/">RAM</a></li>
-													<li><a href="/category/">Power Supply</a></li>
+													{% for blog_type in blog_types %}
+                                                        <li><a href="?typename={{blog_type.type_name}}">{{ blog_type.type_name }}</a></li>
+                                                      {% empty %}
+                                                        <li><a href="#">No blog type now.</a></li>
+                                                      {% endfor %}
 												</ul>
 											</li>
-											<li><a href="/category/">Brainware</a>
-										</ul>
-									</li>
-									<li><a href="/category/">Office</a></li>
-									<li class="dropdown magz-dropdown"><a href="#">Programming <i class="ion-ios-arrow-right"></i></a>
-										<ul class="dropdown-menu">
-											<li><a href="/category/">Web</a></li>
-											<li class="dropdown magz-dropdown"><a href="/category/">Mobile <i class="ion-ios-arrow-right"></i></a>
-												<ul class="dropdown-menu">
-													<li class="dropdown magz-dropdown"><a href="/category/">Hybrid <i class="ion-ios-arrow-right"></i></a>
-														<ul class="dropdown-menu">
-															<li><a href="#">Ionic Framework 1</a></li>
-															<li><a href="#">Ionic Framework 2</a></li>
-															<li><a href="#">Ionic Framework 3</a></li>
-															<li><a href="#">Framework 7</a></li>
-														</ul>
-													</li>
-													<li><a href="/category/">Native</a></li>
-												</ul>
-											</li>
-											<li><a href="/category/">Desktop</a></li>
-										</ul>
-									</li>
+                                        </ul>
+                                    </li>
+									<li><a href="/contact/">联系我们</a></li>
 								</ul>
 							</li>
-							<li class="dropdown magz-dropdown magz-dropdown-megamenu"><a href="#">Mega Menu <i class="ion-ios-arrow-right"></i> <div class="badge">Hot</div></a>
+							<li class="dropdown magz-dropdown magz-dropdown-megamenu"><a href="#">推荐 <i class="ion-ios-arrow-right"></i> <div class="badge">Hot</div></a>
 								<div class="dropdown-menu megamenu">
 									<div class="megamenu-inner">
 										<div class="row">
@@ -287,15 +248,20 @@
 									</div>
 								</div>
 							</li>
-							<li class="dropdown magz-dropdown"><a href="#">Dropdown Icons <i class="ion-ios-arrow-right"></i></a>
+							<li class="dropdown magz-dropdown"><a href="#">账户 <i class="ion-ios-arrow-right"></i></a>
 								<ul class="dropdown-menu">
-									<li><a href="#"><i class="icon ion-person"></i> My Account</a></li>
-									<li><a href="#"><i class="icon ion-heart"></i> Favorite</a></li>
-									<li><a href="#"><i class="icon ion-chatbox"></i> Comments</a></li>
-									<li><a href="#"><i class="icon ion-key"></i> Change Password</a></li>
-									<li><a href="#"><i class="icon ion-settings"></i> Settings</a></li>
-									<li class="divider"></li>
-									<li><a href="#"><i class="icon ion-log-out"></i> Logout</a></li>
+                                    {% if request.session.is_login %}
+                                        <li><a href="#"><i class="icon ion-person"></i>我的账户</a></li>
+                                        <li><a href="#"><i class="icon ion-heart"></i>我的收藏</a></li>
+                                        <li><a href="#"><i class="icon ion-ios-paper"></i>我的博客</a></li>
+                                        <li><a href="#"><i class="icon ion-key"></i>修改密码</a></li>
+                                        <li><a href="#"><i class="icon ion-settings"></i>账户设定</a></li>
+                                        <li class="divider"></li>
+									<li><a href="/logout/"><i class="icon ion-log-out"></i>登出</a></li>
+                                    {% else %}
+                                        <li><a href="/login/"><i class="icon ion-person"></i>登陆</a></li>
+                                        <li><a href="/register/"><i class="icon ion-person-add"></i>注册</a></li>
+                                    {% endif %}
 								</ul>
 							</li>
 						</ul>

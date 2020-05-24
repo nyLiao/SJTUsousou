@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}
-SJTU soso
+Soso register
 {% endblock %}
 
 {% block content %}
@@ -10,29 +10,38 @@ SJTU soso
 				<div class="box-wrapper">				
 					<div class="box box-border">
 						<div class="box-body">
-							<h4>Register</h4>
-							<form>
-								<div class="form-group">
-									<label>Name</label>
-									<input type="text" name="name" class="form-control">
-								</div>
-								<div class="form-group">
-									<label>Email</label>
-									<input type="email" name="email" class="form-control">
-								</div>
-								<div class="form-group">
-									<label>Username</label>
-									<input type="text" name="username" class="form-control">
-								</div>
-								<div class="form-group">
-									<label class="fw">Password</label>
-									<input type="password" name="password" class="form-control">
-								</div>
-								<div class="form-group text-right">
-									<button class="btn btn-primary btn-block">Register</button>
+							<h4>Soso 注册</h4>
+							<form class='form-register' action="/register/" method="post">
+                                  {% csrf_token %}
+                                  <div class="form-group">
+                                      {{ register_form.username.label_tag }}
+                                      {{ register_form.username}}
+                                  </div>
+                                  <div class="form-group">
+                                      {{ register_form.password1.label_tag }}
+                                      {{ register_form.password1 }}
+                                  </div>
+                                  <div class="form-group">
+                                      {{ register_form.password2.label_tag }}
+                                      {{ register_form.password2 }}
+                                  </div>
+                                  <div class="form-group">
+                                      {{ register_form.email.label_tag }}
+                                      {{ register_form.email }}
+                                  </div>
+                                  <div class="form-group">
+                                      {{ register_form.captcha.errors }}
+                                      {{ register_form.captcha.label_tag }}
+                                      {{ register_form.captcha }}
+                                  </div>
+                                  {% if message %}
+                                      <div class="alert alert-warning">{{ message }}</div>
+                                  {% endif %}
+                                <div class="form-group text-right">
+									<button class="btn btn-primary btn-block">注册</button>
 								</div>
 								<div class="form-group text-center">
-									<span class="text-muted">Already have an account?</span> <a href="login.html">Login</a>
+									<span class="text-muted">已经有一个搜搜账户?</span> <a href="/login/">登陆</a>
 								</div>
 							</form>
 						</div>

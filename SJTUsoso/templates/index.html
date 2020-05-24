@@ -464,11 +464,20 @@ SJTU soso
                                     </div>
                                     <div class="featured-author-center">
                                         <figure class="featured-author-picture">
-                                            <img src="/static/images/img01.jpg" alt="Sample Article">
+                                            {% if request.session.is_login %}
+                                                <img src="{{ user.getImage }}" alt="Avatar">
+                                            {% else %}
+                                                <img src="/static/images/img01.jpg" alt="Sample Article">
+                                            {% endif %}
                                         </figure>
                                         <div class="featured-author-info">
-                                            <h2 class="name">John Doe</h2>
-                                            <div class="desc">@JohnDoe</div>
+                                            {% if request.session.is_login %}
+                                                <h2 class="name">{{ request.session.nickname }}</h2>
+                                                <div class="desc">@{{ request.session.user_name }}</div>
+                                            {% else %}
+                                                <h2 class="name">visitor</h2>
+                                                <div class="desc">您未登录</div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -476,23 +485,35 @@ SJTU soso
                                     <div class="featured-author-count">
                                         <div class="item">
                                             <a href="#">
-                                                <div class="name">Posts</div>
-                                                <div class="value">208</div>
+                                                <div class="name">博客数</div>
+                                                {% if request.session.is_login %}
+                                                    <div class="value">208</div>
+                                                {% else %}
+                                                    <div class="value">\</div>
+                                                {% endif %}
                                             </a>
                                         </div>
                                         <div class="item">
                                             <a href="#">
-                                                <div class="name">Stars</div>
-                                                <div class="value">3,729</div>
+                                                <div class="name">收藏数</div>
+                                                {% if request.session.is_login %}
+                                                    <div class="value">3,729</div>
+                                                {% else %}
+                                                    <div class="value">\</div>
+                                                {% endif %}
                                             </a>
                                         </div>
                                         <div class="item">
-                                            <a href="#">
-                                                <div class="icon">
-                                                    <div>More</div>
-                                                    <i class="ion-chevron-right"></i>
-                                                </div>
-                                            </a>
+                                            {% if request.session.is_login %}
+                                                <a href="#">
+                                            {% else %}
+                                                <a href="/login/">
+                                            {% endif %}
+                                                    <div class="icon">
+                                                        <div>More</div>
+                                                        <i class="ion-chevron-right"></i>
+                                                    </div>
+                                                </a>
                                         </div>
                                     </div>
                                     <div class="featured-author-quote">
