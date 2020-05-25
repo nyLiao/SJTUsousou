@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'mdeditor',
     'captcha',
-    'bbss',
 ]
 
 MIDDLEWARE = [
@@ -112,7 +111,7 @@ DATABASES = {
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'ENGINE': 'haystack.backends.whoosh_cn_backend.WhooshEngine',
         #'ENGINE': 'blog.whoosh_cn_backend.WhooshEngine',
         'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
     },
