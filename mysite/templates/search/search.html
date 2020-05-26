@@ -9,9 +9,10 @@
 <body>
     <h2>Search</h2>
 
-    <form method="get" action=".">
+    <form method="get" action="{% url 'search' %}">
         <table>
-            {{ form.as_table }}
+            <!-- {{ form.as_table }} -->
+            <input type="text" name="q" placeholder="Type something ...">
             <tr>
                 <td>&nbsp;</td>
                 <td>

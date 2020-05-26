@@ -17,6 +17,7 @@ class ArticleTypeIndex(indexes.SearchIndex, indexes.Indexable):
    view = indexes.CharField(model_attr='view')          # web views times
    category = indexes.CharField(model_attr='category')  # web class, tags, etc
    content = indexes.CharField(model_attr='content')    # web content
+   content_auto = indexes.NgramField(model_attr='content')
 
    def get_model(self):
        return ArticleType
