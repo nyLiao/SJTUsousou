@@ -1,3 +1,0 @@
-{{ object.url }}
-{{ object.title }}
-{{ object.content }}
