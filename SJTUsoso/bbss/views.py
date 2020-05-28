@@ -10,13 +10,12 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from rest_framework.renderers import JSONRenderer
 from django.views.decorators.cache import cache_page
-from django.shortcuts import render,redirect
 from . import models
-from bbss.models import  MessageBoard
+from bbss.models import MessageBoard
 from .forms import *
 import hashlib
 # from recommend_books import recommend_by_user_id
-from .forms import *
+
 
 def bbss(req):
     try:
@@ -26,16 +25,18 @@ def bbss(req):
     return render(req, 'message_boards.html', locals())
 
 def login_in(func):  # 验证用户是否登录
-	@wraps(func)
-	def wrapper(*args, **kwargs):
-		request = args[0]
-		is_login = request.session.get("login_in")
-		if is_login:
-			return func(*args, **kwargs)
-		else:
-			return redirect(reverse("login"))
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        print('req...')
+        request = args[0]
+        is_login = request.session.get("login_in")
+        print(is_login)
+        if is_login:
+            return func(*args, **kwargs)
+        else:
+            return redirect(reverse("login"))
 
-	return wrapper
+    return wrapper
 
 
 def books_paginator(books, page):
@@ -418,13 +419,15 @@ def message_boards(request, fap_id=1, pagenum=1, **kwargs):
 	return render(request, "message_boards.html", context=data)
 
 
-@login_in
+# @login_in
 def new_message_board(request):
 	# 写新论坛
+	print('ddddddddddddddddd')
 	user = User.objects.get(id=request.session.get("user_id"))
+	print('ddddddddddddddddd', user)
 	title = request.POST.get("title")
 	content = request.POST.get("content")
-	# print('ddddddddddddddddd', title, content)
+	print('ddddddddddddddddd', title, content)
 	if not title or not content:
 		return redirect(reverse("message_boards", kwargs={'fap_id': 2, 'pagenum': 1}))
 	MessageBoard.objects.create(user=user, content=content, title=title)

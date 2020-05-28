@@ -107,7 +107,10 @@ SJTU soso
                                         </div>
                                         <time>  </time>
                                     </div>
-                                    <h1><a href="{{ sitepage.object.url }}" target="_blank">{{ sitepage.object.title }}</a></h1>
+                                    <h1>
+                                        <a href="{{ sitepage.object.url }}" target="_blank">
+                                            {% highlight sitepage.object.title with query %}</a>
+                                    </h1>
                                     <p>
                                         {% highlight sitepage.object.text with query %}
                                     </p>

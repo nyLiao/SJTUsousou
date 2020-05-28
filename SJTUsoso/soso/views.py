@@ -1,12 +1,29 @@
+# import json
+import simplejson as json
+from django.http import HttpResponse
 from django.shortcuts import render,get_object_or_404, redirect, HttpResponse
-from .models import *
-import json
 from django.core.mail import send_mail
+from haystack.query import SearchQuerySet
+
 from SJTUsoso import settings
 from SJTUsoso.utils import *
+from .models import *
+
+from haystack.views import SearchView
 
 # Create your views here.
 
+def autocomplete(request):
+    sqs = SearchQuerySet().autocomplete(content_auto=request.GET.get('q', ''))[:5]
+    suggestions = [result.title for result in sqs]
+    # print(suggestions)
+    # Make sure you return a JSON object, not a bare list.
+    # Otherwise, you could be vulnerable to an XSS attack.
+    the_data = json.dumps({
+        'results': suggestions
+    })
+    return HttpResponse(the_data, content_type='application/json')
+    
 def contactme(req):
     name = req.POST.get('name', None)
     email = req.POST.get('email', None)
@@ -49,4 +66,3 @@ def to503(req):
 
 def topage(req):
     return render(req, 'page.html')
-
