@@ -17,6 +17,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 # Create your models here.
 
+
+
 class SosoSitearticle(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=200, blank=True, null=True)
@@ -26,3 +28,4 @@ class SosoSitearticle(models.Model):
     class Meta:
         #managed = False
         db_table = 'soso_siteArticle'
+

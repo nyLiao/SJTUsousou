@@ -12,7 +12,7 @@ SJTU soso
 						<aside>
 							<div class="aside-body">
 								<figure class="ads">
-									<img src="../static/images/ad.png">
+									<img src="/static/images/ad.png">
 									<figcaption>Advertisement</figcaption>
 								</figure>
 							</div>
@@ -23,8 +23,8 @@ SJTU soso
 								<article class="article-fw">
 									<div class="inner">
 										<figure>
-											<a href="single.html">												
-												<img src="../static/images/news/img16.jpg">
+											<a href="single.html">
+												<img src="/static/images/news/img16.jpg">
 											</a>
 										</figure>
 										<div class="details">
@@ -45,7 +45,7 @@ SJTU soso
 									<div class="inner">
 										<figure>
 											<a href="single.html">
-												<img src="../static/images/news/img05.jpg">
+												<img src="/static/images/news/img05.jpg">
 											</a>
 										</figure>
 										<div class="padding">
@@ -61,7 +61,7 @@ SJTU soso
 									<div class="inner">
 										<figure>
 											<a href="single.html">
-												<img src="../static/images/news/img02.jpg">
+												<img src="/static/images/news/img02.jpg">
 											</a>
 										</figure>
 										<div class="padding">
@@ -77,7 +77,7 @@ SJTU soso
 									<div class="inner">
 										<figure>
 											<a href="single.html">
-												<img src="../static/images/news/img13.jpg">
+												<img src="/static/images/news/img13.jpg">
 											</a>
 										</figure>
 										<div class="padding">
@@ -111,38 +111,29 @@ SJTU soso
 					</div>
 					<div class="col-md-8">
 						<ol class="breadcrumb">
-						  <li><a href="#">Home</a></li>
-						  <li class="active">Film</li>
 						</ol>
 						<article class="article main-article">
 							<header>
-								<h1>Pellentesque elementum tellus id mauris faucibus</h1>
+								<h1>{{ Wechat.title }}</h1>
 								<ul class="details">
-									<li>Posted on 31 December, 2016</li>
-									<li><a>Film</a></li>
-									<li>By <a href="#">John Doe</a></li>
+									<li>Posted on {{ Wechat.date }}</li>
+									<li><a>{{ Wechat.tag }}</a></li>
+
 								</ul>
 							</header>
 							<div class="main">
-								<p>Pellentesque elementum tellus id mauris faucibus, id sagittis mauris rhoncus. Donec ac iaculis dui, id convallis mauris. Fusce faucibus purus eu risus pulvinar, vel rutrum velit hendrerit. Sed urna nunc, efficitur faucibus sollicitudin non.</p>
+								<p>{{ Wechat.digest }} </p>
 								<div class="featured">
 									<figure>
-										<img src="../static/images/news/img01.jpg">
-										<figcaption>Image by pexels.com</figcaption>
+										<img src="/static/images/wechat/{{ Wechat.img }}" height="450">
 									</figure>
 								</div>
+                                <p>
+                                    {{ Wechat.content }}
+                                </p>
 
-								<p>Nulla facilisi. Aenean pharetra fringilla nunc a finibus. Nulla vitae pretium nunc. Pellentesque sagittis sollicitudin turpis id aliquam. Cras lobortis diam in nunc posuere, et malesuada sem gravida. Curabitur ornare massa id orci faucibus elementum. Phasellus pharetra, velit <a href="#">in egestas rutrum,</a> metus dolor maximus massa, feugiat molestie eros mauris sit amet massa. Maecenas blandit diam lacus, in luctus nulla efficitur nec. Sed sit amet quam sit amet odio scelerisque vestibulum vel sit amet ante. Cras fringilla efficitur lacinia. Cras posuere, arcu id consequat ultrices, urna urna cursus massa, at sollicitudin elit lacus quis dui. In laoreet nulla a turpis blandit sollicitudin. Donec in risus eu lorem volutpat hendrerit quis non lorem. Nulla in metus ipsum.
-								<p>Etiam sit amet augue non velit aliquet consectetur. Proin gravida, odio in facilisis pharetra, neque enim aliquam eros, vitae gravida orci elit vel magna. Integer viverra a purus id gravida. Donec laoreet mi ac auctor ultricies. Pellentesque ullamcorper est et erat ullamcorper gravida. In hac habitasse platea dictumst. Pellentesque justo mauris, mollis at tortor ut, commodo venenatis elit. Curabitur suscipit pellentesque nunc, id tempus mi facilisis sed. Curabitur molestie eu odio vitae condimentum. Donec placerat tristique neque a blandit. Nullam commodo massa ut eros elementum, in suscipit libero aliquam.</p>
 
-								<h4>Sed id sodales sapien. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla facilisi.</h4>
-								<p>Nulla facilisi. Duis auctor fringilla sagittis. Fusce ornare, dui id consequat volutpat, nibh metus viverra nibh, vitae bibendum diam velit in libero. Sed dignissim quam sit amet nibh porttitor, non pellentesque metus tincidunt. Maecenas non velit sapien. </p>
-								<p>Maecenas vel dolor sit amet ligula interdum tempor id eu ipsum. Suspendisse pharetra risus ut metus elementum pulvinar. Mauris eget varius tellus. Cras et lorem vel nunc gravida porttitor.</p>
-								<blockquote>
-									Free Responsive HTML5 &amp; CSS3 Magazine Template
-								</blockquote>
-								<p>Ut est elit, vehicula tempus volutpat ut, sodales eget odio. Nunc placerat, orci ac iaculis feugiat, sem tellus efficitur tortor, mollis iaculis lacus ante nec risus. Sed consequat vehicula pretium.</p>
-							</div>
+                            </div>
 							<footer>
 								<div class="col">
 									<ul class="tags">
@@ -198,7 +189,7 @@ SJTU soso
 						</div>
 						<div class="author">
 							<figure>
-								<img src="../static/images/img01.jpg">
+								<img src="/static/images/img01.jpg">
 							</figure>
 							<div class="details">
 								<div class="job">Web Developer</div>
@@ -238,7 +229,7 @@ SJTU soso
 								<div class="inner">
 									<figure>
 										<a href="#">
-											<img src="../static/images/news/img03.jpg">
+											<img src="/static/images/news/img03.jpg">
 										</a>
 									</figure>
 									<div class="padding">
@@ -254,7 +245,7 @@ SJTU soso
 								<div class="inner">
 									<figure>
 										<a href="#">
-											<img src="../static/images/news/img08.jpg">
+											<img src="/static/images/news/img08.jpg">
 										</a>
 									</figure>
 									<div class="padding">
@@ -272,9 +263,9 @@ SJTU soso
 							<h2 class="title">3 Responses <a href="#">Write a Response</a></h2>
 							<div class="comment-list">
 								<div class="item">
-									<div class="user">                                
+									<div class="user">
 										<figure>
-											<img src="../static/images/img01.jpg">
+											<img src="/static/images/img01.jpg">
 										</figure>
 										<div class="details">
 											<h5 class="name">Mark Otto</h5>
@@ -291,9 +282,9 @@ SJTU soso
 									</div>
 								</div>
 								<div class="item">
-									<div class="user">                                
+									<div class="user">
 										<figure>
-											<img src="../static/images/img01.jpg">
+											<img src="/static/images/img01.jpg">
 										</figure>
 										<div class="details">
 											<h5 class="name">Mark Otto</h5>
@@ -310,9 +301,9 @@ SJTU soso
 									</div>
 									<div class="reply-list">
 										<div class="item">
-											<div class="user">                                
+											<div class="user">
 												<figure>
-													<img src="../static/images/img01.jpg">
+													<img src="/static/images/img01.jpg">
 												</figure>
 												<div class="details">
 													<h5 class="name">Mark Otto</h5>
@@ -332,9 +323,9 @@ SJTU soso
 									</div>
 								</div>
 								<div class="item">
-									<div class="user">                                
+									<div class="user">
 										<figure>
-											<img src="../static/images/img01.jpg">
+											<img src="/static/images/img01.jpg">
 										</figure>
 										<div class="details">
 											<h5 class="name">Mark Otto</h5>

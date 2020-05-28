@@ -1,87 +1,323 @@
+{% load static %}
 <!DOCTYPE html>
-<!-- saved from url=(0041)http://v3.bootcss.com/examples/dashboard/ -->
 <html lang="zh-CN">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="description" content="Magz is a HTML5 & CSS3 magazine template is based on Bootstrap 3.">
 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="/static/books.png">
-    <title>推荐系统</title>
-    {% block style %}
-    {% endblock %}
-    <!-- Bootstrap core CSS -->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="/static/css/dashboard.css" rel="stylesheet">
-    <link href="/static/css/custom.css" rel="stylesheet">
+		<title>{% block title %} {% endblock %}</title>
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="/static/scripts/bootstrap/bootstrap.min.css">
+		<!-- IonIcons -->
+		<link rel="stylesheet" href="/static/scripts/ionicons/css/ionicons.min.css">
+		<!-- Toast -->
+		<link rel="stylesheet" href="/static/scripts/toast/jquery.toast.min.css">
+		<!-- OwlCarousel -->
+		<link rel="stylesheet" href="/static/scripts/owlcarousel/dist/assets/owl.carousel.min.css">
+		<link rel="stylesheet" href="/static/scripts/owlcarousel/dist/assets/owl.theme.default.min.css">
+		<!-- Magnific Popup -->
+		<link rel="stylesheet" href="/static/scripts/magnific-popup/dist/magnific-popup.css">
+		<link rel="stylesheet" href="/static/scripts/sweetalert/dist/sweetalert.css">
+		<!-- Custom style -->
+		<link rel="stylesheet" href="/static/css/style.css">
+		<link rel="stylesheet" href="/static/css/skins/all.css">
+		<link rel="stylesheet" href="/static/css/demo.css">
+        <link href="/static/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="/static/js/ie-emulation-modes-warning.js"></script>
+        <!-- Custom styles for this template -->
+        <link href="/static/css/dashboard.css" rel="stylesheet">
+        <link href="/static/css/custom.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+        <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+        <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+        <script src="/static/js/ie-emulation-modes-warning.js"></script>
 
-</head>
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        {% block header_extends %} {% endblock %}
+	</head>
 
-<body>
+	<body class="skin-orange">
+		<header class="primary">
+			<div class="firstbar">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-3 col-sm-12">
+							<div class="brand">
+								<a href="{% url 'home'%}">
+									<img src="/static/images/logo.png" alt="Magz Logo">
+								</a>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<form class="search" autocomplete="off" method="get" action="{% url 'haystack_search' %}">
+                                {% csrf_token %}
+								<div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" name="q" class="form-control" placeholder="Type something here">
+                                            <div class="input-group-btn">
+                                                <button type="submit" class="btn btn-primary"><i class="ion-search"></i></button>
+                                            </div>
+                                        </div>
+								</div>
+								<div class="help-block">
+									<div>Popular:</div>
+									<ul>
+										<li><a href="/search/?q=选课">选课</a></li>
+										<li><a href="/search/?q=考试">考试</a></li>
+										<li><a href="/search/?q=2020">2020</a></li>
+										<li><a href="/search/?q=疫情">疫情</a></li>
+										<li><a href="/search/?q=返校">返校</a></li>
+									</ul>
+								</div>
+							</form>
+						</div>
+						<div class="col-md-3 col-sm-12 text-right">
+							<ul class="nav-icons">
+                                {% if request.session.is_login %}
+                                    <li class="ion-person"><a href="#">当前在线：{{ request.session.user_name }}</a></li>
+                                    <li class="ion-person"><a href="/logout/">登出</a></li>
+                                {% else %}
+                                    <li class="ion-person"><a href="/login/">登录</a></li>
+                                    <li class="ion-person-add"><a href="/register/">注册</a></li>
+                                {% endif %}
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">推荐系统</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                {% if request.session.login_in == True %}
-                    <li><a href="{% url 'personal' %}">{{ request.session.name }}</a></li>
-                    <li><a href="{% url 'logout' %}">退出</a></li>
-                {% else %}
-                    <li><a href="/login/">登录</a></li>
-                    <li><a href="/register/"">注册</a></li>
-                {% endif %}
-            </ul>
-            <form class="navbar-form navbar-right" action="{% url 'haystack_search' %}" method='post'>
-                {% csrf_token %}
-                <input type="text" class="form-control" name="search" placeholder="输入关键字">
-                <button class="btn btn-default" type="submit">提交</button>
-            </form>
-        </div>
-    </div>
-</nav>
+			<!-- Start nav -->
+			<nav class="menu">
+				<div class="container">
+					<div class="brand">
+						<a href="#">
+							<img src="/static/images/logo.png" alt="Magz Logo">
+						</a>
+					</div>
+					<div class="mobile-toggle">
+						<a href="#" data-toggle="menu" data-target="#menu-list"><i class="ion-navicon-round"></i></a>
+					</div>
+					<div class="mobile-toggle">
+						<a href="#" data-toggle="sidebar" data-target="#sidebar"><i class="ion-ios-arrow-left"></i></a>
+					</div>
+					<div id="menu-list">
+						<ul class="nav-list">
+							<li class="for-tablet nav-title"><a>Menu</a></li>
+							<li class="for-tablet"><a href="#">Login</a></li>
+							<li class="for-tablet"><a href="#">Register</a></li>
+							<li><a href="{% url 'home'%}">主页</a></li>
+							<li class="dropdown magz-dropdown">
+
+							</li>
+							<li class="dropdown magz-dropdown magz-dropdown-megamenu"><a href="#">推荐 <i class="ion-ios-arrow-right"></i> <div class="badge">Hot</div></a>
+								<div class="dropdown-menu megamenu">
+									<div class="megamenu-inner">
+										<div class="row">
+											<div class="col-md-3">
+												<div class="row">
+													<div class="col-md-12">
+														<h2 class="megamenu-title">Trending</h2>
+													</div>
+												</div>
+
+											</div>
+											<div class="col-md-9">
+												<div class="row">
+													<div class="col-md-12">
+														<h2 class="megamenu-title">Featured Posts</h2>
+													</div>
+												</div>
+												<div class="row">
+													<article class="article col-md-4 mini">
+														<div class="inner">
+															<figure>
+																<a href="/single/">
+																	<img src="/static/images/news/img10.jpg" alt="Sample Article">
+																</a>
+															</figure>
+															<div class="padding">
+																<div class="detail">
+																	<div class="time">December 10, 2016</div>
+																	<div class="category"><a href="/category/">Healthy</a></div>
+																</div>
+																<h2><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate</a></h2>
+															</div>
+														</div>
+													</article>
+													<article class="article col-md-4 mini">
+														<div class="inner">
+															<figure>
+																<a href="/single/">
+																	<img src="/static/images/news/img11.jpg" alt="Sample Article">
+																</a>
+															</figure>
+															<div class="padding">
+																<div class="detail">
+																	<div class="time">December 13, 2016</div>
+																	<div class="category"><a href="/category/">Lifestyle</a></div>
+																</div>
+																<h2><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate</a></h2>
+															</div>
+														</div>
+													</article>
+													<article class="article col-md-4 mini">
+														<div class="inner">
+															<figure>
+																<a href="/single/">
+																	<img src="/static/images/news/img14.jpg" alt="Sample Article">
+																</a>
+															</figure>
+															<div class="padding">
+																<div class="detail">
+																	<div class="time">December 14, 2016</div>
+																	<div class="category"><a href="/category/">Travel</a></div>
+																</div>
+																<h2><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate</a></h2>
+															</div>
+														</div>
+													</article>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="dropdown magz-dropdown magz-dropdown-megamenu"><a href="#">Column <i class="ion-ios-arrow-right"></i></a>
+								<div class="dropdown-menu megamenu">
+									<div class="megamenu-inner">
+										<div class="row">
+											<div class="col-md-3">
+												<h2 class="megamenu-title">Column 1</h2>
+												<ul class="vertical-menu">
+													<li><a href="#">Example 1</a></li>
+													<li><a href="#">Example 2</a></li>
+													<li><a href="#">Example 3</a></li>
+													<li><a href="#">Example 4</a></li>
+													<li><a href="#">Example 5</a></li>
+												</ul>
+											</div>
+											<div class="col-md-3">
+												<h2 class="megamenu-title">Column 2</h2>
+												<ul class="vertical-menu">
+													<li><a href="#">Example 6</a></li>
+													<li><a href="#">Example 7</a></li>
+													<li><a href="#">Example 8</a></li>
+													<li><a href="#">Example 9</a></li>
+													<li><a href="#">Example 10</a></li>
+												</ul>
+											</div>
+											<div class="col-md-3">
+												<h2 class="megamenu-title">Column 3</h2>
+												<ul class="vertical-menu">
+													<li><a href="#">Example 11</a></li>
+													<li><a href="#">Example 12</a></li>
+													<li><a href="#">Example 13</a></li>
+													<li><a href="#">Example 14</a></li>
+													<li><a href="#">Example 15</a></li>
+												</ul>
+											</div>
+											<div class="col-md-3">
+												<h2 class="megamenu-title">Column 4</h2>
+												<ul class="vertical-menu">
+													<li><a href="#">Example 16</a></li>
+													<li><a href="#">Example 17</a></li>
+													<li><a href="#">Example 18</a></li>
+													<li><a href="#">Example 19</a></li>
+													<li><a href="#">Example 20</a></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="dropdown magz-dropdown"><a href="#">账户 <i class="ion-ios-arrow-right"></i></a>
+{#								<ul class="dropdown-menu">#}
+{#                                    {% if request.session.is_login %}#}
+{#                                        <li><a href="#"><i class="icon ion-person"></i>我的账户</a></li>#}
+{#                                        <li><a href="#"><i class="icon ion-heart"></i>我的收藏</a></li>#}
+{#                                        <li><a href="#"><i class="icon ion-ios-paper"></i>我的博客</a></li>#}
+{#                                        <li><a href="#"><i class="icon ion-key"></i>修改密码</a></li>#}
+{#                                        <li><a href="#"><i class="icon ion-settings"></i>账户设定</a></li>#}
+{#                                        <li class="divider"></li>#}
+{#									<li><a href="/logout/"><i class="icon ion-log-out"></i>登出</a></li>#}
+{#                                    {% else %}#}
+{#                                        <li><a href="#"><i class="icon ion-person"></i>登陆</a></li>#}
+{#                                        <li><a href="#"><i class="icon ion-person-add"></i>注册</a></li>#}
+{#                                    {% endif %}#}
+{#								</ul>#}
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+			<!-- End nav -->
+		</header>
+
+        {% block content %} {% endblock %}
+
+		<!-- Start footer -->
+		<footer class="footer">
+
+		</footer>
+		<!-- End Footer -->
+
+		<!-- JS -->
+		<script src="/static/js/jquery.js"></script>
+		<script src="/static/js/jquery.migrate.js"></script>
+		<script src="/static/scripts/bootstrap/bootstrap.min.js"></script>
+		<script>var $target_end=$(".best-of-the-week");</script>
+		<script src="/static/scripts/jquery-number/jquery.number.min.js"></script>
+		<script src="/static/scripts/owlcarousel/dist/owl.carousel.min.js"></script>
+		<script src="/static/scripts/magnific-popup/dist/jquery.magnific-popup.min.js"></script>
+		<script src="/static/scripts/easescroll/jquery.easeScroll.js"></script>
+		<script src="/static/scripts/sweetalert/dist/sweetalert.min.js"></script>
+		<script src="/static/scripts/icheck/icheck.min.js"></script>
+		<script src="/static/scripts/toast/jquery.toast.min.js"></script>
+		<script src="/static/js/demo.js"></script>
+		<script>$("input").iCheck({
+      checkboxClass: 'icheckbox_square-red',
+      radioClass: 'iradio_square-red',
+      cursor: true
+		});</script>
+		<script src="/static/js/e-magz.js"></script>
+
+        <script src="/static/js/jquery-2.1.1.min.js"></script>
+        <script src="/static/js/jquery.min.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
+        <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="/static/js/ie10-viewport-bug-workaround.js"></script>
+        <script src="/static/js/custom.js"></script>
+        <script src="/static/js/plugins/highstock/js/highstock.js"></script>
+        <script src="/static/js/plugins/highstock/js/modules/exporting.js"></script>
+        <script type="text/javascript">
+            $(function ($) {
+                    {#    导航栏按钮渲染#}
+                    $(".sidebar").find("li").each(function () {
+                        var a = $(this).find("a:first")[0];
+                        if ($(a).attr("href") === location.pathname) {
+                            $(this).addClass("active");
+                        } else {
+                            $(this).removeClass("active");
+                        }
+                    });
+                });
+        </script>
+        {% block script_extends %}{% endblock %}
+	</body>
+    <body>
+
 
 <div class="container-fluid">
     <div class="row">
-{#        <div class="col-sm-3 col-md-2 sidebar">#}
-{#            <ul class="nav nav-sidebar">#}
-{#                <li class="active"><a href="{% url 'all_book' %}">全部书籍<span class="sr-only">(current)</span></a></li>#}
-{#                <li><a href="{% url 'hot_book' %}">最热书籍</a></li>#}
-{#                <li><a href="{% url 'latest_book' %}">最新书籍</a></li>#}
-{#                <li><a href="{% url 'kindof' %}">分类图书</a></li>#}
-{#                <li><a href="{% url 'nobel_book' %}">诺贝尔奖图书</a></li>#}
-{#                <li><a href="{% url 'md_book' %}">矛盾文学奖</a></li>#}
-{#                <li><a href="{% url 'week_reco' %}">我猜你喜欢</a></li>#}
-{#                <li><a href="{% url 'monthitem' %}">月度推荐图书</a></li>#}
-{#                <li><a href="{% url 'action' %}">线下活动</a></li>#}
-{#                <li><a href="{% url 'message_boards' 1 1 %}">读书论坛</a></li>#}
-{#                <li><a href="{% url 'personal' %}">我的信息</a></li>#}
-{#            </ul>#}
-{#        </div>#}
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             {% block right-panel-content %}
             {% endblock %}
@@ -119,4 +355,5 @@
 {% endblock %}
 
 </body>
+
 </html>

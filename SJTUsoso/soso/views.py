@@ -32,9 +32,6 @@ def tocontact(req):
 def tocategory(req):
     return render(req, 'category.html')
 
-def tosingle(req):
-    return render(req, 'single.html')
-
 def to403(req):
     return render(req, '403.html')
 

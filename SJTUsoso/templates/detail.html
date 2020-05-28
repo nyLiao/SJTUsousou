@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block content %}
+            {% load static %}
+            <link rel="stylesheet" href="{% static 'css/dropload.css' %}">
+            <div class="ui unstackable two column grid">
+                <div class=" ten wide column">
+                    <video class="video" autoplay="autoplay" controls="controls" >
+                        <source src="/static/images/videos/{{ Video.video }}" type="video/mp4">
+                    </video>
+
+                    <div class="video-info">
+                        <h3 class="ui dividing header" id="id_comment_label">{{ Video.title }}</h3>
+                        <div class="video-view-count">{{ Video.watch }}次观看</div>
+                        <div class="video-view-operation">
+                            {{video.desc}}
+                        </div>
+                        <div class="extra content video-view-operation">
+                            <span class="left floated like">
+
+                                <span id="like-count">喜欢人数：{{ Video.love }}  </span>
+                            </span>
+
+                            <span class="right floated star">
+                                <span id="collect-count">收藏人数：{{ Video.collect }}</span>
+                            </span>
+                        </div>
+                        <div class="extra content video-view-operation">
+                            <span class="left floated like">
+                                <span id="like-count">综合评分:{{ Video.avg }} </span>
+                            </span>
+
+                            <span class="right floated star">
+                                <span id="collect-count">评分人数:{{ Video.rate_num }}</span>
+                            </span>
+                        </div>
+                        <div class="extra content video-view-operation">
+                            <span class="left floated like">
+                                <span id="like-count">添加评分: </span>
+                            </span>
+
+                            <span class="right floated star">
+                                {% if is_rate is not None %}
+                                    <h4>您已经进行打分: {{ is_rate.mark }}</h4>
+                                {% else %}
+                                    <form action="{% url 'score' Video.id %}" method="post">
+                                        {% csrf_token %}
+                                        <select name="score">
+                                            <option>1.0</option>
+                                            <option>2.0</option>
+                                            <option>3.0</option>
+                                            <option>4.0</option>
+                                            <option>5.0</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-default">提交</button>
+                                    </form>
+                                  {% endif %}
+                            </span>
+                        </div>
+                        <div class="ui divider"></div>
+                    </div>
+
+                    <div class="ui comments">
+                        {% if user.is_authenticated %}
+                        <form class="ui reply form" id="comment_form" method="post"
+                           action="{% url 'comment:submit_comment' video.pk %}"  >
+                            {% csrf_token %}
+                            <div class="field">
+                                {{form.content}}
+                                <input type="hidden" value="8888" name="video_id">
+                            </div>
+                            <button class="ui primary button" type="submit">
+                                添加评论
+                            </button>
+                            <div class="ui info message n">
+                                <div class="item" id="comment-result"></div>
+                            </div>
+                        </form>
+                        {% else %}
+                        <div class="ui ignored info attached message">
+            {#                <p>登录后即可评论 &nbsp;&nbsp;&nbsp;<a href="{% url 'users:login' %}?next=32423">马上登录</a></p>#}
+                        </div>
+                        {% endif %}
+                        <h3 class="ui dividing header" id="id_comment_label">评论</h3>
+                        <div class="comment-list"></div>
+                    </div>
+                </div>
+
+            {#    <div class="six wide column">#}
+            {#        {% include "video/recommend.html" %}#}
+            {#        {% include "video/ad.html" %}#}
+            {#    </div>#}
+            </div>
+
+
+
+        {% endblock %}

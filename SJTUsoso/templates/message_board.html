@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 {% block  right-panel-content %}
 
     <body>
@@ -23,7 +23,6 @@
         </div>
     </div>
     <!---评论区------>
-
     <div align="center" style="font-size: 20px">
         {#        <caption>回帖区</caption>#}
         <div style="padding-top: 10px;padding-bottom: 5px">
@@ -34,7 +33,7 @@
                 </button>
             {% else %}
                 <button class="like" style="margin: 15px 15px 0" value=1>
-                    <span style="color: blue; font-size: 20px">点赞</span>
+                    <span style="color: #0000ff; font-size: 20px">点赞</span>
                 </button>
             {% endif %}
 
@@ -208,12 +207,9 @@
 
         var modal;
         $('#exampleModal').on('show.bs.modal', function (event) {
-
             var button = $(event.relatedTarget); // 触发事件的按钮
             modal = $(this);
 
         });
-
-
     </script>
 {% endblock %}

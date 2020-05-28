@@ -121,3 +121,8 @@ body {
 .css-default{
   background-color: lightgray;
 }
+
+#main-content{
+  display: flex;
+  margin: auto;
+}

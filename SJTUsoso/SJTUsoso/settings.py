@@ -16,7 +16,6 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from django.contrib.staticfiles.management.commands import collectstatic
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -45,7 +44,6 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'mdeditor',
     'captcha',
-    'bbss',
 ]
 
 MIDDLEWARE = [
@@ -82,26 +80,14 @@ WSGI_APPLICATION = 'SJTUsoso.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-'''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django',
-        'USER':'root',
-        'PASSWORD':'Setsuna/AIJIN',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
-'''
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'SJTUsoso',
-        'USER':'soso',
-        'PASSWORD':'SJTUsoso',
-        'HOST': '39.100.88.210',
+        'USER':'root',
+        'PASSWORD':'123456',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
         'TEST': {
             'CHARSET': 'utf8',
@@ -113,9 +99,8 @@ DATABASES = {
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        #'ENGINE': 'blog.whoosh_cn_backend.WhooshEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
-    },
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    }
 }
 
 # 自动更新索引
