@@ -1,6 +1,5 @@
 # Custom
 *.toc
-.idea/
 
 # Database
 whoosh_index/

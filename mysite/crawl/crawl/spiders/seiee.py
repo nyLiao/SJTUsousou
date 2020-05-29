@@ -27,7 +27,7 @@ class SeieeSpider(scrapy.Spider):
         article['title'] = response.xpath('//h2//text()').extract_first()[:256]
         article['date'] = response.xpath('//*[contains(@class,"date")]/span[1]//text()').extract_first().strip()
         article['view'] = response.xpath('//*[contains(@id,"readTime")]//text()').extract_first()
-        article['text'] = cln_text(response.xpath('string(//*[contains(@class,"content")])').extract_first())
+        article['content'] = cln_text(response.xpath('string(//*[contains(@class,"content")])').extract_first())
         article['category'] = "通知公告"
-        # print(article['text'])
+        # print(article['content'])
         yield article

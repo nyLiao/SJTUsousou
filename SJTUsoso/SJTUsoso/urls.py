@@ -15,12 +15,7 @@ Including another URLconf
 from blog.views import *
 from django.contrib import admin
 from django.urls import path, include, re_path
-from django.conf.urls import url
-from django.views import static
-from django.views.generic.base import RedirectView
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from haystack.views import SearchView
-
 from soso.views import *
 from django.conf.urls import url
 from django.views import static
@@ -45,7 +40,6 @@ urlpatterns = [
     path('reset/', reset),
     path('single/<int:Wechat_id>/', tosingle ,name="Wechat"),
     path('search/', SearchView(), name='haystack_search'),
-    path('search/autocomplete/', autocomplete),
     path('contactsuccess/', contactsuccess),
     path('contactfail/', contactfail),
     path('logout/', logout),
@@ -66,5 +60,3 @@ urlpatterns = [
     url(r'^css/safari\.css$', RedirectView.as_view(url=r'/static/css/safari.css')),
     re_path(r'mdeditor/', include('mdeditor.urls')),
 ]
-
-urlpatterns += staticfiles_urlpatterns()
