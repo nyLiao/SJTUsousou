@@ -17,6 +17,7 @@ from django.urls import path, include, re_path
 from django.conf.urls import url
 from django.views import static
 from django.views.generic.base import RedirectView
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from haystack.views import SearchView
 
 from soso.views import *
@@ -40,7 +41,7 @@ urlpatterns = [
     path('register/', register),
     path('reset/', reset),
     path('single/', tosingle),
-    path('search/', SearchView(), name='haystack_search'),
+    path('search/', mySearchView.as_view(), name='haystack_search'),
     path('search/autocomplete/', autocomplete),
     path('contactsuccess/', contactsuccess),
     path('contactfail/', contactfail),
@@ -62,3 +63,5 @@ urlpatterns = [
     path("like_collect/", views.like_collect, name="like_collect"),  # 对论坛留言点赞或收藏
     #url(r'^BBS/',include('BBS.urls')),
 ]
+
+urlpatterns += staticfiles_urlpatterns()

@@ -15,6 +15,8 @@ class SosoSitearticleIndex(indexes.SearchIndex, indexes.Indexable):
    url = indexes.CharField(model_attr='url')                # web url
    content = indexes.CharField(model_attr='text')           # web content
    content_auto = indexes.NgramField(model_attr='title')    # autocomplete index
+   date = indexes.CharField(model_attr='date')              # web date
+   view = indexes.CharField(model_attr='view')              # web views times
 
    def get_model(self):
        return SosoSitearticle

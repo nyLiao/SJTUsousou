@@ -1,17 +1,42 @@
 # import json
 import simplejson as json
 from django.http import HttpResponse
-from django.shortcuts import render,get_object_or_404, redirect, HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from django.core.mail import send_mail
+
 from haystack.query import SearchQuerySet
+from haystack.generic_views import SearchView
 
 from SJTUsoso import settings
 from SJTUsoso.utils import *
 from .models import *
 
-from haystack.views import SearchView
 
 # Create your views here.
+class mySearchView(SearchView):
+    def __init__(self):
+        super(mySearchView, self).__init__()
+
+    def get_queryset(self):
+        queryset = super(mySearchView, self).get_queryset()
+        # further filter queryset based on some set of criteria
+        # Sort order
+        order = self.request.GET.get('order')
+        if not order:
+            order = "latest"
+        if order == "popular":
+            queryset = queryset.order_by('-view')
+        else:
+            queryset = queryset.order_by('-date')
+        # print('queryset:', queryset)
+        return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(mySearchView, self).get_context_data(*args, **kwargs)
+        # do something
+        # print('context:', context)
+        return context
+
 
 def autocomplete(request):
     sqs = SearchQuerySet().autocomplete(content_auto=request.GET.get('q', ''))[:5]
@@ -23,7 +48,8 @@ def autocomplete(request):
         'results': suggestions
     })
     return HttpResponse(the_data, content_type='application/json')
-    
+
+
 def contactme(req):
     name = req.POST.get('name', None)
     email = req.POST.get('email', None)

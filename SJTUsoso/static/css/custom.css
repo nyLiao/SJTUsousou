@@ -27,6 +27,18 @@ article.article-list {
     word-break:break-all;
 }
 
+div.detail {
+    margin: 0px auto;
+    vertical-align: middle;
+    align-items: center;
+}
+
+div.category {
+    margin: 0px auto;
+    vertical-align: middle;
+    align-items: center;
+}
+
 .graph-container {
 
     margin-top: 25px;
