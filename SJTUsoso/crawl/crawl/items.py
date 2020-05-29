@@ -7,7 +7,7 @@
 
 import scrapy
 from scrapy_djangoitem import DjangoItem
-from search.models import ArticleType
+from soso.models import SosoSitearticle
 
 class ArticleItem(DjangoItem):
-    django_model = ArticleType
+    django_model = SosoSitearticle
