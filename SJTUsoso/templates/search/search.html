@@ -96,9 +96,9 @@ SJTU soso
                                                 {{ sitepage.object.date }}
                                             </time>
                                             &nbsp;&nbsp;&nbsp;
-                                            <a>Healthy |</a>
-                                            <a>Healthy |</a>
-                                            <a>Healthy</a>
+                                            <a>{{ sitepage.object.kw1 }} |</a>
+                                            <a>{{ sitepage.object.kw2 }} |</a>
+                                            <a>{{ sitepage.object.kw3 }}</a>
                                         </div>
                                     </div>
                                     <h1>
@@ -110,7 +110,9 @@ SJTU soso
                                         {% highlight sitepage.object.text with query max_length 120 %}
                                     </p>
                                     <footer>
-                                        <!-- <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>783</div></a> -->
+                                        <a href="#" class="love"><i class="ion-android-favorite-outline"></i>
+                                            <div>{{ sitepage.object.view }}</div>
+                                        </a>
                                         <a class="btn btn-primary more" href="{{ sitepage.object.url }}" target="_blank">
                                             <div>More</div>
                                             <div><i class="ion-ios-arrow-thin-right"></i></div>

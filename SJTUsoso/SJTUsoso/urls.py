@@ -12,7 +12,6 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
 """
-from blog.views import *
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf.urls import url
@@ -22,9 +21,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from haystack.views import SearchView
 
 from soso.views import *
-from django.conf.urls import url
-from django.views import static
-from django.views.generic.base import RedirectView
+from blog.views import *
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

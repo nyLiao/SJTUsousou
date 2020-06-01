@@ -23,6 +23,10 @@ class SosoSitearticle(models.Model):
     text = models.TextField(blank=True, null=True)
     date = models.DateField()                   # web date
     view = models.IntegerField()                # web views times
+    category = models.CharField(max_length=20, blank=True, null=True)
+    kw1 = models.CharField(max_length=20, blank=True, null=True)
+    kw2 = models.CharField(max_length=20, blank=True, null=True)
+    kw3 = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
         #managed = False

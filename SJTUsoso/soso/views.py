@@ -24,17 +24,23 @@ class mySearchView(SearchView):
         order = self.request.GET.get('order')
         if not order:
             order = "latest"
-        if order == "popular":
+        if order == "smart":
+            queryset = queryset.order_by('-view')
+        elif order == "popular":
             queryset = queryset.order_by('-view')
         else:
             queryset = queryset.order_by('-date')
-        # print('queryset:', queryset)
+
+        # print('queryset:', queryset.count())
         return queryset
 
     def get_context_data(self, *args, **kwargs):
         context = super(mySearchView, self).get_context_data(*args, **kwargs)
         # do something
+        
         # print('context:', context)
+        queryset = self.get_queryset()
+        print('queryset:', [i.title + str(i.view) for i in queryset])
         return context
 
 
