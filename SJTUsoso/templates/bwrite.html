@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+SJTU soso
+{% endblock %}
+
+{% block content %}
+		<section class="page">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2">
+	          <ol class="breadcrumb">
+	          	<li><a href="{% url 'home'%}">Soso</a></li>
+	            <li class="active">写博客</li>
+	          </ol>
+                    <br>
+                        <form action="/blog/write/" method="post">
+                            {% csrf_token %}
+                            文章类型：
+                            <select name="blog_type" class="form-group">
+                                {% for type in blog_types %}
+                                    <option>{{ type }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-group">
+                                {{ wblog_form.media }}
+                                {{ wblog_form.as_p }}
+                            </div>
+                            <div class="line thin"></div>
+                            {% if message %}
+                                <div class="alert alert-warning">{{ message }}</div>
+                            {% endif %}
+                            <div class="form-group text-right">
+                                <button class="btn btn-primary btn-block">发布文章</button>
+                            </div>
+                        </form>
+					</div>
+				</div>
+			</div>
+		</section>
+{% endblock %}

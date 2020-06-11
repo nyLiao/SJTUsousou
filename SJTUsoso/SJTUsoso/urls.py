@@ -19,10 +19,11 @@ from django.views import static
 from django.views.generic.base import RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from haystack.views import SearchView
-
 from soso.views import *
 from blog.views import *
-
+from django.conf.urls import url
+from django.views import static
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,22 +32,41 @@ urlpatterns = [
     path('404/', to404),
     path('500/', to500),
     path('503/', to503),
-    path('category/', tocategory),
-    path('contact/', tocontact),
-    path('sendmail/', contactme),
-    path('forgot/', forgot),
-    path('login/', login , name="login"),
+
+
+
+    path('search/', SearchView(), name='haystack_search'),
     path('page/', topage),
+
     path("score/<int:Video_id>/", score, name="score"),  # 评分
     path('video/<int:Video_id>/', tovideo,name="Video"),
+
     path('register/', register),
+    path('login/', login, name="login"),
+    path('logout/', logout),
+    path('forgot/', forgot),
     path('reset/', reset),
+
     path('single/<int:Wechat_id>/', tosingle ,name="Wechat"),
     path('search/', mySearchView.as_view(), name='haystack_search'),
     path('search/autocomplete/', autocomplete),
+
+    path('userspace/', userspace),
+    path('userspace/change/', userspacechange),
+    path('userspace/avatar/', avatarup),
+
+    path('blog/write/', WBlog),
+    path('blog/delete/', deblog),
+    path('blog/', blog_list, name="blog_list"),
+    path('blog/coverup/', coverup),
+    path('blog/<int:blog_pk>/', blog_detail, name="blog_detail"),
+
+    path('collect/', collect),
+    path('decollect/', decollect),
+
+    path('contact/', contactme),
     path('contactsuccess/', contactsuccess),
     path('contactfail/', contactfail),
-    path('logout/', logout),
 
     path("message_boards/<int:fap_id>/<int:pagenum>/", message_boards, name="message_boards"),  # 获取论坛
     path("get_message_board/<int:message_board_id>/<int:fap_id>/<int:currentpage>/", get_message_board,
@@ -57,12 +77,11 @@ urlpatterns = [
     path("like_collect/", like_collect, name="like_collect"),  # 对论坛留言点赞或收藏
 
     url(r'^captcha', include('captcha.urls')),
-    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    url(r'^blog/write/ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
     url(r'^media/(?P<path>.*)$', static.serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
     url(r'^favicon\.ico$', RedirectView.as_view(url=r'static/images/favicon.ico')),
     url(r'^css/safari\.css$', RedirectView.as_view(url=r'/static/css/safari.css')),
-    re_path(r'mdeditor/', include('mdeditor.urls')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

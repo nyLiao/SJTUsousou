@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+{{ user.name }}的个人空间
+{% endblock %}
+
+{% block content %}
+    <section class="single">
+        <div class="container">
+        <div class="row">
+        <div class="col-md-4 sidebar" id="sidebar">
+            <aside>
+                <div class="aside-body">
+                    <div class="featured-author">
+                        <div class="featured-author-inner">
+                            <div class="featured-author-cover" style="background-image: url('/static/images/news/img15.jpg');">
+                                <div class="badges">
+                                    <div class="badge-item"><i class="ion-star"></i> Featured</div>
+                                </div>
+                                <div class="featured-author-center">
+                                    <figure style="width: 90px; height: 90px;" class="featured-author-picture">
+                                        <a href="{{ user.getImage }}"><img class="img-circle img-responsive" src="{{ user.getImage }}" alt="avatar"/></a>
+                                    </figure>
+                                    <div class="featured-author-info">
+                                        <h2 class="name">{{ user.nickname }}</h2>
+                                        <div class="desc">@{{ user.name }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="featured-author-body">
+                                <div class="featured-author-count">
+                                    <div class="item">
+                                        <a href="/blog/?user={{user.name}}">
+                                            <div class="name">博客数</div>
+                                            <div class="value">{{ blogsnum }}</div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="/collect/?user={{ user.name }}">
+                                            <div class="name">收藏数</div>
+                                            <div class="value">{{ itemsum }}</div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        {% if request.session.is_login %}
+                                            <a href="/userspace/?user={{ user.name }}">
+                                        {% else %}
+                                            <a href="/login/">
+                                        {% endif %}
+                                                <div class="icon">
+                                                    <div>More</div>
+                                                    <i class="ion-chevron-right"></i>
+                                                </div>
+                                            </a>
+                                    </div>
+                                </div>
+                                <div class="featured-author-quote">
+                                    "Eur costrict mobsa undivani krusvuw blos andugus pu aklosah"
+                                </div>
+                                <div class="block">
+                                    <h2 class="block-title">Photos</h2>
+                                    <div class="block-body">
+                                        <ul class="item-list-round" data-magnific="gallery">
+                                            <li><a href="/static/images/news/img06.jpg" style="background-image: url('/static/images/news/img06.jpg');"></a></li>
+                                            <li><a href="/static/images/news/img07.jpg" style="background-image: url('/static/images/news/img07.jpg');"></a></li>
+                                            <li><a href="/static/images/news/img08.jpg" style="background-image: url('/static/images/news/img08.jpg');"></a></li>
+                                            <li><a href="/static/images/news/img09.jpg" style="background-image: url('/static/images/news/img09.jpg');"></a></li>
+                                            <li><a href="/static/images/news/img10.jpg" style="background-image: url('/static/images/news/img10.jpg');"></a></li>
+                                            <li><a href="/static/images/news/img11.jpg" style="background-image: url('/static/images/news/img11.jpg');"></a></li>
+                                            <li><a href="/static/images/news/img12.jpg" style="background-image: url('/static/images/news/img12.jpg');"><div class="more">+2</div></a></li>
+                                            <li class="hidden"><a href="/static/images/news/img13.jpg" style="background-image: url('/static/images/news/img13.jpg');"></a></li>
+                                            <li class="hidden"><a href="/static/images/news/img14.jpg" style="background-image: url('/static/images/news/img14.jpg');"></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="featured-author-footer">
+                                    <a href="#">See All Authors</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            </div>
+
+            <div class="col-md-8">
+                <ol class="breadcrumb">
+		              <li><a href="#">Soso</a></li>
+		              <li class="active">博客</li>
+		            </ol>
+                  {% if user.name %}
+                    <h1 class="page-title">Blogs: {{ user.name }}</h1>
+		            <p class="page-subtitle">Showing all posts with blogs <i>{{ user.name }}</i></p>
+                  {% else %}
+		            <h1 class="page-title">Blogs</h1>
+		            <p class="page-subtitle">Showing all blogs</p>
+                  {% endif %}
+		        <div class="line"></div>
+		        <div class="row">
+                {% for blog in blogs %}
+		          <article class="col-md-12 article-list">
+		            <div class="inner">
+		              <figure>
+			              <a href="{% url 'blog_detail' blog.pk %}">
+			                <img alt="cover" src="{{ blog.getImage }}">
+		                </a>
+		              </figure>
+		              <div class="details">
+		                <div class="detail">
+		                  <div class="category">
+		                   <a href="/blog/home/?typename={{blog.blog_type}}">{{ blog.blog_type }}</a>
+		                  </div>
+		                  <div class="time">{{ blog.create_month }}&nbsp{{ blog.created_time|date:"d,  20y" }}</div>
+		                </div>
+		                <h1><a href="{% url 'blog_detail' blog.pk %}">{{ blog.title }}</a></h1>
+		                <p>
+		                  {{ blog.content|striptags|truncatechars:60 }}
+		                </p>
+		                <footer>
+		                  <a href="/collect/?key=blog-{{ blog.pk }}" class="love"><i class="ion-fireball"></i> <div>{{ blog.get_read_num }}</div></a>
+                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                            <a class="btn btn-primary more right" href="/blog/delete/?key={{ blog.pk }}">
+		                    <div>删除</div>
+		                    <div><i class="ion-android-delete"></i></div>
+		                  </a>
+		                </footer>
+		              </div>
+		            </div>
+		          </article>
+                {% empty %}
+                <div class="inner">
+                    <h3>暂无博客，敬请期待</h3>
+                </div>
+                {% endfor %}
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+    {% if messages %}
+        <script>
+            {% for msg in messages %}
+                alert('{{ msg.message }}');
+            {% endfor %}
+        </script>
+    {% endif %}
+{% endblock %}
