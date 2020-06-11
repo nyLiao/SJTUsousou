@@ -2,6 +2,8 @@
 import simplejson as json
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
+from .models import *
+import json
 from django.core.mail import send_mail
 
 from haystack.query import SearchQuerySet
@@ -10,7 +12,6 @@ from haystack.generic_views import SearchView
 from SJTUsoso import settings
 from SJTUsoso.utils import *
 from .models import *
-
 
 # Create your views here.
 class mySearchView(SearchView):
@@ -30,7 +31,6 @@ class mySearchView(SearchView):
             queryset = queryset.order_by('-view')
         else:
             queryset = queryset.order_by('-date')
-
         # print('queryset:', queryset.count())
         return queryset
 
@@ -56,30 +56,26 @@ def autocomplete(request):
     return HttpResponse(the_data, content_type='application/json')
 
 
-def contactme(req):
-    name = req.POST.get('name', None)
-    email = req.POST.get('email', None)
-    message = req.POST.get('message', None)
-    subject = req.POST.get('subject', None)
-    if email:
-        msg = name + '\n' + email + '\n' + message + '\n'
-        send_mail(subject, msg, settings.EMAIL_HOST_USER,
-                ['haowenliew@outlook.com'], fail_silently=False)
-        return redirect('/contactsuccess/')
-    else:
-        return redirect('/contactfail/')
+def contactme(request):
+    if request.method == "POST":
+        name = request.POST.get('name', None)
+        email = request.POST.get('email', None)
+        message = request.POST.get('message', None)
+        subject = request.POST.get('subject', None)
+        if email:
+            msg = name + '\n' + email + '\n' + message + '\n'
+            send_mail(subject, msg, settings.EMAIL_HOST_USER,
+                    ['haowenliew@outlook.com'], fail_silently=False)
+            return redirect('/contactsuccess/')
+        else:
+            return redirect('/contactfail/')
+    return render(request, 'contact.html')
 
 def contactsuccess(req):
     return render(req, 'contact.html', {"successmessage":"* The Email was Sent Successfully!"})
 
 def contactfail(req):
     return render(req, 'contact.html')
-
-def tocontact(req):
-    return render(req, 'contact.html')
-
-def tocategory(req):
-    return render(req, 'category.html')
 
 def to403(req):
     return render(req, '403.html')
@@ -95,3 +91,4 @@ def to503(req):
 
 def topage(req):
     return render(req, 'page.html')
+

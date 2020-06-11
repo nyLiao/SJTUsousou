@@ -4,7 +4,6 @@
 # ref: https://django-haystack.readthedocs.io/en/master/tutorial.html#setting-up-the-views
 
 from haystack import indexes
-
 from .models import SosoSitearticle
 
 
