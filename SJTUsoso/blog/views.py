@@ -327,10 +327,13 @@ def tohome(req):
         Wechats = Wechat.objects.filter(id__in=result_id)
     except:
         pass
-    latest_msg_board0 = MessageBoard.objects.order_by('-create_time')[0]
-    latest_msg_board1 = MessageBoard.objects.order_by('-create_time')[1]
-    latest_msg_board2 = MessageBoard.objects.order_by('-create_time')[2]
-    latest_msg_board3 = MessageBoard.objects.order_by('-create_time')[3]
+    try:
+        latest_msg_board0 = MessageBoard.objects.order_by('-create_time')[0]
+        latest_msg_board1 = MessageBoard.objects.order_by('-create_time')[1]
+        latest_msg_board2 = MessageBoard.objects.order_by('-create_time')[2]
+        latest_msg_board3 = MessageBoard.objects.order_by('-create_time')[3]
+    except:
+        pass
 
     return render(req, "index.html", locals())
 
