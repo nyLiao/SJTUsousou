@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}
 SJTU soso
 {% endblock %}
@@ -33,12 +34,12 @@ SJTU soso
                             </div>
                         </article>
                     </div>
-
                 </div>
                 <div class="tlinks">Collect from <a href="http://www.cssmoban.com/"  title="网站模板">网站模板</a></div>
                 <div class="line">
                     <div>视频推荐</div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <div class="row">
@@ -70,7 +71,6 @@ SJTU soso
                             {% endfor %}
                         </div>
                     </div>
-
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <div class="row">
                             {% for Video in Videos2 %}
@@ -240,7 +240,7 @@ SJTU soso
                         <div class="inner">
                             <figure>
                                 <a href="{% url 'Wechat' Wechat.id %}">
-                                    <img src="../static/images/wechat/{{ Wechat.img }}" alt="Sample Article">
+                                    <img src="/static/images/wechat/{{ Wechat.img }}" alt="Sample Article">
                                 </a>
                             </figure>
                             <div class="details">
@@ -279,13 +279,13 @@ SJTU soso
                                         <div class="badge-item"><i class="ion-star"></i> Featured</div>
                                     </div>
                                     <div class="featured-author-center">
-                                        <figure class="featured-author-picture">
-                                            {% if request.session.is_login %}
-                                                <img src="{{ user.getImage }}" alt="Avatar">
-                                            {% else %}
-                                                <img src="/static/images/img01.jpg" alt="Sample Article">
-                                            {% endif %}
-                                        </figure>
+                                            <figure style="width: 90px; height: 90px;" class="featured-author-picture">
+                                                {% if request.session.is_login %}
+                                                    <img class="img-circle img-responsive" src="{{ user.getImage }}" alt="avatar" />
+                                                {% else %}
+                                                    <img src="/static/images/img01.jpg"  alt="Sample Article" class="img-circle img-responsive" />
+                                                {% endif %}
+                                            </figure>
                                         <div class="featured-author-info">
                                             {% if request.session.is_login %}
                                                 <h2 class="name">{{ request.session.nickname }}</h2>
@@ -300,20 +300,14 @@ SJTU soso
                                 <div class="featured-author-body">
                                     <div class="featured-author-count">
                                         <div class="item">
+                                            {% if request.session.is_login %}
+                                            <a href="/blog/?user={{ request.session.user_name }}">
+                                            {% else %}
                                             <a href="#">
+                                            {% endif %}
                                                 <div class="name">博客数</div>
                                                 {% if request.session.is_login %}
-                                                    <div class="value">208</div>
-                                                {% else %}
-                                                    <div class="value">\</div>
-                                                {% endif %}
-                                            </a>
-                                        </div>
-                                        <div class="item">
-                                            <a href="#">
-                                                <div class="name">收藏数</div>
-                                                {% if request.session.is_login %}
-                                                    <div class="value">3,729</div>
+                                                    <div class="value">{{ request.session.myblogs }}</div>
                                                 {% else %}
                                                     <div class="value">\</div>
                                                 {% endif %}
@@ -321,7 +315,21 @@ SJTU soso
                                         </div>
                                         <div class="item">
                                             {% if request.session.is_login %}
-                                                <a href="#">
+                                            <a href="/collect/?user={{ request.session.user_name }}">
+                                            {% else %}
+                                            <a href="#">
+                                            {% endif %}
+                                                <div class="name">收藏数</div>
+                                                {% if request.session.is_login %}
+                                                    <div class="value">{{ itemsum }}</div>
+                                                {% else %}
+                                                    <div class="value">\</div>
+                                                {% endif %}
+                                            </a>
+                                        </div>
+                                        <div class="item">
+                                            {% if request.session.is_login %}
+                                                <a href="/userspace/">
                                             {% else %}
                                                 <a href="/login/">
                                             {% endif %}
@@ -484,6 +492,8 @@ SJTU soso
                                 </div>
                             </article>
                             <div class="line"></div>
+
+{#                            {% for i in latest_msg_board1 %}#}
                             <article class="article-mini">
                                 <div class="inner">
                                     <figure>
@@ -533,8 +543,6 @@ SJTU soso
                                 </div>
                             </article>
                         </div>
-
-
                     </div>
                 </aside>
                 <aside>
@@ -577,6 +585,4 @@ SJTU soso
         </div>
     </div>
 </section>
-
-
 {% endblock %}

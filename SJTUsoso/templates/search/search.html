@@ -71,48 +71,48 @@ SJTU soso
             <div class="col-md-9">
                 <div class="nav-tabs-group">
                     <ul class="nav-tabs-list">
-                        <li class="active"><a href="#">All</a></li>
-                        <li><a href="#">Latest</a></li>
-                        <li><a href="#">Popular</a></li>
-                        <li><a href="#">Trending</a></li>
-                        <li><a href="#">Videos</a></li>
+                        <li><a href="?q={{ query }}&order=smart" name="smart">SMART</a></li>
+                        <li class="active"><a href="?q={{ query }}&order=latest" name="latest">Latest</a></li>
+                        <li><a href="?q={{ query }}&order=popular" name="popular">Popular</a></li>
                     </ul>
-                    <div class="nav-tabs-right">
-                        <select class="form-control">
-                            <option>Limit</option>
-                            <option>10</option>
-                            <option>20</option>
-                            <option>50</option>
-                            <option>100</option>
-                        </select>
-                    </div>
                 </div>
                 <div class="search-result">
-                    Search results for keyword  "{{ query }}"  found.
+                    {{ page_obj.paginator.count }} search results for keyword  "{{ query }}"  found.
                 </div>
                 <div class="row">
                     {% if query %}
-                        {% for sitepage in page.object_list %}
+                        {% for sitepage in page_obj.object_list %}
                         <article class="col-md-12 article-list">
                             <div class="inner">
                                 <figure>
-                                    <a href="/single/">
-                                        <img src="/static/images/news/img09.jpg">
+                                    <a href="{{ sitepage.object.url }}" target="_blank">
+                                        <img src="{{ sitepage.getImage }}">
                                     </a>
                                 </figure>
                                 <div class="details">
                                     <div class="detail">
                                         <div class="category">
-                                            <a href="#">Healthy</a>
+                                            <time>
+                                                {{ sitepage.object.date }}
+                                            </time>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <a>{{ sitepage.object.kw1 }} |</a>
+                                            <a>{{ sitepage.object.kw2 }} |</a>
+                                            <a>{{ sitepage.object.kw3 }}</a>
                                         </div>
-                                        <time>  </time>
                                     </div>
-                                    <h1><a href="{{ sitepage.object.url }}" target="_blank">{{ sitepage.object.title }}</a></h1>
+                                    <h1>
+                                        <a href="{{ sitepage.object.url }}" target="_blank">
+                                            {% highlight sitepage.object.title with query max_length 30 %}
+                                        </a>
+                                    </h1>
                                     <p>
-                                        {% highlight sitepage.object.text with query %}
+                                        {% highlight sitepage.object.text with query max_length 120 %}
                                     </p>
                                     <footer>
-                                        <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>783</div></a>
+                                        <a href="#" class="love"><i class="ion-android-favorite-outline"></i>
+                                            <div>{{ sitepage.object.view }}</div>
+                                        </a>
                                         <a class="btn btn-primary more" href="{{ sitepage.object.url }}" target="_blank">
                                             <div>More</div>
                                             <div><i class="ion-ios-arrow-thin-right"></i></div>
@@ -129,20 +129,20 @@ SJTU soso
                     {% endif %}
           <div class="col-md-12 text-center">
             <ul class="pagination">
-            {% if page.has_previous %}
-                <li class="prev"><a href="?q={{ query }}&page={{ page.previous_page_number }}"><i class="ion-ios-arrow-left"></i></a></li>
+            {% if page_obj.has_previous %}
+                <li class="prev"><a href="?q={{ query }}&page={{ page_obj.previous_page_number }}"><i class="ion-ios-arrow-left"></i></a></li>
             {% else %}
                 <li class="prev"><a href="#"><i class="ion-ios-arrow-left"></i></a></li>
             {% endif %}
-              <li class="active"><a href="#">{{ page.number }}</a></li>
-            {% if page.has_next %}
-                <li class="next"><a href="?q={{ query }}&page={{ page.next_page_number }}"><i class="ion-ios-arrow-right"></i></a></li>
+              <li class="active"><a href="#">{{ page_obj.number }}</a></li>
+            {% if page_obj.has_next %}
+                <li class="next"><a href="?q={{ query }}&page={{ page_obj.next_page_number }}"><i class="ion-ios-arrow-right"></i></a></li>
             {% else %}
                 <li class="next"><a href="#"><i class="ion-ios-arrow-right"></i></a></li>
             {% endif %}
             </ul>
             <div class="pagination-help-text">
-                Search Page {{ page.number }} of {{ page.paginator.num_pages }}
+                Search Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
             </div>
           </div>
                 </div>
@@ -155,4 +155,24 @@ SJTU soso
         color: red;
     }
 </style>
+{% endblock %}
+
+{% block script_extends %}
+<script type="text/javascript">
+    // return GET param
+    $.getUrlParam = function (name) {
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        let r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return 'latest';
+    }
+    // activate order label
+    $(".nav-tabs-list").find("li").each(function() {
+        let a = $(this).find("a:first")[0];
+        if ($(a).attr("name") === $.getUrlParam('order')) {
+            $(this).addClass("active");
+        } else {
+            $(this).removeClass("active");
+        }
+    });
+</script>
 {% endblock %}

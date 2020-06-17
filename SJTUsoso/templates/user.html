@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+{{ user.name }}的个人空间
+{% endblock %}
+
+{% block content %}
+    <section class="single">
+        <div class="container">
+        <div class="row">
+        <div class="col-md-4 sidebar" id="sidebar">
+            <aside>
+                <div class="aside-body">
+                    <div class="featured-author">
+                        <div class="featured-author-inner">
+                            <div class="featured-author-cover" style="background-image: url('/static/images/news/img15.jpg');">
+                                <div class="badges">
+                                    <div class="badge-item"><i class="ion-star"></i> Featured</div>
+                                </div>
+                                <div class="featured-author-center">
+                                    <figure style="width: 90px; height: 90px;" class="featured-author-picture">
+                                        {% if user.img_url %}
+                                            <a href="/userspace/avatar/"><img class="img-circle img-responsive" src="{{ user.getImage }}" alt="avatar"/></a>
+                                        {% else %}
+                                            <a href="/userspace/avatar/"><img class="img-circle img-responsive" src="/static/images/img01.jpg" alt="avatar"/></a>
+                                        {% endif %}
+                                    </figure>
+                                    <div class="featured-author-info">
+                                        {% if request.session.is_login %}
+                                            <h2 class="name">{{ request.session.nickname }}</h2>
+                                            <div class="desc">@{{ request.session.user_name }}</div>
+                                        {% else %}
+                                            <h2 class="name">visitor</h2>
+                                            <div class="desc">您未登录</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="featured-author-body">
+                                <div class="featured-author-count">
+                                    <div class="item">
+                                        <a href="/blog/?user={{user.name}}">
+                                            <div class="name">博客数</div>
+                                            {% if request.session.is_login %}
+                                                <div class="value">{{ request.session.myblogs }}</div>
+                                            {% else %}
+                                                <div class="value">\</div>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="/collect/?user={{ user.name }}">
+                                            <div class="name">收藏数</div>
+                                            {% if request.session.is_login %}
+                                                <div class="value">{{ itemsum }}</div>
+                                            {% else %}
+                                                <div class="value">\</div>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        {% if request.session.is_login %}
+                                            <a href="/userspace/">
+                                        {% else %}
+                                            <a href="/login/">
+                                        {% endif %}
+                                                <div class="icon">
+                                                    <div>More</div>
+                                                    <i class="ion-chevron-right"></i>
+                                                </div>
+                                            </a>
+                                    </div>
+                                </div>
+                                <div class="featured-author-quote">
+                                    "Eur costrict mobsa undivani krusvuw blos andugus pu aklosah"
+                                </div>
+                                <div class="block">
+                                    <h2 class="block-title">Photos</h2>
+                                    <div class="block-body">
+                                        <ul class="item-list-round" data-magnific="gallery">
+                                            <li><a href="/static/images/news/img06.jpg" style="background-image: url('/static/images/news/img06.jpg');"></a></li>
+                                            <li><a href="/static/images/news/img07.jpg" style="background-image: url('/static/images/news/img07.jpg');"></a></li>
+                                            <li><a href="/static/images/news/img08.jpg" style="background-image: url('/static/images/news/img08.jpg');"></a></li>
+                                            <li><a href="/static/images/news/img09.jpg" style="background-image: url('/static/images/news/img09.jpg');"></a></li>
+                                            <li><a href="/static/images/news/img10.jpg" style="background-image: url('/static/images/news/img10.jpg');"></a></li>
+                                            <li><a href="/static/images/news/img11.jpg" style="background-image: url('/static/images/news/img11.jpg');"></a></li>
+                                            <li><a href="/static/images/news/img12.jpg" style="background-image: url('/static/images/news/img12.jpg');"><div class="more">+2</div></a></li>
+                                            <li class="hidden"><a href="/static/images/news/img13.jpg" style="background-image: url('/static/images/news/img13.jpg');"></a></li>
+                                            <li class="hidden"><a href="/static/images/news/img14.jpg" style="background-image: url('/static/images/news/img14.jpg');"></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="featured-author-footer">
+                                    <a href="#">See All Authors</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            </div>
+
+            <div class="col-md-8">
+                <ol class="breadcrumb">
+                  <li><a href="{% url 'home' %}">Soso</a></li>
+                  <li class="active">个人空间</li>
+                </ol>
+                    <br>
+                    <form class="clearfix" id="jsAvatarForm" enctype="multipart/form-data" autocomplete="off" method="post" action="/userspace/avatar/" target='frameFile'>
+                        {% csrf_token %}
+                        <label class="changearea" for="avatarUp">
+                            <figure style="width: 100px; height: 100px;">
+                                {% if user.img_url %}
+                                    <a href="/userspace/avatar/"><img class="img-circle img-responsive" src="{{ user.getImage }}" alt="avatar"/></a>
+                                {% else %}
+                                    <a href="/userspace/avatar/"><img class="img-circle img-responsive" src="/static/images/img01.jpg" alt="avatar"/></a>
+                                {% endif %}
+                            </figure>
+                            <div class="form-group">
+                                <span class="fl upload-inp-box" style="margin-left:70px;">
+                                    {{ avatar_form.img }}
+                                    {% if hide == 1 %}
+                                    <a href="/userspace/avatar/"><button class="button btn-green btn-w100" id="jsAvatarBtn">修改头像</button></a>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </label>
+                    </form>
+                    <br>
+                    {% if change == 0 %}
+                        <div class="container" style="left: 200px;">
+                            <div class="form-group">
+                                  用户名：{{ user.name }}
+                            </div>
+                            <div class="form-group">
+                                  昵称：{{ user.nickname }}
+                            </div>
+                            <div class="form-group">
+                                  性别：{{ user.sex }}
+                            </div>
+                            <div class="form-group">
+                                  邮箱：{{ user.email }}
+                            </div>
+                            <div class="form-group">
+                                  电话：{{ user.phone }}
+                            </div>
+                            <div class="form-group">
+                                  自我介绍：{{ user.intro }}
+                            </div>
+                            <div class="form-group">
+                              <div class="item">
+                                <a href="/userspace/change/">
+                                    <div class="icon">
+                                        <div>修改个人信息 <span class="ion-chevron-right"></span></div>
+                                    </div>
+                                </a>
+                              </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if change == 1 %}
+                        <form action="/userspace/change/" method="post">
+                              {% csrf_token %}
+                                <div class="form-group">
+                                  用户名：{{ user.name }}
+                                </div>
+                                <div class="form-group">
+                                    {{ Userspace_form.nickname.label_tag }}
+                                    {{ Userspace_form.nickname }}
+                                </div>
+                                <div class="form-group">
+                                    {{ Userspace_form.sex.label_tag }}
+                                    {{ Userspace_form.sex }}
+                                </div>
+                                <div class="form-group">
+                                    邮箱：{{ user.email }}
+                                </div>
+                                <div class="form-group">
+                                    {{ Userspace_form.phone.label_tag }}
+                                    {{ Userspace_form.phone }}
+                                </div>
+                                <div class="form-group">
+                                    {{ Userspace_form.intro.label_tag }}
+                                    {{ Userspace_form.intro }}
+                                </div>
+                              {% if message %}
+                                  <div class="alert alert-warning">{{ message }}</div>
+                              {% endif %}
+                            <div class="form-group text-right">
+                                <button class="btn btn-primary btn-block">保存修改</button>
+                            </div>
+                        </form>
+                        <div class="form-group text-right">
+                            <a href="/userspace/"><button class="btn btn-primary btn-block" >放弃修改</button></a>
+                        </div>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
