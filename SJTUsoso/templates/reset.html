@@ -10,23 +10,18 @@ SJTU soso
 				<div class="box-wrapper">				
 					<div class="box box-border">
 						<div class="box-body">
-							<h4>修改密码</h4>
-							<form action="/reset/" method="post">
-                                {% csrf_token %}
+							<h4>Reset Password</h4>
+							<form>
 								<div class="form-group">
-									<label>旧密码</label>
-									<input type="password" name="oldpassword" class="form-control">
+									<label>Email</label>
+									<input type="email" name="email" class="form-control">
 								</div>
 								<div class="form-group">
-									<label>新密码</label>
-									<input type="password" name="newpassword" class="form-control">
+									<label>New Password</label>
+									<input type="password" name="password" class="form-control">
 								</div>
-                                <div class="line thin"></div>
-                                {% if message %}
-                                    <div class="alert alert-warning">{{ message }}</div>
-                                {% endif %}
 								<div class="form-group text-right">
-									<button class="btn btn-primary btn-block">修改密码</button>
+									<button class="btn btn-primary btn-block">Reset Password</button>
 								</div>
 							</form>
 						</div>

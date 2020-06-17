@@ -1,3 +1,4 @@
+'''
 from django.contrib.contenttypes.models import ContentType
 from blog.models import ReadNum,LikeNum
 
@@ -16,7 +17,8 @@ def read_statistics_once_read(request, obj):
         readnum.read_num += 1
         readnum.save()
     return key
-
+'''
+'''
 def like_statistics_once_like(request, obj):
     ct = ContentType.objects.get_for_model(obj)
     key = "%s_%s_like" % (ct.model, obj.pk)
@@ -32,7 +34,4 @@ def like_statistics_once_like(request, obj):
         likenum.like_num += 1
         likenum.save()
     return key
-
-
-def get_filename(filename):
-    return filename.upper()
+'''
