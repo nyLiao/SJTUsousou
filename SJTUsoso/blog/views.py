@@ -6,6 +6,7 @@ from blog.models import Wechat
 from blog.models import Video
 from blog.models import User
 from blog.models import Rate
+from blog.models import VideoComments
 from blog.models import MessageBoard,CollectBoard,BoardComment
 # Create your views here.
 from django.core.paginator import Paginator
@@ -15,6 +16,7 @@ from django.urls import reverse
 from .forms import *
 from django.db.models import Avg
 from .ucf import ItemBasedCF
+from .recom_friend import *
 from django.core.paginator import Paginator
 from django.db.models import Q, Count, F
 from django.http import HttpResponse, JsonResponse
@@ -24,26 +26,11 @@ from rest_framework.renderers import JSONRenderer
 import json
 import os
 import random
+import math
 from .one_tfidf import *
-
 
 def tocategory(request):
     return render(request, 'category.html')
-
-
-# def login_in(func):  # 验证用户是否登录
-# 	@wraps(func)
-# 	def wrapper(*args, **kwargs):
-# 		request = args[0]
-# 		is_login = request.session.get("login_in")
-# 		print(is_login)
-# 		if is_login:
-# 			return func(*args, **kwargs)
-# 		else:
-# 			return redirect(reverse("login"))
-#
-# 	return wrapper
-
 
 def login(request):
     if request.session.get('is_login', None):
@@ -71,7 +58,6 @@ def login(request):
 
     login_form = UserForm()
     return render(request, 'login.html', locals())
-
 
 def message_boards(request, fap_id=1, pagenum=1, **kwargs):
     # 获取论坛内容
@@ -129,7 +115,7 @@ def message_boards(request, fap_id=1, pagenum=1, **kwargs):
     # 构造页面渲染的数据
     '''
     渲染需要的数据:
-    - 当前页的博对象列表
+    - 当前页的博文对象列表
     - 分页页码范围
     - 当前页的页码
     '''
@@ -146,14 +132,9 @@ def message_boards(request, fap_id=1, pagenum=1, **kwargs):
     }
     return render(request, "message_boards.html", context=data)
 
-
-# @login_in
 def new_message_board(request):
     # 写新论坛
-    try:
-        user = User.objects.get(name=request.session['user_name'])
-    except KeyError:
-        return redirect('login')
+    user = User.objects.get(name=request.session['user_name'])
     title = request.POST.get("title")
     content = request.POST.get("content")
     # print('ddddddddddddddddd', title, content)
@@ -161,7 +142,6 @@ def new_message_board(request):
         return redirect(reverse("message_boards", kwargs={'fap_id': 2, 'pagenum': 1}))
     MessageBoard.objects.create(user=user, content=content, title=title)
     return redirect(reverse("message_boards", args=(2, 1)))
-
 
 def get_message_board(request, message_board_id, fap_id=1, currentpage=1):
     try:
@@ -175,7 +155,6 @@ def get_message_board(request, message_board_id, fap_id=1, currentpage=1):
 
     MessageBoard.objects.filter(id=message_board_id).update(look_num=F('look_num') + 1)
     msg_board = MessageBoard.objects.get(id=message_board_id)
-
     board_comments = msg_board.boardcomment_set.all()
     have_comment = True
     if not board_comments:
@@ -193,8 +172,6 @@ def get_message_board(request, message_board_id, fap_id=1, currentpage=1):
 
     return render(request, "message_board.html", context=context)
 
-
-# @login_in
 def new_board_comment(request, message_board_id, fap_id=1, currentpage=1):
     # 写评论
     content = request.POST.get("content")
@@ -209,7 +186,6 @@ def new_board_comment(request, message_board_id, fap_id=1, currentpage=1):
     )
     MessageBoard.objects.filter(id=message_board_id).update(feebback_num=F('feebback_num') + 1)
     return redirect(reverse("get_message_board", args=(message_board_id, fap_id, currentpage)))
-
 
 def like_collect(request):
 
@@ -260,7 +236,6 @@ def like_collect(request):
         print(e)
         return JsonResponse(data={'code': 0, 'msg': '参数有误2'})
 
-
 def tosingle(req,Wechat_id):
     user = User.objects.get(name=req.session['user_name'])
     demo1 = Wechat.objects.get(id=Wechat_id)
@@ -298,9 +273,9 @@ def tosingle(req,Wechat_id):
 
     return render(req, 'single.html',{"Wechat": demo1})
 
-
 def tohome(req):
     try:
+        #处理协同过滤视频
         user = User.objects.get(name=req.session['user_name'])
         item = ItemBasedCF()
         item.ItemSimilarity()
@@ -319,6 +294,7 @@ def tohome(req):
         Videos1 = Video.objects.filter(id__in=[video_recommend_list[0], video_recommend_list[1]])
         Videos2 = Video.objects.filter(id__in=[video_recommend_list[2], video_recommend_list[3]])
 
+        #处理内容推送
         filename = r"D:\venv\SJTUsousou\SJTUsoso\static\data\fenci.json"
         with open(filename) as file_obj:
             dicts = json.load(file_obj)
@@ -341,23 +317,22 @@ def tohome(req):
                 if count == 4:
                     break
         Wechats = Wechat.objects.filter(id__in=result_id)
+        #处理好友推荐
+        friends_id = search_friend(user.id)
+        friends = []
+        for id in friends_id:
+            friends.append((User.objects.get(id=id)).nickname)
+
     except:
         pass
-    latest_msg_board0 = MessageBoard.objects.order_by('-create_time')[0]
-    latest_msg_board1 = MessageBoard.objects.order_by('-create_time')[1]
-    latest_msg_board2 = MessageBoard.objects.order_by('-create_time')[2]
-    latest_msg_board3 = MessageBoard.objects.order_by('-create_time')[3]
-
     return render(req, "index.html", locals())
 
-
-def cal(dict1,dict2):
+def cal(dict1,dict2):#分词与TFIDF处理后的相似度计算
     sum=0
     for key in dict1.keys():
         if key in dict2.keys():
             sum+=dict1[key]*dict2[key]
     return sum
-
 
 def score(request, Video_id):
     # 打分
@@ -379,11 +354,10 @@ def score(request, Video_id):
 
     return render(request, "detail.html", {"Video":video,"is_rate":is_rate})
 
-
 def tovideo(req,Video_id):
     demo = Video.objects.get(id=Video_id)
-    return render(req, 'detail.html',{"Video":demo})
-
+    comments=VideoComments.objects.filter(video_id=Video_id)
+    return render(req, 'detail.html',{"Video":demo,"comments":comments})
 
 def register(request):
     if request.session.get('is_login', None):
@@ -421,7 +395,6 @@ def register(request):
     register_form = RegisterForm()
     return render(request, 'register.html', locals())
 
-
 def logout(request):
     if not request.session.get('is_login', None):
         # 如果本来就未登录，也就没有登出一说
@@ -433,14 +406,11 @@ def logout(request):
     # del request.session['user_name']
     return redirect("home")
 
-
 def forgot(req):
     return render(req, 'forgot.html')
 
-
 def reset(req):
     return render(req, 'reset.html')
-
 
 def hash_code(s, salt='mysite'):# 加点盐
     h = hashlib.sha256()

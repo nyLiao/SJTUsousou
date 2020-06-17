@@ -8,7 +8,6 @@ import os
 from mdeditor.fields import MDTextField
 from django.db import models
 from django.db.models import Avg
-
 from django.db.models.fields import exceptions
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -173,6 +172,17 @@ class Video(models.Model):
 
     def __str__(self):
         return self.title
+
+class VideoComments(models.Model):
+    content = models.CharField(verbose_name="内容", max_length=300)
+    date = models.CharField(verbose_name="日期", max_length=50)
+    user_nickname = models.CharField(verbose_name="昵称", max_length=50)
+    user_id = models.IntegerField(default=0, blank=True)
+    video_id = models.IntegerField(default=0, blank=True)
+    objects = models.Manager()
+    class Meta:
+        verbose_name = "视频评论"
+        verbose_name_plural = "视频评论"
 
 class Rate(models.Model):
     video = models.ForeignKey(
