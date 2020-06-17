@@ -2,9 +2,8 @@
 import simplejson as json
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
-from .models import *
-import json
 from django.core.mail import send_mail
+from django.db import connection
 
 from haystack.query import SearchQuerySet
 from haystack.generic_views import SearchView
@@ -12,6 +11,7 @@ from haystack.generic_views import SearchView
 from SJTUsoso import settings
 from SJTUsoso.utils import *
 from .models import *
+
 
 # Create your views here.
 class mySearchView(SearchView):
@@ -25,8 +25,20 @@ class mySearchView(SearchView):
         order = self.request.GET.get('order')
         if not order:
             order = "latest"
+
         if order == "smart":
-            queryset = queryset.order_by('-view')
+            try:
+                from .bert_run import get_similarity
+                qry = self.request.GET.get('q')
+                for obj in queryset[:50]:
+                    art_obj = obj.object
+                    art_obj.sml = get_similarity(qry, art_obj.title)
+                    art_obj.save()
+                if queryset.filter(sml__gte=1).count() > 0:
+                    queryset = queryset.filter(sml__gte=1)
+                queryset = queryset.order_by('-sml')
+            except Exception as e:
+                print("Sorting unsupported.")
         elif order == "popular":
             queryset = queryset.order_by('-view')
         else:
@@ -37,10 +49,12 @@ class mySearchView(SearchView):
     def get_context_data(self, *args, **kwargs):
         context = super(mySearchView, self).get_context_data(*args, **kwargs)
         # do something
-        
+
         # print('context:', context)
         queryset = self.get_queryset()
-        print('queryset:', [i.title + str(i.view) for i in queryset])
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE soso_siteArticle SET sml = 0")
+        # print('queryset:', [i.title + str(i.sml) for i in queryset])
         return context
 
 
@@ -91,4 +105,3 @@ def to503(req):
 
 def topage(req):
     return render(req, 'page.html')
-

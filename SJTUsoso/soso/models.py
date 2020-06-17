@@ -34,7 +34,8 @@ class SosoSitearticle(models.Model):
     kw1 = models.CharField(max_length=20, blank=True, null=True)
     kw2 = models.CharField(max_length=20, blank=True, null=True)
     kw3 = models.CharField(max_length=20, blank=True, null=True)
-    img_url = models.ImageField(upload_to='images',blank=True)
+    img_url = models.ImageField(upload_to='images', blank=True)
+    sml = models.IntegerField(blank=True, null=True, default=0)
 
     def getImage(self):
         if self.img_url:

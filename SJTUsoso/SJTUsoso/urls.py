@@ -33,9 +33,6 @@ urlpatterns = [
     path('500/', to500),
     path('503/', to503),
 
-
-
-    #path('search/', SearchView(), name='haystack_search'),
     path('page/', topage),
 
     path("score/<int:Video_id>/", score, name="score"),  # 评分
