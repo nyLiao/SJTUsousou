@@ -1,0 +1,36 @@
+{% extends 'base3.html' %}
+{% block right-panel-content %}
+    <h3 class="text-center">{{ title }}</h3>
+    <a href="#">视频资源</a>
+    <br/><br/>
+    <form method="post" enctype="multipart/form-data" action="/post1/">
+        {%csrf_token%}
+        标题: <input type="text" name="title"/>
+        <br/><br/>
+        标签：<input type="text" name="tag"/>
+        <br/><br/>
+        视频:<input type="file" name="video">
+        <br/>
+        封面:<input type="file" name="preload">
+        <br/>
+        <input type="submit" value="上传视频">
+    </form>
+    <br/><br/>
+    <a href="#">公众号资源</a>
+    <br/><br/>
+    <form method="post" enctype="multipart/form-data" action="/post2/">
+        {%csrf_token%}
+        标题: <input type="text" name="title"/>
+        <br/><br/>
+        标签：<input type="text" name="tag"/>
+        <br/><br/>
+        摘要：<br/><textarea cols="80" rows="3" name="digest"></textarea>
+        <br/><br/>
+        内容：<br/><textarea cols="80" rows="10" name="content"></textarea>
+        <br/>
+        封面:<input type="file" name="pic">
+        <br/>
+        <input type="submit" value="上传公众号文章">
+    </form>
+{% endblock %}
+
