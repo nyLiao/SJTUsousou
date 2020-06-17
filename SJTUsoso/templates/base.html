@@ -119,6 +119,7 @@
 											</li>
                                         </ul>
                                     </li>
+                                    <li><a href="{% url 'message_boards' 1 1 %}">BBS论坛</a></li>
 									<li><a href="/contact/">联系我们</a></li>
 								</ul>
 							</li>
@@ -207,6 +208,7 @@
                                         <li><a href="/userspace/"><i class="icon ion-person"></i>我的账户</a></li>
                                         <li><a href="#"><i class="icon ion-heart"></i>我的收藏</a></li>
                                         <li><a href="/blog/?user={{ request.session.user_name }}"><i class="icon ion-ios-paper"></i>我的博客</a></li>
+                                        <li><a href="{% url 'message_boards' 5 1 %}"><i class="icon ion-ios-paper"></i>我的帖子</a></li>
                                         <li><a href="/blog/write/"><i class="icon ion-waterdrop"></i>写文章</a></li>
                                         <li><a href="/reset/"><i class="icon ion-key"></i>修改密码</a></li>
                                         <li class="divider"></li>
