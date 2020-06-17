@@ -6,7 +6,7 @@ chardet==3.0.4
 construct==2.5.3
 defusedxml==0.6.0
 diff-match-patch==20181111
-Django==3.0.5
+Django==3.0.7
 django-ckeditor==5.9.0
 django-crispy-forms==1.9.1
 django-formtools==2.2
