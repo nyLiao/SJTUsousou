@@ -4,6 +4,7 @@
             <link rel="stylesheet" href="{% static 'css/dropload.css' %}">
             <div class="ui unstackable two column grid">
                 <div class=" ten wide column">
+
                     <video class="video" autoplay="autoplay" controls="controls" >
                         <source src="/static/images/videos/{{ Video.video }}" type="video/mp4">
                     </video>
@@ -60,37 +61,21 @@
                     </div>
 
                     <div class="ui comments">
-                        {% if user.is_authenticated %}
-                        <form class="ui reply form" id="comment_form" method="post"
-                           action="{% url 'comment:submit_comment' video.pk %}"  >
-                            {% csrf_token %}
-                            <div class="field">
-                                {{form.content}}
-                                <input type="hidden" value="8888" name="video_id">
-                            </div>
-                            <button class="ui primary button" type="submit">
-                                添加评论
-                            </button>
-                            <div class="ui info message n">
-                                <div class="item" id="comment-result"></div>
-                            </div>
-                        </form>
-                        {% else %}
-                        <div class="ui ignored info attached message">
-            {#                <p>登录后即可评论 &nbsp;&nbsp;&nbsp;<a href="{% url 'users:login' %}?next=32423">马上登录</a></p>#}
-                        </div>
-                        {% endif %}
                         <h3 class="ui dividing header" id="id_comment_label">评论</h3>
-                        <div class="comment-list"></div>
+                        <form method="post"  action="{% url 'video_comment' Video.id %}" name="video_comment">
+                            {%csrf_token%}
+                            <textarea cols="120" rows="3" name="content"></textarea>
+                            <br/><br/>
+                            <input type="submit" value="上传评论">
+                        </form>
+                        <br/>
+                        {% for comment in comments %}
+                        <div class="container-fluid">
+                            <p style="font-size:20px">{{ comment.user_nickname }}:{{ comment.content }}</p>
+                        </div>
+                        {% endfor %}
+                        <br/>
                     </div>
                 </div>
-
-            {#    <div class="six wide column">#}
-            {#        {% include "video/recommend.html" %}#}
-            {#        {% include "video/ad.html" %}#}
-            {#    </div>#}
             </div>
-
-
-
-        {% endblock %}
+{% endblock %}

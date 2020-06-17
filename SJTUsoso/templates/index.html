@@ -113,16 +113,9 @@ SJTU soso
                         <h1 class="title-col">好友推荐</h1>
                         <div class="body-col">
                             <ol class="tags-list">
-                                <li><a href="#">小李</a></li>
-                                <li><a href="#">小王</a></li>
-                                <li><a href="#">JavaScript</a></li>
-                                <li><a href="#">jQuery</a></li>
-                                <li><a href="#">Bootstrap</a></li>
-                                <li><a href="#">Responsive</a></li>
-                                <li><a href="#">AuteIrure</a></li>
-                                <li><a href="#">Voluptate</a></li>
-                                <li><a href="#">Veit</a></li>
-                                <li><a href="#">Reprehenderit</a></li>
+                                {% for friend in friends %}
+                                <li><a href="#">{{ friend }}</a></li>
+                                {% endfor %}
                             </ol>
                         </div>
                     </div>
@@ -470,75 +463,71 @@ SJTU soso
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="comments">
-
                             <article class="article-fw">
                                 <div class="inner">
                                     <figure>
+{#                                        {% url 'message_boards' 1 1 %}#}
                                         <a href="{% url 'message_boards' 1 1 %}">
                                             <img src="/static/images/bbs_logo.jpg" alt="Sample Article">
                                         </a>
                                     </figure>
                                     <div class="details">
                                         <div class="detail">
-                                            <div class="time">{{ latest_msg_board0.create_time }}</div>
-                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board0.id }}/2/1/">{{ latest_msg_board0.user }}</a></div>
+                                            <div class="time">December 31, 2016</div>
+                                            <div class="category"><a href="/category/">Sport</a></div>
                                         </div>
-                                        <h1><a href="/get_message_board/{{ latest_msg_board0.id }}/2/1/">{{ latest_msg_board0.title }}</a></h1>
-{#                                        <p>#}
-{#                                            {{ latest_msg_board0.content }}#}
-{#                                        </p>#}
+                                        <h1><a href="/single/">Donec congue turpis vitae mauris</a></h1>
+                                        <p>
+                                            Donec congue turpis vitae mauris condimentum luctus. Ut dictum neque at egestas convallis.
+                                        </p>
                                     </div>
                                 </div>
                             </article>
                             <div class="line"></div>
-
-{#                            {% for i in latest_msg_board1 %}#}
                             <article class="article-mini">
                                 <div class="inner">
                                     <figure>
-                                        <a href="/get_message_board/{{ latest_msg_board1.id }}/2/1/">
+                                        <a href="/single/">
                                             <img src="/static/images/news/img05.jpg" alt="Sample Article">
                                         </a>
                                     </figure>
                                     <div class="padding">
-                                        <h1><a href="/get_message_board/{{ latest_msg_board1.id }}/2/1/">{{ latest_msg_board1.title }}</a></h1>
+                                        <h1><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
                                         <div class="detail">
-                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board1.id }}/2/1/">{{ latest_msg_board1.user }}</a></div>
-                                            <div class="time">{{ latest_msg_board1.create_time }}</div>
+                                            <div class="category"><a href="/category/">Lifestyle</a></div>
+                                            <div class="time">December 22, 2016</div>
                                         </div>
                                     </div>
                                 </div>
                             </article>
-
                             <article class="article-mini">
                                 <div class="inner">
                                     <figure>
-                                        <a href="/get_message_board/{{ latest_msg_board2.id }}/2/1/">
+                                        <a href="/single/">
                                             <img src="/static/images/news/img02.jpg" alt="Sample Article">
                                         </a>
                                     </figure>
                                     <div class="padding">
-                                        <h1><a href="/get_message_board/{{ latest_msg_board2.id }}/2/1/">{{ latest_msg_board2.title }}</a></h1>
+                                        <h1><a href="/single/">Fusce ullamcorper elit at felis cursus suscipit</a></h1>
                                         <div class="detail">
-                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board2.id }}/2/1/">{{ latest_msg_board2.user }}</a></div>
-                                            <div class="time">{{ latest_msg_board2.create_time }}</div>
+                                            <div class="category"><a href="/category/">Travel</a></div>
+                                            <div class="time">December 21, 2016</div>
                                         </div>
                                     </div>
                                 </div>
                             </article>
-
                             <article class="article-mini">
                                 <div class="inner">
                                     <figure>
-                                        <a href="/get_message_board/{{ latest_msg_board3.id }}/2/1/">
+                                        <a href="/single/">
                                             <img src="/static/images/news/img10.jpg" alt="Sample Article">
                                         </a>
                                     </figure>
                                     <div class="padding">
-                                        <h1><a href="/get_message_board/{{ latest_msg_board3.id }}/2/1/">{{ latest_msg_board3.title }}</a></h1>
+                                        <h1><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
                                         <div class="detail">
-                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board3.id }}/2/1/">{{ latest_msg_board3.user }}</a></div>
-                                            <div class="time">{{ latest_msg_board3.create_time }}</div>
+                                            <div class="category"><a href="/category/">Healthy</a></div>
+                                            <div class="time">December 20, 2016</div>
                                         </div>
                                     </div>
                                 </div>
