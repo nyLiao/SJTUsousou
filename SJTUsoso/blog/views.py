@@ -48,6 +48,7 @@ def tocategory(request):
 
 def message_boards(request, fap_id=1, pagenum=1, **kwargs):
     # 获取论坛内容
+    blog_types = models.BlogType.objects.all()
     msg = request.GET.get('msg', '')
     # print('做了缓存')
     have_board = True
@@ -117,10 +118,11 @@ def message_boards(request, fap_id=1, pagenum=1, **kwargs):
         "have_board": have_board,
         "fap_id": fap_id,
     }
-    return render(request, "message_boards.html", context=data)
+    return render(request, "message_boards.html", context=data,)
 
 def new_message_board(request):
     # 写新论坛
+    blog_types = models.BlogType.objects.all()
     user = User.objects.get(name=request.session['user_name'])
     title = request.POST.get("title")
     content = request.POST.get("content")
@@ -131,6 +133,7 @@ def new_message_board(request):
     return redirect(reverse("message_boards", args=(2, 1)))
 
 def get_message_board(request, message_board_id, fap_id=1, currentpage=1):
+    blog_types = models.BlogType.objects.all()
     try:
         user = User.objects.get(name=request.session['user_name'])
         collectboard = CollectBoard.objects.filter(user=user, message_board_id=message_board_id)
@@ -161,6 +164,7 @@ def get_message_board(request, message_board_id, fap_id=1, currentpage=1):
 
 def new_board_comment(request, message_board_id, fap_id=1, currentpage=1):
     # 写评论
+    blog_types = models.BlogType.objects.all()
     content = request.POST.get("content")
     if not content:
         return redirect(reverse("get_message_board", args=(message_board_id, fap_id, currentpage)))
@@ -175,7 +179,7 @@ def new_board_comment(request, message_board_id, fap_id=1, currentpage=1):
     return redirect(reverse("get_message_board", args=(message_board_id, fap_id, currentpage)))
 
 def like_collect(request):
-
+    blog_types = models.BlogType.objects.all()
     user = User.objects.get(name=request.session['user_name'])
     message_board_id = request.POST.get("message_board_id")
     like_or_collect = request.POST.get("like_or_collect", None)  # 点赞还是收藏
