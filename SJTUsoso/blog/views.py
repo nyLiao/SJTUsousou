@@ -296,7 +296,6 @@ def tohome(req):
         user = User.objects.get(name=req.session['user_name'])
         items = models.Collection.objects.filter(user=user.name)
         itemsum = str(items.count())
-        blog_types = models.BlogType.objects.all()
         item = ItemBasedCF()
         item.ItemSimilarity()
         recommedDict = item.Recommend(user.id)
@@ -357,6 +356,11 @@ def tohome(req):
         user = User.objects.get(name=req.session['user_name'])
         items = models.Collection.objects.filter(user=user.name)
         itemsum = str(items.count())
+    except:
+        pass
+
+    try:
+        blog_types = models.BlogType.objects.all()
     except:
         pass
 
