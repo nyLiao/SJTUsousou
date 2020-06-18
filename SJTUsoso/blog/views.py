@@ -340,7 +340,7 @@ def tohome(req):
         pass
 
     try:
-        sites = SosoSitearticle.objects.order_by('-view')[:10]
+        sites = SosoSitearticle.objects.filter(date__range=["2020-01-01", "2020-12-31"]).order_by('-view')[:10]
     except:
         pass
     return render(req, "index.html", locals())
