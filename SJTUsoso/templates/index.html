@@ -341,26 +341,7 @@ SJTU soso
                                         </div>
                                     </div>
                                     <div class="featured-author-quote">
-                                        "Eur costrict mobsa undivani krusvuw blos andugus pu aklosah"
-                                    </div>
-                                    <div class="block">
-                                        <h2 class="block-title">Photos</h2>
-                                        <div class="block-body">
-                                            <ul class="item-list-round" data-magnific="gallery">
-                                                <li><a href="/static/images/news/img06.jpg" style="background-image: url('/static/images/news/img06.jpg');"></a></li>
-                                                <li><a href="/static/images/news/img07.jpg" style="background-image: url('/static/images/news/img07.jpg');"></a></li>
-                                                <li><a href="/static/images/news/img08.jpg" style="background-image: url('/static/images/news/img08.jpg');"></a></li>
-                                                <li><a href="/static/images/news/img09.jpg" style="background-image: url('/static/images/news/img09.jpg');"></a></li>
-                                                <li><a href="/static/images/news/img10.jpg" style="background-image: url('/static/images/news/img10.jpg');"></a></li>
-                                                <li><a href="/static/images/news/img11.jpg" style="background-image: url('/static/images/news/img11.jpg');"></a></li>
-                                                <li><a href="/static/images/news/img12.jpg" style="background-image: url('/static/images/news/img12.jpg');"><div class="more">+2</div></a></li>
-                                                <li class="hidden"><a href="/static/images/news/img13.jpg" style="background-image: url('/static/images/news/img13.jpg');"></a></li>
-                                                <li class="hidden"><a href="/static/images/news/img14.jpg" style="background-image: url('/static/images/news/img14.jpg');"></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="featured-author-footer">
-                                        <a href="#">See All Authors</a>
+                                        "{{ request.session.intro }}"
                                     </div>
                                 </div>
                             </div>
@@ -496,11 +477,6 @@ SJTU soso
 {#                            {% for i in latest_msg_board1 %}#}
                             <article class="article-mini">
                                 <div class="inner">
-                                    <figure>
-                                        <a href="/get_message_board/{{ latest_msg_board1.id }}/2/1/">
-                                            <img src="/static/images/news/img05.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
                                     <div class="padding">
                                         <h1><a href="/get_message_board/{{ latest_msg_board1.id }}/2/1/">{{ latest_msg_board1.title }}</a></h1>
                                         <div class="detail">
@@ -513,11 +489,6 @@ SJTU soso
 
                             <article class="article-mini">
                                 <div class="inner">
-                                    <figure>
-                                        <a href="/get_message_board/{{ latest_msg_board2.id }}/2/1/">
-                                            <img src="/static/images/news/img02.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
                                     <div class="padding">
                                         <h1><a href="/get_message_board/{{ latest_msg_board2.id }}/2/1/">{{ latest_msg_board2.title }}</a></h1>
                                         <div class="detail">
@@ -530,11 +501,6 @@ SJTU soso
 
                             <article class="article-mini">
                                 <div class="inner">
-                                    <figure>
-                                        <a href="/get_message_board/{{ latest_msg_board3.id }}/2/1/">
-                                            <img src="/static/images/news/img10.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
                                     <div class="padding">
                                         <h1><a href="/get_message_board/{{ latest_msg_board3.id }}/2/1/">{{ latest_msg_board3.title }}</a></h1>
                                         <div class="detail">
@@ -545,44 +511,6 @@ SJTU soso
                                 </div>
                             </article>
                         </div>
-
-
-                    </div>
-                </aside>
-                <aside>
-                    <div class="aside-body">
-                        <ul class="video-list" data-youtube='"carousel":true, "nav": "#video-list-nav"'>
-                            <li><a data-youtube-id="SBjQ9tuuTJQ" data-action="magnific"></a></li>
-                            <li><a data-youtube-id="9cVJr3eQfXc" data-action="magnific"></a></li>
-                            <li><a data-youtube-id="DnGdoEa1tPg" data-action="magnific"></a></li>
-                        </ul>
-                    </div>
-                </aside>
-                <aside id="sponsored">
-                    <h1 class="aside-title">Sponsored</h1>
-                    <div class="aside-body">
-                        <ul class="sponsored">
-                            <li>
-                                <a href="#">
-                                    <img src="/static/images/sponsored.png" alt="Sponsored">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="/static/images/sponsored.png" alt="Sponsored">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="/static/images/sponsored.png" alt="Sponsored">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="/static/images/sponsored.png" alt="Sponsored">
-                                </a>
-                            </li>
-                        </ul>
                     </div>
                 </aside>
             </div>

@@ -31,30 +31,6 @@ from .one_tfidf import *
 def tocategory(request):
     return render(request, 'category.html')
 
-def login(request):
-    if request.session.get('is_login', None):
-        return redirect('home')
-
-    if request.method == "POST":
-        login_form = UserForm(request.POST)
-        message = "请检查填写的内容！"
-        if login_form.is_valid():
-            username = login_form.cleaned_data['username']
-            password = login_form.cleaned_data['password']
-            try:
-                user = models.User.objects.get(name=username)
-                if user.password == hash_code(password):  # 哈希值和数据库内的值进行比对
-                    request.session['is_login'] = True
-                    request.session['user_id'] = user.id
-                    request.session['user_name'] = user.name
-                    request.session['nickname'] = user.nickname
-                    return redirect('home')
-                else:
-                    message = "密码不正确！"
-            except:
-                message = "用户不存在！"
-        return render(request, 'login.html', locals())
-
 
 # def login_in(func):  # 验证用户是否登录
 #   @wraps(func)
@@ -288,8 +264,6 @@ def tohome(req):
     try:
         #处理协同过滤视频
         user = User.objects.get(name=req.session['user_name'])
-        items = models.Collection.objects.filter(user=user.name)
-        itemsum = str(items.count())
         blog_types = models.BlogType.objects.all()
         item = ItemBasedCF()
         item.ItemSimilarity()
@@ -347,6 +321,12 @@ def tohome(req):
     except:
         pass
 
+    try:
+        user = User.objects.get(name=req.session['user_name'])
+        items = models.Collection.objects.filter(user=user.name)
+        itemsum = str(items.count())
+    except:
+        pass
     return render(req, "index.html", locals())
 
 def cal(dict1,dict2):#分词与TFIDF处理后的相似度计算
@@ -401,6 +381,7 @@ def login(request):
                     request.session['user_id'] = user.id
                     request.session['user_name'] = user.name
                     request.session['nickname'] = user.nickname
+                    request.session['intro'] = user.intro
                     request.session['myblogs'] = blogsnum
                     return redirect('home')
                 else:
@@ -520,6 +501,7 @@ def userspacechange(request):
                 request.session['user_id'] = user.id
                 request.session['user_name'] = user.name
                 request.session['nickname'] = user.nickname
+                request.session['intro'] = user.intro
                 request.session['myblogs'] = blogsnum
                 return redirect('/userspace/')
         change = 1
@@ -546,6 +528,7 @@ def avatarup(request):
                 request.session['user_id'] = user.id
                 request.session['user_name'] = user.name
                 request.session['nickname'] = user.nickname
+                request.session['intro'] = user.intro
                 request.session['myblogs'] = blogsnum
                 return redirect('/userspace/')
         avatar_form = UpdateAvatarForm()
@@ -609,6 +592,7 @@ def WBlog(request):
                 request.session['user_id'] = user.id
                 request.session['user_name'] = user.name
                 request.session['nickname'] = user.nickname
+                request.session['intro'] = user.intro
                 request.session['myblogs'] = blogsnum
                 request.session['new_blog'] = new_blog.pk
                 return redirect('/blog/'+str(new_blog.pk)+'/')
@@ -790,5 +774,5 @@ def decollect(request):
                 item.like_num -= 1
                 item.save()
                 messages.success(request, "取消收藏成功!")
-                return redirect('/collect/?user='+request.session['user_name'])
+                return redirect('/blog/'+str(item.pk)+'/')
     return redirect('/login/')
