@@ -363,8 +363,9 @@ SJTU soso
                             <h1><a href="{% url 'blog_detail' blog.pk %}">{{ blog.title }}</a></h1>
                             <div class="detail">
                               <div class="category"><a href="/blog/?typename={{ blog.blog_type }}">{{ blog.blog_type }}</a></div>&nbsp;
-                              <div class="time right">{{ blog.create_month }}&nbsp{{ blog.created_time|date:"d,  20y" }}</div>&nbsp;
-                              <i class="ion-fireball right"></i> <div>{{ blog.get_read_num }}</div>
+                              <div class="time">{{ blog.create_month }}&nbsp{{ blog.created_time|date:"d,  20y" }}</div>&nbsp;
+                              <i class="ion-android-favorite-outline"></i> <div>{{ blog.like_num }}</div>&nbsp;
+                              <i class="ion-fireball"></i> <div>{{ blog.get_read_num }}</div>&nbsp;
                             </div>
                           </div>
                           </div>
