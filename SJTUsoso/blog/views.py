@@ -117,6 +117,7 @@ def message_boards(request, fap_id=1, pagenum=1, **kwargs):
         "message_boards": msg_board,
         "have_board": have_board,
         "fap_id": fap_id,
+        "blog_types": models.BlogType.objects.all()
     }
     return render(request, "message_boards.html", context=data,)
 
