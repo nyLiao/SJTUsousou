@@ -16,6 +16,7 @@ from django.contrib import messages
 from django.urls import reverse
 from rest_framework.renderers import JSONRenderer
 
+from soso.models import *
 from SJTUsoso.utils import *
 from SJTUsoso import settings
 from soso import models as sosomodels
@@ -335,6 +336,11 @@ def tohome(req):
 
     try:
         blogs = models.Blog.objects.order_by('-like_num')[0:5:1]
+    except:
+        pass
+
+    try:
+        sites = SosoSitearticle.objects.order_by('-view')[:10]
     except:
         pass
     return render(req, "index.html", locals())

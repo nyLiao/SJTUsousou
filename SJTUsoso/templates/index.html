@@ -120,8 +120,7 @@ SJTU soso
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-6">
-                        <h1 class="title-col">
-                            Hot News
+                        <h1 class="title-col">热搜
                             <div class="carousel-nav" id="hot-news-nav">
                                 <div class="prev">
                                     <i class="ion-ios-arrow-left"></i>
@@ -132,102 +131,24 @@ SJTU soso
                             </div>
                         </h1>
                         <div class="body-col vertical-slider" data-max="4" data-nav="#hot-news-nav" data-item="article">
+                            {% for sitepage in sites %}
                             <article class="article-mini">
                                 <div class="inner">
                                     <figure>
-                                        <a href="/single/">
-                                            <img src="/static/images/news/img09.jpg" alt="Sample Article">
+                                        <a href="{{ sitepage.url }}">
+                                            <img src="{{ sitepage.getImage }}">
                                         </a>
                                     </figure>
                                     <div class="padding">
-                                        <h1><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
+                                        <h1><a href="{{ sitepage.url }}">{{ sitepage.title }}</a></h1>
                                         <div class="detail">
-                                            <div class="category"><a href="/category/">Lifestyle</a></div>
-                                            <div class="time">December 22, 2016</div>
+                                            <div class="category"><a href="?q={{ sitepage.kw1 }}">{{ sitepage.kw1 }}</a></div>
+                                            <div class="time">{{ sitepage.date }}</div>
                                         </div>
                                     </div>
                                 </div>
                             </article>
-                            <article class="article-mini">
-                                <div class="inner">
-                                    <figure>
-                                        <a href="/single/">
-                                            <img src="/static/images/news/img01.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
-                                    <div class="padding">
-                                        <h1><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
-                                        <div class="detail">
-                                            <div class="category"><a href="/category/">Lifestyle</a></div>
-                                            <div class="time">December 22, 2016</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="article-mini">
-                                <div class="inner">
-                                    <figure>
-                                        <a href="/single/">
-                                            <img src="/static/images/news/img05.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
-                                    <div class="padding">
-                                        <h1><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
-                                        <div class="detail">
-                                            <div class="category"><a href="/category/">Lifestyle</a></div>
-                                            <div class="time">December 22, 2016</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="article-mini">
-                                <div class="inner">
-                                    <figure>
-                                        <a href="/single/">
-                                            <img src="/static/images/news/img02.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
-                                    <div class="padding">
-                                        <h1><a href="/single/">Fusce ullamcorper elit at felis cursus suscipit</a></h1>
-                                        <div class="detail">
-                                            <div class="category"><a href="/category/">Travel</a></div>
-                                            <div class="time">December 21, 2016</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="article-mini">
-                                <div class="inner">
-                                    <figure>
-                                        <a href="/single/">
-                                            <img src="/static/images/news/img13.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
-                                    <div class="padding">
-                                        <h1><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
-                                        <div class="detail">
-                                            <div class="category"><a href="/category/">International</a></div>
-                                            <div class="time">December 20, 2016</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="article-mini">
-                                <div class="inner">
-                                    <figure>
-                                        <a href="/single/">
-                                            <img src="/static/images/news/img08.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
-                                    <div class="padding">
-                                        <h1><a href="/single/">Aliquam et metus convallis tincidunt velit ut rhoncus dolor</a></h1>
-                                        <div class="detail">
-                                            <div class="category"><a href="/category/">Computer</a></div>
-                                            <div class="time">December 19, 2016</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
