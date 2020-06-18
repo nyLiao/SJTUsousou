@@ -65,13 +65,13 @@ def count_resource(request):
 def video_post(request):
     if request.method == 'POST':
         myFile = request.FILES.get("video", None)
-        destination = open("D:\\venv\\SJTUsousou\\SJTUsoso\\static\\images\\videos\\" + myFile.name, 'wb+')  # 打开特定的文件进行二进制的写操作
+        destination = open("/root/SJTUsoso/static/images/videos/" + myFile.name, 'wb+')  # 打开特定的文件进行二进制的写操作
         for chunk in myFile.chunks():  # 分块写入文件
             destination.write(chunk)
         destination.close()
 
         myFile1 = request.FILES.get("preload", None)
-        destination = open("D:\\venv\\SJTUsousou\\SJTUsoso\\static\\images\\preload\\" + myFile1.name, 'wb+')  # 打开特定的文件进行二进制的写操作
+        destination = open("/root/SJTUsoso/static/images/preload/" + myFile1.name, 'wb+')  # 打开特定的文件进行二进制的写操作
         for chunk in myFile1.chunks():  # 分块写入文件
             destination.write(chunk)
         destination.close()
@@ -89,7 +89,7 @@ def video_post(request):
 def wechat_post(request):
     if request.method == 'POST':
         myFile = request.FILES.get("pic", None)
-        destination = open("D:\\venv\\SJTUsousou\\SJTUsoso\\static\\images\\wechat\\" + myFile.name,
+        destination = open("/root/SJTUsoso/static/images/wechat/" + myFile.name,
                            'wb+')  # 打开特定的文件进行二进制的写操作
         for chunk in myFile.chunks():  # 分块写入文件
             destination.write(chunk)
@@ -111,7 +111,7 @@ def words_post(request):
     if request.method == 'POST':
         content = request.POST.get('words', '')
         words_list = content.split(",")
-        with open(r"D:\venv\SJTUsousou\SJTUsoso\static\data\words.json", "w") as f:
+        with open(r"/root/SJTUsoso/static/data/words.json", "w") as f:
             json.dump(words_list, f)
         return HttpResponse("关键词更新成功")
     else:
@@ -153,7 +153,7 @@ def comment_push(request,Video_id):
 
 def check_comment(request):
     all_comments = VideoComments.objects.values("user_nickname","content","id")
-    with open(r"D:\venv\SJTUsousou\SJTUsoso\static\data\words.json", 'r') as load_f:
+    with open(r"/root/SJTUsoso/static/data/words.json", 'r') as load_f:
         load_list = json.load(load_f)
     comments={}
     for i in range(len(all_comments)):
@@ -166,7 +166,7 @@ def check_comment(request):
 def to_del_comment(request,comment_id):
     VideoComments.objects.get(id=comment_id).delete()
     all_comments = VideoComments.objects.values("user_nickname", "content", "id")
-    with open(r"D:\venv\SJTUsousou\SJTUsoso\static\data\words.json", 'r') as load_f:
+    with open(r"/root/SJTUsoso/static/data/words.json", 'r') as load_f:
         load_list = json.load(load_f)
     comments = {}
     for i in range(len(all_comments)):

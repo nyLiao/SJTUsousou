@@ -256,11 +256,11 @@ def like_collect(request):
 def tosingle(req,Wechat_id):
     user = User.objects.get(name=req.session['user_name'])
     demo1 = Wechat.objects.get(id=Wechat_id)
-    filename1 = r"D:\venv\SJTUsousou\SJTUsoso\static\data\fenci.json"
+    filename1 = r"/root/SJTUsoso/static/data/fenci.json"
     with open(filename1) as file_obj:
         dicts = json.load(file_obj)
 
-    filename2 = "D:\\venv\\SJTUsousou\\SJTUsoso\\static\\data\\"  + str(user.id) + ".json"
+    filename2 = "/root/SJTUsoso/static/data/"  + str(user.id) + ".json"
     if not os.path.exists(filename2):
         user_dict={}
         for i in dicts[str(Wechat_id)].keys():
@@ -315,11 +315,11 @@ def tohome(req):
         Videos2 = Video.objects.filter(id__in=[video_recommend_list[2], video_recommend_list[3]])
 
         #处理内容推送
-        filename = r"D:\venv\SJTUsousou\SJTUsoso\static\data\fenci.json"
+        filename = r"/root/SJTUsoso/static/data/fenci.json"
         with open(filename) as file_obj:
             dicts = json.load(file_obj)
 
-        filename = "D:\\venv\\SJTUsousou\\SJTUsoso\\static\\data\\"+str(user.id)+".json" #改成user.id
+        filename = "/root/SJTUsoso/static/data/"+str(user.id)+".json" #改成user.id
         if not os.path.exists(filename):
             result_id=[random.randint(1,10),random.randint(1,10),random.randint(1,10),random.randint(1,10)]
         else:
