@@ -585,11 +585,6 @@ def WBlog(request):
                 new_blog.content = content
                 #new_blog.img_url = img_url
                 new_blog.save()
-                new_article = sosomodels.SosoSitearticle.objects.create()
-                new_article.title = title
-                new_article.text = content
-                new_article.url = '/blog/'+str(new_blog.pk)+'/'
-                new_article.save()
                 blogs = models.Blog.objects.filter(author=user.name)
                 blogsnum = str(blogs.count())
                 request.session.flush()
