@@ -637,8 +637,11 @@ def coverup(request):
 
 def blog_list(request):
     context = {}
-    context['hotest_blog'] = models.Blog.objects.order_by('-like_num')[0]
-    context['hot_blogs'] = models.Blog.objects.order_by('-like_num')[1:6:1]
+    try:
+        context['hotest_blog'] = models.Blog.objects.order_by('-like_num')[0]
+        context['hot_blogs'] = models.Blog.objects.order_by('-like_num')[1:6:1]
+    except:
+        pass
     if "typename" in request.GET:
         blogs = models.Blog.objects.filter(blog_type=request.GET['typename'])
         typename = request.GET['typename']
@@ -702,8 +705,11 @@ def blog_detail(request, blog_pk):
     context['previous_blog'] = models.Blog.objects.filter(created_time__gt=blog.created_time).last()
     context['next_blog'] = models.Blog.objects.filter(created_time__lt=blog.created_time).first()
     context["blog_types"] = models.BlogType.objects.all()
-    context["newest_blog"] = models.Blog.objects.latest('pk')
-    context["new_blogs"] = models.Blog.objects.order_by('-created_time')[1:4:1]
+    try:
+        context["newest_blog"] = models.Blog.objects.latest('pk')
+        context["new_blogs"] = models.Blog.objects.order_by('-created_time')[1:4:1]
+    except:
+        pass
     context['blog'] = blog
     author = models.User.objects.get(name=blog.author)
     context['author'] = author
