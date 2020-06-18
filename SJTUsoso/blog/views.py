@@ -1,5 +1,7 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from . import models
+from soso import models as sosomodels
+import json
 from .forms import *
 import hashlib
 from blog.models import Wechat
@@ -8,6 +10,12 @@ from blog.models import User
 from blog.models import Rate
 from blog.models import VideoComments
 from blog.models import MessageBoard,CollectBoard,BoardComment
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from SJTUsoso.utils import *
+from django.contrib import messages
+import re
+from urllib.parse import urlencode
+from SJTUsoso import settings
 # Create your views here.
 from django.core.paginator import Paginator
 from functools import wraps
@@ -56,8 +64,20 @@ def login(request):
                 message = "用户不存在！"
         return render(request, 'login.html', locals())
 
-    login_form = UserForm()
-    return render(request, 'login.html', locals())
+      
+# def login_in(func):  # 验证用户是否登录
+#   @wraps(func)
+#   def wrapper(*args, **kwargs):
+#       request = args[0]
+#       is_login = request.session.get("login_in")
+#       print(is_login)
+#       if is_login:
+#           return func(*args, **kwargs)
+#       else:
+#           return redirect(reverse("login"))
+#
+#   return wrapper
+
 
 def message_boards(request, fap_id=1, pagenum=1, **kwargs):
     # 获取论坛内容
@@ -277,6 +297,9 @@ def tohome(req):
     try:
         #处理协同过滤视频
         user = User.objects.get(name=req.session['user_name'])
+        items = models.Collection.objects.filter(user=user.name)
+        itemsum = str(items.count())
+        blog_types = models.BlogType.objects.all()
         item = ItemBasedCF()
         item.ItemSimilarity()
         recommedDict = item.Recommend(user.id)
@@ -322,9 +345,17 @@ def tohome(req):
         friends = []
         for id in friends_id:
             friends.append((User.objects.get(id=id)).nickname)
-
     except:
         pass
+      
+    try:
+        latest_msg_board0 = MessageBoard.objects.order_by('-create_time')[0]
+        latest_msg_board1 = MessageBoard.objects.order_by('-create_time')[1]
+        latest_msg_board2 = MessageBoard.objects.order_by('-create_time')[2]
+        latest_msg_board3 = MessageBoard.objects.order_by('-create_time')[3]
+    except:
+        pass
+
     return render(req, "index.html", locals())
 
 def cal(dict1,dict2):#分词与TFIDF处理后的相似度计算
@@ -358,6 +389,37 @@ def tovideo(req,Video_id):
     demo = Video.objects.get(id=Video_id)
     comments=VideoComments.objects.filter(video_id=Video_id)
     return render(req, 'detail.html',{"Video":demo,"comments":comments})
+
+
+def login(request):
+    if request.session.get('is_login', None):
+        return redirect('home')
+
+    if request.method == "POST":
+        login_form = UserForm(request.POST)
+        message = "请检查填写的内容！"
+        if login_form.is_valid():
+            username = login_form.cleaned_data['username']
+            password = login_form.cleaned_data['password']
+            try:
+                user = models.User.objects.get(name=username)
+                if user.password == hash_code(password):  # 哈希值和数据库内的值进行比对
+                    blogs = models.Blog.objects.filter(author=username)
+                    blogsnum = str(blogs.count())
+                    request.session['is_login'] = True
+                    request.session['user_id'] = user.id
+                    request.session['user_name'] = user.name
+                    request.session['nickname'] = user.nickname
+                    request.session['myblogs'] = blogsnum
+                    return redirect('home')
+                else:
+                    message = "密码不正确！"
+            except:
+                message = "用户不存在！"
+        return render(request, 'login.html', locals())
+
+    login_form = UserForm()
+    return render(request, 'login.html', locals())
 
 def register(request):
     if request.session.get('is_login', None):
@@ -395,6 +457,14 @@ def register(request):
     register_form = RegisterForm()
     return render(request, 'register.html', locals())
 
+
+def hash_code(s, salt='mysite'):# 加点盐
+    h = hashlib.sha256()
+    s += salt
+    h.update(s.encode())  # update方法只接收bytes类型
+    return h.hexdigest()
+
+
 def logout(request):
     if not request.session.get('is_login', None):
         # 如果本来就未登录，也就没有登出一说
@@ -406,16 +476,325 @@ def logout(request):
     # del request.session['user_name']
     return redirect("home")
 
-def forgot(req):
-    return render(req, 'forgot.html')
-
-def reset(req):
-    return render(req, 'reset.html')
 
 def hash_code(s, salt='mysite'):# 加点盐
     h = hashlib.sha256()
     s += salt
     h.update(s.encode())  # update方法只接收bytes类型
     return h.hexdigest()
+
+
+def userspace(request):
+    blog_types = models.BlogType.objects.all()
+    if "user" in request.GET:
+        user = models.User.objects.get(name=request.GET['user'])
+        blogs = models.Blog.objects.filter(author=user.name)
+        blogsnum = str(blogs.count())
+        items = models.Collection.objects.filter(user=user.name)
+        itemsum = str(items.count())
+        return render(request, 'other.html', locals())
+    elif request.session.get('is_login', None):
+        user = models.User.objects.get(name=request.session['user_name'])
+        items = models.Collection.objects.filter(user=user.name)
+        itemsum = str(items.count())
+        change = 0
+        return render(request, 'user.html', locals())
+    else:
+        return redirect('/login/')
+
+def userspacechange(request):
+    blog_types = models.BlogType.objects.all()
+    if request.session.get('is_login', None):
+        user = models.User.objects.get(name=request.session['user_name'])
+        blogs = models.Blog.objects.filter(author=user.name)
+        blogsnum = str(blogs.count())
+        if request.method == "POST":
+            Userspace_form = UserspaceForm(request.POST)
+            message = "请检查填写的内容！"
+            if Userspace_form.is_valid():  # 获取数据
+                nickname = Userspace_form.cleaned_data['nickname']
+                phone = Userspace_form.cleaned_data['phone']
+                sex = Userspace_form.cleaned_data['sex']
+                intro = Userspace_form.cleaned_data['intro']
+                if nickname:
+                    user.nickname = nickname
+                else:
+                    pass
+                user.phone = phone
+                user.sex = sex
+                user.intro = intro
+                user.save()
+                request.session.flush()
+                request.session['is_login'] = True
+                request.session['user_id'] = user.id
+                request.session['user_name'] = user.name
+                request.session['nickname'] = user.nickname
+                request.session['myblogs'] = blogsnum
+                return redirect('/userspace/')
+        change = 1
+        Userspace_form = UserspaceForm()
+        return render(request, 'user.html', locals())
+    else:
+        return redirect('/login/')
+
+def avatarup(request):
+    blog_types = models.BlogType.objects.all()
+    if request.session.get('is_login', None):
+        user = models.User.objects.get(name=request.session['user_name'])
+        blogs = models.Blog.objects.filter(author=user.name)
+        blogsnum = str(blogs.count())
+        if request.method == "POST":
+            avatar_form = UpdateAvatarForm(request.POST, request.FILES)
+            message = "请检查上传的图片！"
+            if avatar_form.is_valid():
+                image = avatar_form.cleaned_data["img"]
+                user.img_url = image
+                user.save()
+                request.session.flush()
+                request.session['is_login'] = True
+                request.session['user_id'] = user.id
+                request.session['user_name'] = user.name
+                request.session['nickname'] = user.nickname
+                request.session['myblogs'] = blogsnum
+                return redirect('/userspace/')
+        avatar_form = UpdateAvatarForm()
+        hide = 1
+        return render(request, 'user.html', locals())
+    else:
+        return redirect('/login/')
+
+def forgot(req):
+    return render(req, 'forgot.html')
+
+# def reset(req):
+#     return render(req, 'reset.html')
+  
+def reset(request):
+    if request.session.get('is_login', None):
+        if request.method == "POST":
+            message = "请检查填写的内容！"
+            password1 = request.POST.get('oldpassword', None)
+            password2 = request.POST.get('newpassword', None)
+            user = models.User.objects.get(name=request.session['user_name'])
+            if user.password == hash_code(password1):  # 哈希值和数据库内的值进行比对
+                user.password = hash_code(password2)
+                user.save()
+                return redirect('/logout/')
+            else:
+                message = "密码错误"
+                return render(request, 'reset.html', locals())
+        return render(request, 'reset.html')
+    return redirect('/login/')
+
+def WBlog(request):
+    if request.session.get('is_login', None):
+        user = models.User.objects.get(name=request.session['user_name'])
+        if request.method == "POST":
+            wblog_form = WBlogForm(request.POST, request.FILES)
+            message = "请检查文章内容！"
+            if wblog_form.is_valid():
+                blog_user = user
+                title = wblog_form.cleaned_data["title"]
+                blog_type = request.POST.get("blog_type", None)
+                content = wblog_form.cleaned_data["content"]
+                #img_url = wblog_form.cleaned_data["img_url"]
+
+                new_blog = models.Blog.objects.create()
+                new_blog.author = blog_user.name
+                new_blog.blog_type = blog_type
+                new_blog.title = title
+                new_blog.content = content
+                #new_blog.img_url = img_url
+                new_blog.save()
+                new_article = sosomodels.SosoSitearticle.objects.create()
+                new_article.title = title
+                new_article.text = content
+                new_article.url = '/blog/'+str(new_blog.pk)+'/'
+                new_article.save()
+                blogs = models.Blog.objects.filter(author=user.name)
+                blogsnum = str(blogs.count())
+                request.session.flush()
+                request.session['is_login'] = True
+                request.session['user_id'] = user.id
+                request.session['user_name'] = user.name
+                request.session['nickname'] = user.nickname
+                request.session['myblogs'] = blogsnum
+                request.session['new_blog'] = new_blog.pk
+                return redirect('/blog/'+str(new_blog.pk)+'/')
+        blog_types = models.BlogType.objects.all()
+        wblog_form = WBlogForm()
+        return render(request, 'bwrite.html', locals())
+    else:
+        return redirect('/login/')
+
+def coverup(request):
+    blog_types = models.BlogType.objects.all()
+    if request.session.get('is_login', None):
+        new_blog = models.Blog.objects.get(pk=request.session['new_blog'])
+        del request.session['new_blog']
+        if request.method == "POST":
+            cover_form = UploadCoverForm(request.POST, request.FILES)
+            message = "请检查上传的图片!"
+            if cover_form.is_valid():
+                cover = cover_form.cleaned_data['img']
+                new_blog.img_url = cover
+                new_blog.save()
+                return redirect('/blog/'+str(new_blog.pk)+'/')
+        return redirect('home')
+    else:
+        return redirect('/login/')
+
+def blog_list(request):
+    context = {}
+    context['hotest_blog'] = models.Blog.objects.order_by('-like_num')[0]
+    context['hot_blogs'] = models.Blog.objects.order_by('-like_num')[1:6:1]
+    if "typename" in request.GET:
+        blogs = models.Blog.objects.filter(blog_type=request.GET['typename'])
+        typename = request.GET['typename']
+        context["typename"] = typename
+        context["blog_types"] = BlogType.objects.all()
+        context["blogs"] = blogs.order_by("-created_time")
+        return render(request, 'category.html', context)
+    elif "user" in request.GET:
+        blogs = models.Blog.objects.filter(author=request.GET['user'])
+        user = models.User.objects.get(name=request.GET['user'])
+        context["user"] = user
+        context["blog_types"] = BlogType.objects.all()
+        context["blogs"] = blogs.order_by("-created_time")
+        blogs = models.Blog.objects.filter(author=user.name)
+        blogsnum = str(blogs.count())
+        context["blogsnum"] = blogsnum
+        items = models.Collection.objects.filter(user=request.GET['user'])
+        context["itemsum"] = str(items.count())
+        if request.session.get('is_login', None):
+            if request.GET['user'] == request.session['user_name']:
+                return render(request, 'myblogs.html', context)
+            else:
+                pass
+        return render(request, 'userblogs.html', context)
+    else:
+        blogs = models.Blog.objects.all()
+        blogs = blogs.order_by("-created_time")
+        paginator = Paginator(blogs, 6, 2)  # Show 8 contacts per page
+        page = request.GET.get('page')
+        try:
+            pnumber = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            pnumber = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            pnumber = paginator.page(paginator.num_pages)
+        context['max_left_item_count'] = '2'
+        context["blogs"] = pnumber#.order_by("-created_time")
+        context["blog_types"] = models.BlogType.objects.all()
+        #context["blogs"] = blogs.order_by("-created_time")
+        return render(request,'category.html',context)
+
+def deblog(request):
+    if request.session.get('is_login', None):
+        if "key" in request.GET:
+            key = request.GET["key"]
+            old_blog = models.Blog.objects.get(pk=int(key))
+            old_blog.delete()
+            blogs = models.Blog.objects.filter(author=request.session['user_name'])
+            blogsnum = str(blogs.count())
+            request.session['myblogs'] = blogsnum
+            messages.success(request, "删除成功!")
+        return redirect('/blog/?user='+request.session['user_name'])
+    return redirect('/login/')
+
+def blog_detail(request, blog_pk):
+    context = {}
+    blog = get_object_or_404(models.Blog, pk=blog_pk)
+    read_cookie_key = read_statistics_once_read(request, blog)
+    context['previous_blog'] = models.Blog.objects.filter(created_time__gt=blog.created_time).last()
+    context['next_blog'] = models.Blog.objects.filter(created_time__lt=blog.created_time).first()
+    context["blog_types"] = models.BlogType.objects.all()
+    context["newest_blog"] = models.Blog.objects.latest('pk')
+    context["new_blogs"] = models.Blog.objects.order_by('-created_time')[1:4:1]
+    context['blog'] = blog
+    author = models.User.objects.get(name=blog.author)
+    context['author'] = author
+    cover_form = UploadCoverForm()
+    context['cover_form'] = cover_form
+    if request.session.get('is_login', None):
+        collection = models.Collection.objects.filter(user=request.session['user_name'], itemtype='blog')
+        for item in collection:
+            if item.itempk == str(blog.pk):
+                context['item'] = item.pk
+                break
+    response = render(request, 'single1.html', context)
+    response.set_cookie(read_cookie_key,'true')
+    return response
+
+def collect(request):
+    if request.session.get('is_login', None):
+        if "key" in request.GET:
+            key = request.GET["key"].split("-", 1)
+            itemtype = key[0]
+            pk = key[1]
+            if itemtype == 'blog':
+                items = models.Collection.objects.filter(user=request.session['user_name'], itemtype='blog')
+                pks = []
+                item = models.Blog.objects.get(pk=int(pk))
+                for i in items:
+                    pks.append(i.itempk)
+                if pk in pks:
+                    messages.error(request, "已在收藏夹中!")
+                    return redirect('/blog/'+str(item.pk)+'/')
+                else:
+                    new_item = models.Collection.objects.create()
+                    new_item.itemtype = 'blog'
+                    new_item.user = request.session['user_name']
+                    new_item.itemtitle = item.title
+                    new_item.itempk = pk
+                    new_item.save()
+                    item.like_num += 1
+                    item.save()
+                    messages.success(request, "收藏成功!")
+                    return redirect('/blog/'+str(item.pk)+'/')
+        elif "user" in request.GET:
+            context = {}
+            user = models.User.objects.get(name=request.GET['user'])
+            items = models.Collection.objects.filter(user=request.GET['user'])
+            context["user"] = user
+            context["items"] = items
+            context["itemsum"] = str(items.count())
+            blogs = models.Blog.objects.filter(author=request.GET['user'])
+            blogsnum = str(blogs.count())
+            context["blogsnum"] = blogsnum
+            if request.GET['user'] == request.session['user_name']:
+                return render(request, 'mycollection.html', context)
+            else:
+                pass
+            return render(request, 'usercollection.html', context)
+    else:
+        return redirect('/login/')
+
+def decollect(request):
+    if request.session.get('is_login', None):
+        if "key" in request.GET:
+            key = request.GET["key"]
+            try:
+                old_item = models.Collection.objects.get(pk=int(key))
+                itemtype = old_item.itemtype
+                itempk = old_item.itempk
+                old_item.delete()
+            except:
+                messages.error(request, "不在收藏夹中!")
+                return redirect('/collect/?user='+request.session['user_name'])
+            if itemtype == 'blog':
+                try:
+                    item = models.Blog.objects.get(pk=int(itempk))
+                except:
+                    messages.error(request, "该博客已被删除!")
+                    return redirect('/collect/?user=' + request.session['user_name'])
+                item.like_num -= 1
+                item.save()
+                messages.success(request, "取消收藏成功!")
+                return redirect('/collect/?user='+request.session['user_name'])
+    return redirect('/login/')
+
 
 

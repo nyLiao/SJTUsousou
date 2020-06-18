@@ -8,6 +8,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta name="description" content="Magz is a HTML5 & CSS3 magazine template is based on Bootstrap 3.">
 
+
 		<title>{% block title %} {% endblock %}</title>
 		<!-- Bootstrap -->
 		<link rel="stylesheet" href="/static/scripts/bootstrap/bootstrap.min.css">
@@ -23,6 +24,7 @@
 		<link rel="stylesheet" href="/static/scripts/sweetalert/dist/sweetalert.css">
 		<!-- Custom style -->
 		<link rel="stylesheet" href="/static/css/style.css">
+		<link rel="stylesheet" href="/static/css/custom.css">
 		<link rel="stylesheet" href="/static/css/skins/all.css">
 		<link rel="stylesheet" href="/static/css/demo.css">
         {% block header_extends %} {% endblock %}
@@ -66,7 +68,7 @@
 						<div class="col-md-3 col-sm-12 text-right">
 							<ul class="nav-icons">
                                 {% if request.session.is_login %}
-                                    <li class="ion-person"><a href="#">当前在线：{{ request.session.user_name }}</a></li>
+                                    <li class="ion-person"><a href="/userspace/">当前在线：{{ request.session.user_name }}</a></li>
                                     <li class="ion-person"><a href="/logout/">登出</a></li>
                                 {% else %}
                                     <li class="ion-person"><a href="/login/">登录</a></li>
@@ -103,13 +105,13 @@
 								<ul class="dropdown-menu">
 									<li><a href="{% url 'home'%}">主页</a></li>
                                     <li><a href="/search/">Soso搜索</a></li>
-									<li class="dropdown magz-dropdown"><a href="/category/">Soso博客 <i class="ion-ios-arrow-right"></i></a>
+									<li class="dropdown magz-dropdown"><a>Soso博客 <i class="ion-ios-arrow-right"></i></a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="/category/">博客主页</a></li>
-                                            <li class="dropdown magz-dropdown"><a href="/category/">博客类型 <i class="ion-ios-arrow-right"></i></a>
+                                            <li><a href="{% url 'blog_list'%}">博客主页</a></li>
+                                            <li class="dropdown magz-dropdown"><a href="{% url 'blog_list'%}">博客类型 <i class="ion-ios-arrow-right"></i></a>
 												<ul class="dropdown-menu">
 													{% for blog_type in blog_types %}
-                                                        <li><a href="?typename={{blog_type.type_name}}">{{ blog_type.type_name }}</a></li>
+                                                        <li><a href="/blog/?typename={{blog_type.type_name}}">{{ blog_type.type_name }}</a></li>
                                                       {% empty %}
                                                         <li><a href="#">No blog type now.</a></li>
                                                       {% endfor %}
@@ -117,6 +119,7 @@
 											</li>
                                         </ul>
                                     </li>
+                                    <li><a href="{% url 'message_boards' 1 1 %}">BBS论坛</a></li>
 									<li><a href="/contact/">联系我们</a></li>
 								</ul>
 							</li>
@@ -199,67 +202,21 @@
 									</div>
 								</div>
 							</li>
-							<li class="dropdown magz-dropdown magz-dropdown-megamenu"><a href="#">Column <i class="ion-ios-arrow-right"></i></a>
-								<div class="dropdown-menu megamenu">
-									<div class="megamenu-inner">
-										<div class="row">
-											<div class="col-md-3">
-												<h2 class="megamenu-title">Column 1</h2>
-												<ul class="vertical-menu">
-													<li><a href="#">Example 1</a></li>
-													<li><a href="#">Example 2</a></li>
-													<li><a href="#">Example 3</a></li>
-													<li><a href="#">Example 4</a></li>
-													<li><a href="#">Example 5</a></li>
-												</ul>
-											</div>
-											<div class="col-md-3">
-												<h2 class="megamenu-title">Column 2</h2>
-												<ul class="vertical-menu">
-													<li><a href="#">Example 6</a></li>
-													<li><a href="#">Example 7</a></li>
-													<li><a href="#">Example 8</a></li>
-													<li><a href="#">Example 9</a></li>
-													<li><a href="#">Example 10</a></li>
-												</ul>
-											</div>
-											<div class="col-md-3">
-												<h2 class="megamenu-title">Column 3</h2>
-												<ul class="vertical-menu">
-													<li><a href="#">Example 11</a></li>
-													<li><a href="#">Example 12</a></li>
-													<li><a href="#">Example 13</a></li>
-													<li><a href="#">Example 14</a></li>
-													<li><a href="#">Example 15</a></li>
-												</ul>
-											</div>
-											<div class="col-md-3">
-												<h2 class="megamenu-title">Column 4</h2>
-												<ul class="vertical-menu">
-													<li><a href="#">Example 16</a></li>
-													<li><a href="#">Example 17</a></li>
-													<li><a href="#">Example 18</a></li>
-													<li><a href="#">Example 19</a></li>
-													<li><a href="#">Example 20</a></li>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</div>
-							</li>
 							<li class="dropdown magz-dropdown"><a href="#">账户 <i class="ion-ios-arrow-right"></i></a>
 								<ul class="dropdown-menu">
                                     {% if request.session.is_login %}
-                                        <li><a href="#"><i class="icon ion-person"></i>我的账户</a></li>
+                                        <li><a href="/userspace/"><i class="icon ion-person"></i>我的账户</a></li>
                                         <li><a href="#"><i class="icon ion-heart"></i>我的收藏</a></li>
-                                        <li><a href="#"><i class="icon ion-ios-paper"></i>我的博客</a></li>
-                                        <li><a href="#"><i class="icon ion-key"></i>修改密码</a></li>
-                                        <li><a href="#"><i class="icon ion-settings"></i>账户设定</a></li>
+                                        <li><a href="/blog/?user={{ request.session.user_name }}"><i class="icon ion-ios-paper"></i>我的博客</a></li>
+                                        <li><a href="{% url 'message_boards' 5 1 %}"><i class="icon ion-ios-paper"></i>我的帖子</a></li>
+                                        <li><a href="/blog/write/"><i class="icon ion-waterdrop"></i>写文章</a></li>
+                                        <li><a href="/reset/"><i class="icon ion-key"></i>修改密码</a></li>
                                         <li class="divider"></li>
 									<li><a href="/logout/"><i class="icon ion-log-out"></i>登出</a></li>
                                     {% else %}
                                         <li><a href="/login/"><i class="icon ion-person"></i>登陆</a></li>
                                         <li><a href="/register/"><i class="icon ion-person-add"></i>注册</a></li>
+                                        <!--<li><a href="#"><i class="icon ion-settings"></i>忘记密码</a></li>-->
                                     {% endif %}
 								</ul>
 							</li>
@@ -476,6 +433,7 @@
 		<!-- JS -->
 		<script src="/static/js/jquery.js"></script>
 		<script src="/static/js/jquery.migrate.js"></script>
+		<script src="/static/js/autocomplete.js"></script>
 		<script src="/static/scripts/bootstrap/bootstrap.min.js"></script>
 		<script>var $target_end=$(".best-of-the-week");</script>
 		<script src="/static/scripts/jquery-number/jquery.number.min.js"></script>

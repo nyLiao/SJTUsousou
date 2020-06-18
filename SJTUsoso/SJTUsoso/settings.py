@@ -16,6 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from django.contrib.staticfiles.management.commands import collectstatic
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -80,11 +81,23 @@ WSGI_APPLICATION = 'SJTUsoso.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django',
+        'USER':'root',
+        'PASSWORD':'Setsuna/AIJIN',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
+}
+'''
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'SJTUsoso',
+        'NAME': 'soso',
         'USER':'root',
         'PASSWORD':'123456',
         'HOST': '127.0.0.1',
@@ -98,9 +111,10 @@ DATABASES = {
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
-    }
+        # 'ENGINE': 'haystack.backends.whoosh_cn_backend.WhooshEngine',
+        'ENGINE': 'soso.whoosh_cn_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
 }
 
 # 自动更新索引
@@ -190,6 +204,9 @@ MDEDITOR_CONFIGS = {
 # 配置ckeditor
 CKEDITOR_UPLOAD_PATH = 'upload/'
 
+CKEDITOR_FILENAME_GENERATOR = 'utils.get_filename'
+
+'''
 CKEDITOR_CONFIGS = {
     'default': {},
     'comment_ckeditor': {
@@ -201,19 +218,89 @@ CKEDITOR_CONFIGS = {
             ['Link', 'Unlink'],
             ["Smiley", "SpecialChar", 'Blockquote'],
         ],
-        'width': 'auto',
-        'height': '180',
+        'width': '100%',
+        'height': '300',
         'tabSpaces': 4,
         'removePlugins': 'elementspath',
         'resize_enabled': False,
     }
 }
+'''
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'skin': 'moono-lisa',
+        # 'skin': 'office2013',
+        'language': 'zh-cn',
+        'uiColor': '#FFFFFF',
+        'toolbar_Basic': [
+            ['Source', '-', 'Bold', 'Italic']
+        ],
+        'toolbar_YourCustomToolbarConfig': [
+            {'name': 'document', 'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
+            {'name': 'clipboard', 'items': ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
+            {'name': 'editing', 'items': ['Find', 'Replace', '-', 'SelectAll']},
+            {'name': 'forms',
+             'items': ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton',
+                       'HiddenField']},
+            '/',
+            {'name': 'basicstyles',
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+            {'name': 'paragraph',
+             'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
+                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl',
+                       'Language', 'CodeSnippet', 'CodeSnippetGeshi']},
+            {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
+            {'name': 'insert',
+             'items': ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe']},
+            '/',
+            {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
+            {'name': 'colors', 'items': ['TextColor', 'BGColor']},
+            {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
+            {'name': 'about', 'items': ['About']},
+            '/',  # put this to force next toolbar on new line
+            {'name': 'yourcustomtools', 'items': [
+                # put the name of your editor.ui.addButton here
+                'Preview',
+                'Maximize',
+
+            ]},
+        ],
+        'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
+        # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
+        # 'height': 500,
+        'width': '100%',
+        # 'filebrowserWindowHeight': 725,
+        # 'filebrowserWindowWidth': 940,
+        # 'toolbarCanCollapse': True,
+        'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
+        'tabSpaces': 4,
+        'extraPlugins': ','.join([
+            'uploadimage', # the upload image feature
+            # your extra plugins here
+            'div',
+            'autolink',
+            'autoembed',
+            'embedsemantic',
+            'autogrow',
+            # 'devtools',
+            'widget',
+            'lineutils',
+            'clipboard',
+            'dialog',
+            'dialogui',
+            'elementspath',
+            'codesnippet',
+        ]),
+    }
+}
+
 
 # 邮件服务器配置
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.163.com'  # 如果是 163 改成 smtp.163.com
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'mekakuactor@163.com'  # 在这里填入您的QQ邮箱账号
-EMAIL_HOST_PASSWORD = ''  # 请在这里填上您自己邮箱的授权码
+EMAIL_HOST_PASSWORD = 'XXFEOIHNFEURGJWV'  # 请在这里填上您自己邮箱的授权码
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_USE_SSL = True
