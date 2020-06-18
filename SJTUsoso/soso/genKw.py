@@ -38,7 +38,7 @@ def set_kw(obj):
 
 
 def get_view():
-    v = np.random.normal(500, 300, 1)
+    v = np.random.normal(1200, 300, 1)
     v = v if v > 30 else (np.abs(v) + 30)
     return v
 

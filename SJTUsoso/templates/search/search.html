@@ -36,15 +36,15 @@ SJTU soso
                                 <label><input type="radio" name="date" checked> Anytime</label>
                             </div>
                             <div class="form-group">
-                                <label><input type="radio" name="date"> Today</label>
-                            </div>
-                            <div class="form-group">
                                 <label><input type="radio" name="date"> Last Week</label>
                             </div>
                             <div class="form-group">
                                 <label><input type="radio" name="date"> Last Month</label>
                             </div>
-                            <br>
+                            <div class="form-group">
+                                <label><input type="radio" name="date"> Last Year</label>
+                            </div>
+                            <!-- <br>
                             <div class="group-title">Categories</div>
                             <div class="form-group">
                                 <label><input type="checkbox" name="category" checked> All Categories</label>
@@ -63,7 +63,7 @@ SJTU soso
                             </div>
                             <div class="form-group">
                                 <label><input type="checkbox" name="category"> Sport</label>
-                            </div>
+                            </div> -->
                         </form>
                     </div>
                 </aside>
@@ -110,7 +110,7 @@ SJTU soso
                                         {% highlight sitepage.object.text with query max_length 120 %}
                                     </p>
                                     <footer>
-                                        <a href="#" class="love"><i class="ion-android-favorite-outline"></i>
+                                        <a href="#" class="love"><i class="ion-bonfire"></i>
                                             <div>{{ sitepage.object.view }}</div>
                                         </a>
                                         <a class="btn btn-primary more" href="{{ sitepage.object.url }}" target="_blank">
