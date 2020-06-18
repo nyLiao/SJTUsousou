@@ -331,6 +331,11 @@ def tohome(req):
         itemsum = str(items.count())
     except:
         pass
+
+    try:
+        blogs = models.Blog.objects.order_by('-like_num')[0:5:1]
+    except:
+        pass
     return render(req, "index.html", locals())
 
 def cal(dict1,dict2):#分词与TFIDF处理后的相似度计算
