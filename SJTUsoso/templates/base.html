@@ -102,7 +102,7 @@
 							<li class="for-tablet"><a href="/register/">Register</a></li>
 							<li><a href="{% url 'home'%}">主页</a></li>
 							<li class="dropdown magz-dropdown">
-								<a href="/category/">导航 <i class="ion-ios-arrow-right"></i></a>
+								<a href=" ">导航 <i class="ion-ios-arrow-right"></i></a>
 								<ul class="dropdown-menu">
 									<li><a href="{% url 'home'%}">主页</a></li>
                                     <li><a href="/search/">Soso搜索</a></li>
@@ -147,14 +147,7 @@
 				</div>
 			</nav>
 			<!-- End nav -->
-            <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                    {% block right-panel-content %}
-                    {% endblock %}
-                </div>
-            </div>
-            </div>
+
 		</header>
 
 
@@ -374,4 +367,16 @@
 		<script src="/static/js/e-magz.js"></script>
         {% block script_extends %}{% endblock %}
 	</body>
+
+    <body>
+    <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                    {% block right-panel-content %}
+                    {% endblock %}
+                </div>
+            </div>
+    </div>
+    </body>
+
 </html>
