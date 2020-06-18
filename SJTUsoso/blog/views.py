@@ -1,42 +1,60 @@
-from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
-from . import models
-from soso import models as sosomodels
 import json
-from .forms import *
 import hashlib
-from blog.models import Wechat
-from blog.models import Video
-from blog.models import User
-from blog.models import Rate
-from blog.models import MessageBoard,CollectBoard,BoardComment
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from SJTUsoso.utils import *
-from django.contrib import messages
 import re
-from urllib.parse import urlencode
-from SJTUsoso import settings
-# Create your views here.
-from django.core.paginator import Paginator
-from functools import wraps
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from .forms import *
-from django.db.models import Avg
-from .ucf import ItemBasedCF
-from django.core.paginator import Paginator
-from django.db.models import Q, Count, F
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from rest_framework.renderers import JSONRenderer
-import json
 import os
 import random
+import math
+from urllib.parse import urlencode
+from functools import wraps
+
+
+from django.db.models import Avg, Q, Count, F
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
+from django.contrib import messages
+from django.urls import reverse
+from rest_framework.renderers import JSONRenderer
+
+from soso.models import *
+from SJTUsoso.utils import *
+from SJTUsoso import settings
+from soso import models as sosomodels
+from blog.models import Wechat, Video, User, Rate, VideoComments, MessageBoard, CollectBoard, BoardComment
+from . import models
+from .forms import *
+from .ucf import ItemBasedCF
+from .recom_friend import *
 from .one_tfidf import *
 
 
+# Create your views here.
 def tocategory(request):
     return render(request, 'category.html')
+
+def login(request):
+    if request.session.get('is_login', None):
+        return redirect('home')
+
+    if request.method == "POST":
+        login_form = UserForm(request.POST)
+        message = "请检查填写的内容！"
+        if login_form.is_valid():
+            username = login_form.cleaned_data['username']
+            password = login_form.cleaned_data['password']
+            try:
+                user = models.User.objects.get(name=username)
+                if user.password == hash_code(password):  # 哈希值和数据库内的值进行比对
+                    request.session['is_login'] = True
+                    request.session['user_id'] = user.id
+                    request.session['user_name'] = user.name
+                    request.session['nickname'] = user.nickname
+                    return redirect('home')
+                else:
+                    message = "密码不正确！"
+            except:
+                message = "用户不存在！"
+        return render(request, 'login.html', locals())
 
 
 # def login_in(func):  # 验证用户是否登录
@@ -53,9 +71,9 @@ def tocategory(request):
 #   return wrapper
 
 
-
 def message_boards(request, fap_id=1, pagenum=1, **kwargs):
     # 获取论坛内容
+    blog_types = models.BlogType.objects.all()
     msg = request.GET.get('msg', '')
     # print('做了缓存')
     have_board = True
@@ -110,7 +128,7 @@ def message_boards(request, fap_id=1, pagenum=1, **kwargs):
     # 构造页面渲染的数据
     '''
     渲染需要的数据:
-    - 当前页的博对象列表
+    - 当前页的博文对象列表
     - 分页页码范围
     - 当前页的页码
     '''
@@ -124,17 +142,14 @@ def message_boards(request, fap_id=1, pagenum=1, **kwargs):
         "message_boards": msg_board,
         "have_board": have_board,
         "fap_id": fap_id,
+        "blog_types": models.BlogType.objects.all()
     }
-    return render(request, "message_boards.html", context=data)
+    return render(request, "message_boards.html", context=data,)
 
-
-# @login_in
 def new_message_board(request):
     # 写新论坛
-    try:
-        user = User.objects.get(name=request.session['user_name'])
-    except KeyError:
-        return redirect('login')
+    blog_types = models.BlogType.objects.all()
+    user = User.objects.get(name=request.session['user_name'])
     title = request.POST.get("title")
     content = request.POST.get("content")
     # print('ddddddddddddddddd', title, content)
@@ -143,8 +158,8 @@ def new_message_board(request):
     MessageBoard.objects.create(user=user, content=content, title=title)
     return redirect(reverse("message_boards", args=(2, 1)))
 
-
 def get_message_board(request, message_board_id, fap_id=1, currentpage=1):
+    blog_types = models.BlogType.objects.all()
     try:
         user = User.objects.get(name=request.session['user_name'])
         collectboard = CollectBoard.objects.filter(user=user, message_board_id=message_board_id)
@@ -156,7 +171,6 @@ def get_message_board(request, message_board_id, fap_id=1, currentpage=1):
 
     MessageBoard.objects.filter(id=message_board_id).update(look_num=F('look_num') + 1)
     msg_board = MessageBoard.objects.get(id=message_board_id)
-
     board_comments = msg_board.boardcomment_set.all()
     have_comment = True
     if not board_comments:
@@ -174,10 +188,9 @@ def get_message_board(request, message_board_id, fap_id=1, currentpage=1):
 
     return render(request, "message_board.html", context=context)
 
-
-# @login_in
 def new_board_comment(request, message_board_id, fap_id=1, currentpage=1):
     # 写评论
+    blog_types = models.BlogType.objects.all()
     content = request.POST.get("content")
     if not content:
         return redirect(reverse("get_message_board", args=(message_board_id, fap_id, currentpage)))
@@ -191,9 +204,8 @@ def new_board_comment(request, message_board_id, fap_id=1, currentpage=1):
     MessageBoard.objects.filter(id=message_board_id).update(feebback_num=F('feebback_num') + 1)
     return redirect(reverse("get_message_board", args=(message_board_id, fap_id, currentpage)))
 
-
 def like_collect(request):
-
+    blog_types = models.BlogType.objects.all()
     user = User.objects.get(name=request.session['user_name'])
     message_board_id = request.POST.get("message_board_id")
     like_or_collect = request.POST.get("like_or_collect", None)  # 点赞还是收藏
@@ -241,7 +253,6 @@ def like_collect(request):
         print(e)
         return JsonResponse(data={'code': 0, 'msg': '参数有误2'})
 
-
 def tosingle(req,Wechat_id):
     user = User.objects.get(name=req.session['user_name'])
     demo1 = Wechat.objects.get(id=Wechat_id)
@@ -279,9 +290,9 @@ def tosingle(req,Wechat_id):
 
     return render(req, 'single.html',{"Wechat": demo1})
 
-
 def tohome(req):
     try:
+        #处理协同过滤视频
         user = User.objects.get(name=req.session['user_name'])
         items = models.Collection.objects.filter(user=user.name)
         itemsum = str(items.count())
@@ -303,6 +314,7 @@ def tohome(req):
         Videos1 = Video.objects.filter(id__in=[video_recommend_list[0], video_recommend_list[1]])
         Videos2 = Video.objects.filter(id__in=[video_recommend_list[2], video_recommend_list[3]])
 
+        #处理内容推送
         filename = r"D:\venv\SJTUsousou\SJTUsoso\static\data\fenci.json"
         with open(filename) as file_obj:
             dicts = json.load(file_obj)
@@ -325,8 +337,14 @@ def tohome(req):
                 if count == 4:
                     break
         Wechats = Wechat.objects.filter(id__in=result_id)
+        #处理好友推荐
+        friends_id = search_friend(user.id)
+        friends = []
+        for id in friends_id:
+            friends.append((User.objects.get(id=id)).nickname)
     except:
         pass
+
     try:
         latest_msg_board0 = MessageBoard.objects.order_by('-create_time')[0]
         latest_msg_board1 = MessageBoard.objects.order_by('-create_time')[1]
@@ -335,16 +353,30 @@ def tohome(req):
     except:
         pass
 
+    try:
+        user = User.objects.get(name=req.session['user_name'])
+        items = models.Collection.objects.filter(user=user.name)
+        itemsum = str(items.count())
+    except:
+        pass
+
+    try:
+        blogs = models.Blog.objects.order_by('-like_num')[0:5:1]
+    except:
+        pass
+
+    try:
+        sites = SosoSitearticle.objects.filter(date__range=["2020-01-01", "2020-12-31"]).order_by('-view')[:10]
+    except:
+        pass
     return render(req, "index.html", locals())
 
-
-def cal(dict1,dict2):
+def cal(dict1,dict2):#分词与TFIDF处理后的相似度计算
     sum=0
     for key in dict1.keys():
         if key in dict2.keys():
             sum+=dict1[key]*dict2[key]
     return sum
-
 
 def score(request, Video_id):
     # 打分
@@ -366,11 +398,10 @@ def score(request, Video_id):
 
     return render(request, "detail.html", {"Video":video,"is_rate":is_rate})
 
-
 def tovideo(req,Video_id):
     demo = Video.objects.get(id=Video_id)
-    return render(req, 'detail.html',{"Video":demo})
-
+    comments=VideoComments.objects.filter(video_id=Video_id)
+    return render(req, 'detail.html',{"Video":demo,"comments":comments})
 
 
 def login(request):
@@ -392,6 +423,7 @@ def login(request):
                     request.session['user_id'] = user.id
                     request.session['user_name'] = user.name
                     request.session['nickname'] = user.nickname
+                    request.session['intro'] = user.intro
                     request.session['myblogs'] = blogsnum
                     return redirect('home')
                 else:
@@ -439,11 +471,13 @@ def register(request):
     register_form = RegisterForm()
     return render(request, 'register.html', locals())
 
+
 def hash_code(s, salt='mysite'):# 加点盐
     h = hashlib.sha256()
     s += salt
     h.update(s.encode())  # update方法只接收bytes类型
     return h.hexdigest()
+
 
 def logout(request):
     if not request.session.get('is_login', None):
@@ -455,6 +489,14 @@ def logout(request):
     # del request.session['user_id']
     # del request.session['user_name']
     return redirect("home")
+
+
+def hash_code(s, salt='mysite'):# 加点盐
+    h = hashlib.sha256()
+    s += salt
+    h.update(s.encode())  # update方法只接收bytes类型
+    return h.hexdigest()
+
 
 def userspace(request):
     blog_types = models.BlogType.objects.all()
@@ -501,6 +543,7 @@ def userspacechange(request):
                 request.session['user_id'] = user.id
                 request.session['user_name'] = user.name
                 request.session['nickname'] = user.nickname
+                request.session['intro'] = user.intro
                 request.session['myblogs'] = blogsnum
                 return redirect('/userspace/')
         change = 1
@@ -527,6 +570,7 @@ def avatarup(request):
                 request.session['user_id'] = user.id
                 request.session['user_name'] = user.name
                 request.session['nickname'] = user.nickname
+                request.session['intro'] = user.intro
                 request.session['myblogs'] = blogsnum
                 return redirect('/userspace/')
         avatar_form = UpdateAvatarForm()
@@ -537,6 +581,9 @@ def avatarup(request):
 
 def forgot(req):
     return render(req, 'forgot.html')
+
+# def reset(req):
+#     return render(req, 'reset.html')
 
 def reset(request):
     if request.session.get('is_login', None):
@@ -587,6 +634,7 @@ def WBlog(request):
                 request.session['user_id'] = user.id
                 request.session['user_name'] = user.name
                 request.session['nickname'] = user.nickname
+                request.session['intro'] = user.intro
                 request.session['myblogs'] = blogsnum
                 request.session['new_blog'] = new_blog.pk
                 return redirect('/blog/'+str(new_blog.pk)+'/')
@@ -615,8 +663,11 @@ def coverup(request):
 
 def blog_list(request):
     context = {}
-    context['hotest_blog'] = models.Blog.objects.order_by('-like_num')[0]
-    context['hot_blogs'] = models.Blog.objects.order_by('-like_num')[1:6:1]
+    try:
+        context['hotest_blog'] = models.Blog.objects.order_by('-like_num')[0]
+        context['hot_blogs'] = models.Blog.objects.order_by('-like_num')[1:6:1]
+    except:
+        pass
     if "typename" in request.GET:
         blogs = models.Blog.objects.filter(blog_type=request.GET['typename'])
         typename = request.GET['typename']
@@ -680,8 +731,11 @@ def blog_detail(request, blog_pk):
     context['previous_blog'] = models.Blog.objects.filter(created_time__gt=blog.created_time).last()
     context['next_blog'] = models.Blog.objects.filter(created_time__lt=blog.created_time).first()
     context["blog_types"] = models.BlogType.objects.all()
-    context["newest_blog"] = models.Blog.objects.latest('pk')
-    context["new_blogs"] = models.Blog.objects.order_by('-created_time')[1:4:1]
+    try:
+        context["newest_blog"] = models.Blog.objects.latest('pk')
+        context["new_blogs"] = models.Blog.objects.order_by('-created_time')[1:4:1]
+    except:
+        pass
     context['blog'] = blog
     author = models.User.objects.get(name=blog.author)
     context['author'] = author
@@ -762,8 +816,5 @@ def decollect(request):
                 item.like_num -= 1
                 item.save()
                 messages.success(request, "取消收藏成功!")
-                return redirect('/collect/?user='+request.session['user_name'])
+                return redirect('/blog/'+str(item.pk)+'/')
     return redirect('/login/')
-
-
-
