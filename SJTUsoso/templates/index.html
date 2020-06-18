@@ -481,13 +481,13 @@ SJTU soso
                                     </figure>
                                     <div class="details">
                                         <div class="detail">
-                                            <div class="time">December 31, 2016</div>
-                                            <div class="category"><a href="/category/">Sport</a></div>
+                                            <div class="time">{{ latest_msg_board0.create_time }}</div>
+                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board0.id }}/2/1/">{{ latest_msg_board0.user }}</a></div>
                                         </div>
-                                        <h1><a href="/single/">Donec congue turpis vitae mauris</a></h1>
-                                        <p>
-                                            Donec congue turpis vitae mauris condimentum luctus. Ut dictum neque at egestas convallis.
-                                        </p>
+                                        <h1><a href="/get_message_board/{{ latest_msg_board0.id }}/2/1/">{{ latest_msg_board0.title }}</a></h1>
+{#                                        <p>#}
+{#                                            {{ latest_msg_board0.content }}#}
+{#                                        </p>#}
                                     </div>
                                 </div>
                             </article>
@@ -497,52 +497,56 @@ SJTU soso
                             <article class="article-mini">
                                 <div class="inner">
                                     <figure>
-                                        <a href="/single/">
+                                        <a href="/get_message_board/{{ latest_msg_board1.id }}/2/1/">
                                             <img src="/static/images/news/img05.jpg" alt="Sample Article">
                                         </a>
                                     </figure>
                                     <div class="padding">
-                                        <h1><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
+                                        <h1><a href="/get_message_board/{{ latest_msg_board1.id }}/2/1/">{{ latest_msg_board1.title }}</a></h1>
                                         <div class="detail">
-                                            <div class="category"><a href="/category/">Lifestyle</a></div>
-                                            <div class="time">December 22, 2016</div>
+                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board1.id }}/2/1/">{{ latest_msg_board1.user }}</a></div>
+                                            <div class="time">{{ latest_msg_board1.create_time }}</div>
                                         </div>
                                     </div>
                                 </div>
                             </article>
+
                             <article class="article-mini">
                                 <div class="inner">
                                     <figure>
-                                        <a href="/single/">
+                                        <a href="/get_message_board/{{ latest_msg_board2.id }}/2/1/">
                                             <img src="/static/images/news/img02.jpg" alt="Sample Article">
                                         </a>
                                     </figure>
                                     <div class="padding">
-                                        <h1><a href="/single/">Fusce ullamcorper elit at felis cursus suscipit</a></h1>
+                                        <h1><a href="/get_message_board/{{ latest_msg_board2.id }}/2/1/">{{ latest_msg_board2.title }}</a></h1>
                                         <div class="detail">
-                                            <div class="category"><a href="/category/">Travel</a></div>
-                                            <div class="time">December 21, 2016</div>
+                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board2.id }}/2/1/">{{ latest_msg_board2.user }}</a></div>
+                                            <div class="time">{{ latest_msg_board2.create_time }}</div>
                                         </div>
                                     </div>
                                 </div>
                             </article>
+
                             <article class="article-mini">
                                 <div class="inner">
                                     <figure>
-                                        <a href="/single/">
+                                        <a href="/get_message_board/{{ latest_msg_board3.id }}/2/1/">
                                             <img src="/static/images/news/img10.jpg" alt="Sample Article">
                                         </a>
                                     </figure>
                                     <div class="padding">
-                                        <h1><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
+                                        <h1><a href="/get_message_board/{{ latest_msg_board3.id }}/2/1/">{{ latest_msg_board3.title }}</a></h1>
                                         <div class="detail">
-                                            <div class="category"><a href="/category/">Healthy</a></div>
-                                            <div class="time">December 20, 2016</div>
+                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board3.id }}/2/1/">{{ latest_msg_board3.user }}</a></div>
+                                            <div class="time">{{ latest_msg_board3.create_time }}</div>
                                         </div>
                                     </div>
                                 </div>
                             </article>
                         </div>
+
+
                     </div>
                 </aside>
                 <aside>
