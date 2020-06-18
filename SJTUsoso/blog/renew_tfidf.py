@@ -61,15 +61,20 @@ def tfidf():
             if weight[i][j]!=0:
                 dicts[i][word[j]]=weight[i][j]
         dicts[i]=dict(sorted(dicts[i].items(),key=lambda item:item[1],reverse=True) )
-        print(dicts[i])
-        print(len(dicts[i]))
     filename = "../static/data/fenci.json"
+
+    cursor.execute(
+        """select id from blog_wechat""")
+    results = cursor.fetchall()
+
+    cipin_dict = {}
+    for i in range(len(dicts)):
+        cipin_dict[results[i][0]]= dicts[i]
+
     with open(filename, 'w') as file_obj:
-        json.dump(dicts, file_obj)
-    #return dicts
+        json.dump(cipin_dict, file_obj)
 
 if __name__ == "__main__":
     tfidf()
-    pass
 
 

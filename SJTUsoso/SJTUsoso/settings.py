@@ -81,26 +81,14 @@ WSGI_APPLICATION = 'SJTUsoso.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-'''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django',
-        'USER':'root',
-        'PASSWORD':'Setsuna/AIJIN',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
-'''
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'soso',
-        'USER':'root',
-        'PASSWORD':'123456',
-        'HOST': '127.0.0.1',
+        'NAME': 'SJTUsoso',
+        'USER':'soso',
+        'PASSWORD':'SJTUsoso',
+        'HOST': '39.100.88.210',
         'PORT': '3306',
         'TEST': {
             'CHARSET': 'utf8',
@@ -108,6 +96,7 @@ DATABASES = {
         }
     }
 }
+
 
 HAYSTACK_CONNECTIONS = {
     'default': {

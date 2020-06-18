@@ -12,20 +12,33 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
 """
-from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf.urls import url
 from django.views import static
 from django.views.generic.base import RedirectView
+from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from haystack.views import SearchView
+
 from soso.views import *
+from myadmin.views import *
 from blog.views import *
-from django.conf.urls import url
-from django.views import static
-from django.views.generic.base import RedirectView
+
 
 urlpatterns = [
+    path('myadmin/', tomain,name="myadmin"),
+    path('video_resource/', tovideo_resource,name="video_resource"),
+    path('wechat_resource/', towechat_resource,name="wechat_resource"),
+    path('del_video_resource/<int:Video_id>/', to_del_video,name="del_video_resource"),
+    path('del_wechat_resource/<int:Wechat_id>/', to_del_wechat,name="del_wechat_resource"),
+    path('upload/', upload_resource,name="upload"),
+    path('check/', check_comment,name="check"),
+    path('count/', count_resource,name="count"),
+    path('post1/',video_post,name="post1"),
+    path('post2/',wechat_post,name="post2"),
+    path('cluster/',user_cluster,name="cluster"),
+    path('video_comment/<int:Video_id>/',comment_push,name="video_comment"),
+
     path('admin/', admin.site.urls),
     path('', tohome, name='home'),
     path('403/', to403),
