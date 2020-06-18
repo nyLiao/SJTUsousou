@@ -97,10 +97,10 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'soso',
-        'USER':'root',
-        'PASSWORD':'123456',
-        'HOST': '127.0.0.1',
+        'NAME': 'SJTUsoso',
+        'USER':'soso',
+        'PASSWORD':'SJTUsoso',
+        'HOST': '39.100.88.210',
         'PORT': '3306',
         'TEST': {
             'CHARSET': 'utf8',
