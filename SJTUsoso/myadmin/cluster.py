@@ -2,7 +2,7 @@ from sklearn.cluster import KMeans
 import numpy as np
 import MySQLdb
 def kmeans_cluster():
-    db = MySQLdb.connect("localhost", "root", "123", "sjtusoso", charset='utf8' )
+    db = MySQLdb.connect("39.100.88.210", "soso", "SJTUsoso", "SJTUsoso", charset='utf8' )
     cursor = db.cursor()
 
     cursor.execute("SELECT count(*) from blog_user")
@@ -21,7 +21,6 @@ def kmeans_cluster():
         for k in data:
             tmp[k[1]]=k[0]
 
-        #print(tmp)
         tmp2 = [] #添加到输入中
         for j in range(video_num):
             if (j+1) not in tmp.keys():
@@ -52,7 +51,7 @@ def kmeans_cluster():
 
         round_list = [round(elem, 2) for elem in kmeans.cluster_centers_[i]]
         results.append("相似用户："+str(tmp2))
-        results.append("簇心：" + str(round_list))
+        results.append(round_list)
 
     db.close()
     return results

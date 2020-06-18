@@ -9,6 +9,7 @@ from blog.renew_tfidf import tfidf,cal
 from django.shortcuts import HttpResponse
 from .cluster import *
 import datetime
+import json
 def tomain(request):
     return render(request, "user/welcome.html", {"title": "欢迎来到管理员界面"})
 
@@ -58,6 +59,7 @@ def count_resource(request):
     video_num = Video.objects.all().count()
     wechat_num = Wechat.objects.all().count()
     rate_num = Rate.objects.all().count()
+    comment_num = VideoComments.objects.all().count()
     return render(request, "user/resource_count.html", locals())
 
 def video_post(request):
@@ -105,10 +107,38 @@ def wechat_post(request):
     else:
         return HttpResponse("程序错误，请回退重试")
 
+def words_post(request):
+    if request.method == 'POST':
+        content = request.POST.get('words', '')
+        words_list = content.split(",")
+        with open(r"D:\venv\SJTUsousou\SJTUsoso\static\data\words.json", "w") as f:
+            json.dump(words_list, f)
+        return HttpResponse("关键词更新成功")
+    else:
+        return HttpResponse("程序错误，请回退重试")
+
 def user_cluster(request):
-    users= kmeans_cluster ()
-    tag =  list(Video.objects.values_list("tag"))
-    return render(request, "user/cluster.html", {"title": "欢迎来到用户聚类界面","users": users,"tag": tag})
+    results = kmeans_cluster ()
+    users = {}
+    tag = list(Video.objects.values_list("tag"))
+    tag_diff = list(set(tag))
+
+    for i in range(len(results)):
+        if (i%2==0):
+            scores = results[i+1]
+            tag_scores={}
+            for j in range(len(tag)):
+                tag_scores[tag[j]]=scores[j]
+            dict_category={}
+            for elem in tag_diff:
+                for k in tag_scores.keys():
+                    if k==elem:
+                        if k in dict_category.keys():
+                            dict_category[k]+=tag_scores[k]
+                        else:
+                            dict_category[k] = tag_scores[k]
+            users[results[i]]=dict_category
+    return render(request, "user/cluster.html", {"title": "欢迎来到用户聚类界面","users": users})
 
 def comment_push(request,Video_id):
     if request.method == 'POST':
@@ -122,4 +152,26 @@ def comment_push(request,Video_id):
         return HttpResponse("程序错误，请回退重试")
 
 def check_comment(request):
-    return render(request, "user/check_comment.html", {"title": "欢迎来到评论监管界面"})
+    all_comments = VideoComments.objects.values("user_nickname","content","id")
+    with open(r"D:\venv\SJTUsousou\SJTUsoso\static\data\words.json", 'r') as load_f:
+        load_list = json.load(load_f)
+    comments={}
+    for i in range(len(all_comments)):
+        for elem in load_list:
+            if elem in all_comments[i]["content"]:
+                comments[all_comments[i]["id"]]=all_comments[i]["user_nickname"]+":"+all_comments[i]["content"]
+                break
+    return render(request, "user/check_comment.html", {"title": "欢迎来到评论监管界面","comments":comments})
+
+def to_del_comment(request,comment_id):
+    VideoComments.objects.get(id=comment_id).delete()
+    all_comments = VideoComments.objects.values("user_nickname", "content", "id")
+    with open(r"D:\venv\SJTUsousou\SJTUsoso\static\data\words.json", 'r') as load_f:
+        load_list = json.load(load_f)
+    comments = {}
+    for i in range(len(all_comments)):
+        for elem in load_list:
+            if elem in all_comments[i]["content"]:
+                comments[all_comments[i]["id"]] = all_comments[i]["user_nickname"] + ":" + all_comments[i]["content"]
+                break
+    return render(request, "user/check_comment.html", {"title": "欢迎来到评论监管界面", "comments": comments})

@@ -32,6 +32,30 @@ from .one_tfidf import *
 def tocategory(request):
     return render(request, 'category.html')
 
+def login(request):
+    if request.session.get('is_login', None):
+        return redirect('home')
+
+    if request.method == "POST":
+        login_form = UserForm(request.POST)
+        message = "请检查填写的内容！"
+        if login_form.is_valid():
+            username = login_form.cleaned_data['username']
+            password = login_form.cleaned_data['password']
+            try:
+                user = models.User.objects.get(name=username)
+                if user.password == hash_code(password):  # 哈希值和数据库内的值进行比对
+                    request.session['is_login'] = True
+                    request.session['user_id'] = user.id
+                    request.session['user_name'] = user.name
+                    request.session['nickname'] = user.nickname
+                    return redirect('home')
+                else:
+                    message = "密码不正确！"
+            except:
+                message = "用户不存在！"
+        return render(request, 'login.html', locals())
+
 
 # def login_in(func):  # 验证用户是否登录
 #   @wraps(func)
@@ -270,6 +294,8 @@ def tohome(req):
     try:
         #处理协同过滤视频
         user = User.objects.get(name=req.session['user_name'])
+        items = models.Collection.objects.filter(user=user.name)
+        itemsum = str(items.count())
         blog_types = models.BlogType.objects.all()
         item = ItemBasedCF()
         item.ItemSimilarity()
@@ -596,6 +622,11 @@ def WBlog(request):
                 new_blog.content = content
                 #new_blog.img_url = img_url
                 new_blog.save()
+                new_article = sosomodels.SosoSitearticle.objects.create()
+                new_article.title = title
+                new_article.text = content
+                new_article.url = '/blog/'+str(new_blog.pk)+'/'
+                new_article.save()
                 blogs = models.Blog.objects.filter(author=user.name)
                 blogsnum = str(blogs.count())
                 request.session.flush()
