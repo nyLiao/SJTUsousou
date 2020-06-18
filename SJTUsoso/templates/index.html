@@ -349,97 +349,25 @@ SJTU soso
                     </div>
                 </aside>
                 <aside>
-                    <h1 class="aside-title">新闻推荐<a href="#" class="all">See All <i class="ion-ios-arrow-right"></i></a></h1>
+                    <h1 class="aside-title">热门博客<a href="#" class="all">See All <i class="ion-ios-arrow-right"></i></a></h1>
                     <div class="aside-body">
+                        {% for blog in blogs %}
                         <article class="article-mini">
-                            <div class="inner">
-                                <figure>
-                                    <a href="/single/">
-                                        <img src="/static/images/news/img07.jpg" alt="Sample Article">
-                                    </a>
-                                </figure>
-                                <div class="padding">
-                                    <h1><a href="/single/">Fusce ullamcorper elit at felis cursus suscipit</a></h1>
-                                </div>
+                          <div class="inner">
+                          <figure>
+                              <a href="{% url 'blog_detail' blog.pk %}">
+                                <img src="{{ blog.getImage }}">
+                            </a>
+                          </figure>
+                          <div class="padding">
+                            <h1><a href="{% url 'blog_detail' blog.pk %}">{{ blog.title }}</a></h1>
+                            <div class="detail">
+                              <div class="category"><a href="/blog/?typename={{ blog.blog_type }}">{{ blog.blog_type }}</a></div>
                             </div>
+                          </div>
+                          </div>
                         </article>
-                        <article class="article-mini">
-                            <div class="inner">
-                                <figure>
-                                    <a href="/single/">
-                                        <img src="/static/images/news/img14.jpg" alt="Sample Article">
-                                    </a>
-                                </figure>
-                                <div class="padding">
-                                    <h1><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="article-mini">
-                            <div class="inner">
-                                <figure>
-                                    <a href="/single/">
-                                        <img src="/static/images/news/img09.jpg" alt="Sample Article">
-                                    </a>
-                                </figure>
-                                <div class="padding">
-                                    <h1><a href="/single/">Aliquam et metus convallis tincidunt velit ut rhoncus dolor</a></h1>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="article-mini">
-                            <div class="inner">
-                                <figure>
-                                    <a href="/single/">
-                                        <img src="/static/images/news/img11.jpg" alt="Sample Article">
-                                    </a>
-                                </figure>
-                                <div class="padding">
-                                    <h1><a href="/single/">dui augue facilisis lacus fringilla pulvinar massa felis quis velit</a></h1>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="article-mini">
-                            <div class="inner">
-                                <figure>
-                                    <a href="/single/">
-                                        <img src="/static/images/news/img06.jpg" alt="Sample Article">
-                                    </a>
-                                </figure>
-                                <div class="padding">
-                                    <h1><a href="/single/">neque est semper nulla, ac elementum risus quam a enim</a></h1>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="article-mini">
-                            <div class="inner">
-                                <figure>
-                                    <a href="/single/">
-                                        <img src="/static/images/news/img03.jpg" alt="Sample Article">
-                                    </a>
-                                </figure>
-                                <div class="padding">
-                                    <h1><a href="/single/">Morbi vitae nisl ac mi luctus aliquet a vitae libero</a></h1>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                </aside>
-                <aside>
-                    <div class="aside-body">
-                        <form class="newsletter">
-                            <div class="icon">
-                                <i class="ion-ios-email-outline"></i>
-                                <h1>Newsletter</h1>
-                            </div>
-                            <div class="input-group">
-                                <input type="email" class="form-control email" placeholder="Your mail">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-primary"><i class="ion-paper-airplane"></i></button>
-                                </div>
-                            </div>
-                            <p>By subscribing you will receive new articles in your email.</p>
-                        </form>
+                        {% endfor %}
                     </div>
                 </aside>
                 <aside>
