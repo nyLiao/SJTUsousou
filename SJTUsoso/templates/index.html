@@ -113,22 +113,14 @@ SJTU soso
                         <h1 class="title-col">好友推荐</h1>
                         <div class="body-col">
                             <ol class="tags-list">
-                                <li><a href="#">小李</a></li>
-                                <li><a href="#">小王</a></li>
-                                <li><a href="#">JavaScript</a></li>
-                                <li><a href="#">jQuery</a></li>
-                                <li><a href="#">Bootstrap</a></li>
-                                <li><a href="#">Responsive</a></li>
-                                <li><a href="#">AuteIrure</a></li>
-                                <li><a href="#">Voluptate</a></li>
-                                <li><a href="#">Veit</a></li>
-                                <li><a href="#">Reprehenderit</a></li>
+                                {% for friend in friends %}
+                                <li><a href="#">{{ friend }}</a></li>
+                                {% endfor %}
                             </ol>
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-6">
-                        <h1 class="title-col">
-                            Hot News
+                        <h1 class="title-col">热搜
                             <div class="carousel-nav" id="hot-news-nav">
                                 <div class="prev">
                                     <i class="ion-ios-arrow-left"></i>
@@ -139,102 +131,24 @@ SJTU soso
                             </div>
                         </h1>
                         <div class="body-col vertical-slider" data-max="4" data-nav="#hot-news-nav" data-item="article">
+                            {% for sitepage in sites %}
                             <article class="article-mini">
                                 <div class="inner">
                                     <figure>
-                                        <a href="/single/">
-                                            <img src="/static/images/news/img09.jpg" alt="Sample Article">
+                                        <a href="{{ sitepage.url }}">
+                                            <img src="{{ sitepage.getImage }}">
                                         </a>
                                     </figure>
                                     <div class="padding">
-                                        <h1><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
+                                        <h1><a href="{{ sitepage.url }}">{{ sitepage.title }}</a></h1>
                                         <div class="detail">
-                                            <div class="category"><a href="/category/">Lifestyle</a></div>
-                                            <div class="time">December 22, 2016</div>
+                                            <div class="category"><a href="?q={{ sitepage.kw1 }}">{{ sitepage.kw1 }}</a></div>
+                                            <div class="time">{{ sitepage.date }}</div>
                                         </div>
                                     </div>
                                 </div>
                             </article>
-                            <article class="article-mini">
-                                <div class="inner">
-                                    <figure>
-                                        <a href="/single/">
-                                            <img src="/static/images/news/img01.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
-                                    <div class="padding">
-                                        <h1><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
-                                        <div class="detail">
-                                            <div class="category"><a href="/category/">Lifestyle</a></div>
-                                            <div class="time">December 22, 2016</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="article-mini">
-                                <div class="inner">
-                                    <figure>
-                                        <a href="/single/">
-                                            <img src="/static/images/news/img05.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
-                                    <div class="padding">
-                                        <h1><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
-                                        <div class="detail">
-                                            <div class="category"><a href="/category/">Lifestyle</a></div>
-                                            <div class="time">December 22, 2016</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="article-mini">
-                                <div class="inner">
-                                    <figure>
-                                        <a href="/single/">
-                                            <img src="/static/images/news/img02.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
-                                    <div class="padding">
-                                        <h1><a href="/single/">Fusce ullamcorper elit at felis cursus suscipit</a></h1>
-                                        <div class="detail">
-                                            <div class="category"><a href="/category/">Travel</a></div>
-                                            <div class="time">December 21, 2016</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="article-mini">
-                                <div class="inner">
-                                    <figure>
-                                        <a href="/single/">
-                                            <img src="/static/images/news/img13.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
-                                    <div class="padding">
-                                        <h1><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
-                                        <div class="detail">
-                                            <div class="category"><a href="/category/">International</a></div>
-                                            <div class="time">December 20, 2016</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="article-mini">
-                                <div class="inner">
-                                    <figure>
-                                        <a href="/single/">
-                                            <img src="/static/images/news/img08.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
-                                    <div class="padding">
-                                        <h1><a href="/single/">Aliquam et metus convallis tincidunt velit ut rhoncus dolor</a></h1>
-                                        <div class="detail">
-                                            <div class="category"><a href="/category/">Computer</a></div>
-                                            <div class="time">December 19, 2016</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -348,26 +262,7 @@ SJTU soso
                                         </div>
                                     </div>
                                     <div class="featured-author-quote">
-                                        "Eur costrict mobsa undivani krusvuw blos andugus pu aklosah"
-                                    </div>
-                                    <div class="block">
-                                        <h2 class="block-title">Photos</h2>
-                                        <div class="block-body">
-                                            <ul class="item-list-round" data-magnific="gallery">
-                                                <li><a href="/static/images/news/img06.jpg" style="background-image: url('/static/images/news/img06.jpg');"></a></li>
-                                                <li><a href="/static/images/news/img07.jpg" style="background-image: url('/static/images/news/img07.jpg');"></a></li>
-                                                <li><a href="/static/images/news/img08.jpg" style="background-image: url('/static/images/news/img08.jpg');"></a></li>
-                                                <li><a href="/static/images/news/img09.jpg" style="background-image: url('/static/images/news/img09.jpg');"></a></li>
-                                                <li><a href="/static/images/news/img10.jpg" style="background-image: url('/static/images/news/img10.jpg');"></a></li>
-                                                <li><a href="/static/images/news/img11.jpg" style="background-image: url('/static/images/news/img11.jpg');"></a></li>
-                                                <li><a href="/static/images/news/img12.jpg" style="background-image: url('/static/images/news/img12.jpg');"><div class="more">+2</div></a></li>
-                                                <li class="hidden"><a href="/static/images/news/img13.jpg" style="background-image: url('/static/images/news/img13.jpg');"></a></li>
-                                                <li class="hidden"><a href="/static/images/news/img14.jpg" style="background-image: url('/static/images/news/img14.jpg');"></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="featured-author-footer">
-                                        <a href="#">See All Authors</a>
+                                        "{{ request.session.intro }}"
                                     </div>
                                 </div>
                             </div>
@@ -375,97 +270,28 @@ SJTU soso
                     </div>
                 </aside>
                 <aside>
-                    <h1 class="aside-title">新闻推荐<a href="#" class="all">See All <i class="ion-ios-arrow-right"></i></a></h1>
+                    <h1 class="aside-title">热门博客<a href="/blog/" class="all">See All <i class="ion-ios-arrow-right"></i></a></h1>
                     <div class="aside-body">
+                        {% for blog in blogs %}
                         <article class="article-mini">
-                            <div class="inner">
-                                <figure>
-                                    <a href="/single/">
-                                        <img src="/static/images/news/img07.jpg" alt="Sample Article">
-                                    </a>
-                                </figure>
-                                <div class="padding">
-                                    <h1><a href="/single/">Fusce ullamcorper elit at felis cursus suscipit</a></h1>
-                                </div>
+                          <div class="inner">
+                          <figure>
+                              <a href="{% url 'blog_detail' blog.pk %}">
+                                <img src="{{ blog.getImage }}">
+                            </a>
+                          </figure>
+                          <div class="padding">
+                            <h1><a href="{% url 'blog_detail' blog.pk %}">{{ blog.title }}</a></h1>
+                            <div class="detail">
+                              <div class="category"><a href="/blog/?typename={{ blog.blog_type }}">{{ blog.blog_type }}</a></div>&nbsp;
+                              <div class="time">{{ blog.create_month }}&nbsp{{ blog.created_time|date:"d,  20y" }}</div>&nbsp;
+                              <i class="ion-android-favorite-outline"></i> <div>{{ blog.like_num }}</div>&nbsp;
+                              <i class="ion-fireball"></i> <div>{{ blog.get_read_num }}</div>&nbsp;
                             </div>
+                          </div>
+                          </div>
                         </article>
-                        <article class="article-mini">
-                            <div class="inner">
-                                <figure>
-                                    <a href="/single/">
-                                        <img src="/static/images/news/img14.jpg" alt="Sample Article">
-                                    </a>
-                                </figure>
-                                <div class="padding">
-                                    <h1><a href="/single/">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="article-mini">
-                            <div class="inner">
-                                <figure>
-                                    <a href="/single/">
-                                        <img src="/static/images/news/img09.jpg" alt="Sample Article">
-                                    </a>
-                                </figure>
-                                <div class="padding">
-                                    <h1><a href="/single/">Aliquam et metus convallis tincidunt velit ut rhoncus dolor</a></h1>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="article-mini">
-                            <div class="inner">
-                                <figure>
-                                    <a href="/single/">
-                                        <img src="/static/images/news/img11.jpg" alt="Sample Article">
-                                    </a>
-                                </figure>
-                                <div class="padding">
-                                    <h1><a href="/single/">dui augue facilisis lacus fringilla pulvinar massa felis quis velit</a></h1>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="article-mini">
-                            <div class="inner">
-                                <figure>
-                                    <a href="/single/">
-                                        <img src="/static/images/news/img06.jpg" alt="Sample Article">
-                                    </a>
-                                </figure>
-                                <div class="padding">
-                                    <h1><a href="/single/">neque est semper nulla, ac elementum risus quam a enim</a></h1>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="article-mini">
-                            <div class="inner">
-                                <figure>
-                                    <a href="/single/">
-                                        <img src="/static/images/news/img03.jpg" alt="Sample Article">
-                                    </a>
-                                </figure>
-                                <div class="padding">
-                                    <h1><a href="/single/">Morbi vitae nisl ac mi luctus aliquet a vitae libero</a></h1>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                </aside>
-                <aside>
-                    <div class="aside-body">
-                        <form class="newsletter">
-                            <div class="icon">
-                                <i class="ion-ios-email-outline"></i>
-                                <h1>Newsletter</h1>
-                            </div>
-                            <div class="input-group">
-                                <input type="email" class="form-control email" placeholder="Your mail">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-primary"><i class="ion-paper-airplane"></i></button>
-                                </div>
-                            </div>
-                            <p>By subscribing you will receive new articles in your email.</p>
-                        </form>
+                        {% endfor %}
                     </div>
                 </aside>
                 <aside>
@@ -478,10 +304,10 @@ SJTU soso
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="comments">
-
                             <article class="article-fw">
                                 <div class="inner">
                                     <figure>
+{#                                        {% url 'message_boards' 1 1 %}#}
                                         <a href="{% url 'message_boards' 1 1 %}">
                                             <img src="/static/images/bbs_logo.jpg" alt="Sample Article">
                                         </a>
@@ -489,7 +315,7 @@ SJTU soso
                                     <div class="details">
                                         <div class="detail">
                                             <div class="time">{{ latest_msg_board0.create_time }}</div>
-                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board0.id }}/2/1/">{{ latest_msg_board0.user }}</a></div>
+                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board0.id }}/2/1/">发帖人：{{ latest_msg_board0.user }}</a></div>
                                         </div>
                                         <h1><a href="/get_message_board/{{ latest_msg_board0.id }}/2/1/">{{ latest_msg_board0.title }}</a></h1>
 {#                                        <p>#}
@@ -499,92 +325,44 @@ SJTU soso
                                 </div>
                             </article>
                             <div class="line"></div>
+
 {#                            {% for i in latest_msg_board1 %}#}
-                            <article class="article-mini">
+                            <article class="article-fw">
                                 <div class="inner">
-                                    <figure>
-                                        <a href="/get_message_board/{{ latest_msg_board1.id }}/2/1/">
-                                            <img src="/static/images/news/img05.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
                                     <div class="padding">
-                                        <h1><a href="/get_message_board/{{ latest_msg_board1.id }}/2/1/">{{ latest_msg_board1.title }}</a></h1>
+                                        <h1 style="font-size: 15px " ><a href="/get_message_board/{{ latest_msg_board1.id }}/2/1/">{{ latest_msg_board1.title }} </a></h1>
                                         <div class="detail">
-                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board1.id }}/2/1/">{{ latest_msg_board1.user }}</a></div>
+                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board1.id }}/2/1/">发帖人：{{ latest_msg_board1.user }}</a></div>
                                             <div class="time">{{ latest_msg_board1.create_time }}</div>
                                         </div>
                                     </div>
                                 </div>
                             </article>
-                            <article class="article-mini">
+
+                            <article class="article-fw">
                                 <div class="inner">
-                                    <figure>
-                                        <a href="/get_message_board/{{ latest_msg_board2.id }}/2/1/">
-                                            <img src="/static/images/news/img02.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
                                     <div class="padding">
-                                        <h1><a href="/get_message_board/{{ latest_msg_board2.id }}/2/1/">{{ latest_msg_board2.title }}</a></h1>
+                                        <h1 style="font-size: 15px"><a href="/get_message_board/{{ latest_msg_board2.id }}/2/1/">{{ latest_msg_board2.title }}</a></h1>
                                         <div class="detail">
-                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board2.id }}/2/1/">{{ latest_msg_board2.user }}</a></div>
+                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board2.id }}/2/1/">发帖人：{{ latest_msg_board2.user }}</a></div>
                                             <div class="time">{{ latest_msg_board2.create_time }}</div>
                                         </div>
                                     </div>
                                 </div>
                             </article>
-                            <article class="article-mini">
+
+                            <article class="article-fw">
                                 <div class="inner">
-                                    <figure>
-                                        <a href="/get_message_board/{{ latest_msg_board3.id }}/2/1/">
-                                            <img src="/static/images/news/img10.jpg" alt="Sample Article">
-                                        </a>
-                                    </figure>
                                     <div class="padding">
-                                        <h1><a href="/get_message_board/{{ latest_msg_board3.id }}/2/1/">{{ latest_msg_board3.title }}</a></h1>
+                                        <h1 style="font-size: 15px"><a href="/get_message_board/{{ latest_msg_board3.id }}/2/1/">{{ latest_msg_board3.title }}</a></h1>
                                         <div class="detail">
-                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board3.id }}/2/1/">{{ latest_msg_board3.user }}</a></div>
+                                            <div class="category"><a href="/get_message_board/{{ latest_msg_board3.id }}/2/1/">发帖人：{{ latest_msg_board3.user }}</a></div>
                                             <div class="time">{{ latest_msg_board3.create_time }}</div>
                                         </div>
                                     </div>
                                 </div>
                             </article>
                         </div>
-                    </div>
-                </aside>
-                <aside>
-                    <div class="aside-body">
-                        <ul class="video-list" data-youtube='"carousel":true, "nav": "#video-list-nav"'>
-                            <li><a data-youtube-id="SBjQ9tuuTJQ" data-action="magnific"></a></li>
-                            <li><a data-youtube-id="9cVJr3eQfXc" data-action="magnific"></a></li>
-                            <li><a data-youtube-id="DnGdoEa1tPg" data-action="magnific"></a></li>
-                        </ul>
-                    </div>
-                </aside>
-                <aside id="sponsored">
-                    <h1 class="aside-title">Sponsored</h1>
-                    <div class="aside-body">
-                        <ul class="sponsored">
-                            <li>
-                                <a href="#">
-                                    <img src="/static/images/sponsored.png" alt="Sponsored">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="/static/images/sponsored.png" alt="Sponsored">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="/static/images/sponsored.png" alt="Sponsored">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="/static/images/sponsored.png" alt="Sponsored">
-                                </a>
-                            </li>
-                        </ul>
                     </div>
                 </aside>
             </div>

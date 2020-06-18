@@ -1,0 +1,55 @@
+{% extends 'base3.html' %}
+{% block right-panel-content %}
+    <h3 class="text-center">{{ title }}</h3>
+    {% if  not videos %}
+        <h3 class="text-center">对不起没有视频</h3>
+    {% endif %}
+    {% for Video in videos %}
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-md-3 column">
+                    <img class="img-thumbnail book-image" alt="140x140" src="/static/images/preload/{{ Video.preload }}" width=140px
+                         height=140px/>
+                </div>
+                <div class="col-md-7 column">
+                    <h3>
+                        <a href="{% url 'Video' Video.id %}"> {{ Video.title }}</a>
+                    </h3>
+                    <p>浏览量:{{ Video.watch }}</p>
+                    <p>收藏量:{{ Video.collect }}</p>
+                    <p>喜欢量:{{ Video.love }}</p>
+
+                    <a href=" {% url 'del_video_resource' Video.id %}">
+                     <button>删除</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="container-fluid">
+        <ul class="pagination" id="pager">
+            {#上一页按钮开始#}
+            {# 如果当前页有上一页#}
+            {% if videos.has_previous %}
+                {#  当前页的上一页按钮正常使用#}
+                <li class="previous"><a href="{{ path }}?page={{ videos.previous_page_number }}">上一页</a></li>
+            {% else %}
+                {# 当前页的不存在上一页时,上一页的按钮不可用#}
+                <li class="previous disabled"><a href="#">上一页</a></li>
+            {% endif %}
+            {#上一页按钮结束#}
+            {# 页码开始#}
+            <li class="item active"><a href="{{ path }}?page={{ videos.number }}">{{ videos.number }}</a></li>
+            {#页码结束#}
+            {# 下一页按钮开始#}
+            {% if videos.has_next %}
+                <li class="next"><a href="{{ path }}?page={{ videos.next_page_number }}">下一页</a></li>
+            {% else %}
+                <li class="next disabled"><a href="#">下一页</a></li>
+            {% endif %}
+            <li class="item"><a href="#">
+                {{ videos.number }}/{{ videos.paginator.num_pages }}</a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
