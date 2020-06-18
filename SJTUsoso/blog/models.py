@@ -1,18 +1,20 @@
-from ckeditor_uploader.fields import RichTextUploadingField
-from django.contrib.auth.models import User as superUser
 import time
 import calendar
 import random
-from django.conf import settings
 import os
+
+from ckeditor_uploader.fields import RichTextUploadingField
 from mdeditor.fields import MDTextField
+
+from django.conf import settings
 from django.db import models
 from django.db.models import Avg
 from django.db.models.functions import datetime
-
 from django.db.models.fields import exceptions
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import User as superUser
+
 
 # Create your models here.
 class User(models.Model):
@@ -181,7 +183,7 @@ class Video(models.Model):
 
     def __str__(self):
         return self.title
-        
+
 
 class VideoComments(models.Model):
     content = models.CharField(verbose_name="内容", max_length=300)

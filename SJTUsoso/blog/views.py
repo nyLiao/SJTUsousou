@@ -1,42 +1,33 @@
-from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
-from . import models
-from soso import models as sosomodels
 import json
-from .forms import *
 import hashlib
-from blog.models import Wechat
-from blog.models import Video
-from blog.models import User
-from blog.models import Rate
-from blog.models import VideoComments
-from blog.models import MessageBoard,CollectBoard,BoardComment
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from SJTUsoso.utils import *
-from django.contrib import messages
 import re
-from urllib.parse import urlencode
-from SJTUsoso import settings
-# Create your views here.
-from django.core.paginator import Paginator
-from functools import wraps
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from .forms import *
-from django.db.models import Avg
-from .ucf import ItemBasedCF
-from .recom_friend import *
-from django.core.paginator import Paginator
-from django.db.models import Q, Count, F
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from rest_framework.renderers import JSONRenderer
-import json
 import os
 import random
 import math
+from urllib.parse import urlencode
+from functools import wraps
+
+
+from django.db.models import Avg, Q, Count, F
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
+from django.contrib import messages
+from django.urls import reverse
+from rest_framework.renderers import JSONRenderer
+
+from SJTUsoso.utils import *
+from SJTUsoso import settings
+from soso import models as sosomodels
+from blog.models import Wechat, Video, User, Rate, VideoComments, MessageBoard, CollectBoard, BoardComment
+from . import models
+from .forms import *
+from .ucf import ItemBasedCF
+from .recom_friend import *
 from .one_tfidf import *
 
+
+# Create your views here.
 def tocategory(request):
     return render(request, 'category.html')
 
@@ -64,7 +55,7 @@ def login(request):
                 message = "用户不存在！"
         return render(request, 'login.html', locals())
 
-      
+
 # def login_in(func):  # 验证用户是否登录
 #   @wraps(func)
 #   def wrapper(*args, **kwargs):
@@ -347,7 +338,7 @@ def tohome(req):
             friends.append((User.objects.get(id=id)).nickname)
     except:
         pass
-      
+
     try:
         latest_msg_board0 = MessageBoard.objects.order_by('-create_time')[0]
         latest_msg_board1 = MessageBoard.objects.order_by('-create_time')[1]
@@ -568,7 +559,7 @@ def forgot(req):
 
 # def reset(req):
 #     return render(req, 'reset.html')
-  
+
 def reset(request):
     if request.session.get('is_login', None):
         if request.method == "POST":
@@ -795,6 +786,3 @@ def decollect(request):
                 messages.success(request, "取消收藏成功!")
                 return redirect('/collect/?user='+request.session['user_name'])
     return redirect('/login/')
-
-
-

@@ -12,19 +12,19 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
 """
-from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf.urls import url
 from django.views import static
 from django.views.generic.base import RedirectView
+from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from haystack.views import SearchView
+
 from soso.views import *
 from myadmin.views import *
 from blog.views import *
-from django.conf.urls import url
-from django.views import static
-from django.views.generic.base import RedirectView
+
+
 urlpatterns = [
     path('myadmin/', tomain,name="myadmin"),
     path('video_resource/', tovideo_resource,name="video_resource"),

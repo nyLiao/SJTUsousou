@@ -52,6 +52,7 @@ pytz==2019.3
 PyYAML==5.3.1
 reportlab==3.5.42
 requests==2.23.0
+scikit-learn==0.22.1
 simplejson==3.17.0
 six==1.14.0
 sqlparse==0.3.1
