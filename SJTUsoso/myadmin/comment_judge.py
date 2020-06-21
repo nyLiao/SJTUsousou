@@ -17,7 +17,7 @@ def judge_comment(text):
                  "content":text,
                  "time":datetime.datetime.now().microsecond
                 }
-        # 文本垃圾检测： antispam
+        # 文本垃圾检测
         request.set_content(HttpContentHelper.toValue({"tasks": [task1], "scenes": ["antispam"]}))
         response = clt.do_action_with_exception(request)
         print(response)

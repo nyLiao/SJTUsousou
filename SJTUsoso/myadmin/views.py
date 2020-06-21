@@ -9,10 +9,14 @@ from blog.models import VideoComments
 from blog.renew_tfidf import tfidf,cal
 from django.shortcuts import HttpResponse
 from .cluster import *
+from .interest_loss import *
 from .comment_judge import *
 import datetime
 import json
+
 def tomain(request):
+    mthread = threading.Thread(target=schedule_task, args=())
+    mthread.start()
     return render(request, "user/welcome.html", {"title": "欢迎来到管理员界面"})
 
 def videos_paginator(videos, page):

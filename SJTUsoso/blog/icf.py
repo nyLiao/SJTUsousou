@@ -44,11 +44,8 @@ class ItemBasedCF:
         rank = dict()
         action_item = self.train[user]
         # 用户user产生过行为的item和评分
-        #print(action_item)
         for item, score in action_item.items():
             sortedItems = sorted(self.similar[item].items(), key=lambda x: x[1], reverse=True)[0:K]
-
-            #print(sortedItems)
             for j, wj in sortedItems:
                 if j in action_item.keys():
                     continue

@@ -184,7 +184,6 @@ class Video(models.Model):
     def __str__(self):
         return self.title
 
-
 class VideoComments(models.Model):
     content = models.CharField(verbose_name="内容", max_length=300)
     date = models.CharField(verbose_name="日期", max_length=50)
@@ -198,19 +197,17 @@ class VideoComments(models.Model):
 
 class Rate(models.Model):
     video = models.ForeignKey(
-        Video, on_delete=models.CASCADE, blank=True, null=True, verbose_name="图书id"
+        Video, on_delete=models.CASCADE, blank=True, null=True, verbose_name="视频id"
     )
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, blank=True, null=True, verbose_name="用户id",
     )
     mark = models.FloatField(verbose_name="评分")
     create_time = models.DateTimeField(verbose_name="发布时间", auto_now_add=True)
-
     @property
     def avg_mark(self):
         average = Rate.objects.all().aggregate(Avg('mark'))['mark__avg']
         return average
-
 
 class Collection(models.Model):
     user = models.CharField(max_length=128)
@@ -225,9 +222,6 @@ class Collection(models.Model):
             return self.itemcover.url
         else:
             return os.path.join("/media/images","project-"+str(random.randint(1,8))+".jpg")
-
-
-
 
 '''
 # 邮箱验证
