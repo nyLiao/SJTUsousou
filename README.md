@@ -1,9 +1,14 @@
 # SJTUsousou
- Search engine specially designed for SJTU
+ SJTU Information Aggregation Platform
 
-
+for  search / recommend / bbs / blog / adminManage etc.
 ## Installation
+`pip install -r requirements.txt` 
 
-1. `pip install -r requirements.txt` / `conda install --file requirements.txt`
-
-2. 
+`conda install --file requirements.txt`
+ 
+ ## Supplement
+ / for user site
+ 
+ /myadmin for admin site
+ 
