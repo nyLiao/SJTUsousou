@@ -18,11 +18,9 @@ def tfidf():
     strings = []
     db = pymysql.connect("localhost", "root", "123", "sjtusoso")
     cursor = db.cursor()
-
     cursor.execute(
         """select content from blog_wechat""")
     results = cursor.fetchall()
-
     for i in range(len(results)):
         # print(i)
         strings.append(results[i][0])

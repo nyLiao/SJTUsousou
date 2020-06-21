@@ -4,10 +4,12 @@ from blog.models import Video
 from blog.models import Wechat
 from blog.models import User
 from blog.models import Rate
+from soso.models import SosoSitearticle
 from blog.models import VideoComments
 from blog.renew_tfidf import tfidf,cal
 from django.shortcuts import HttpResponse
 from .cluster import *
+from .comment_judge import *
 import datetime
 import json
 def tomain(request):
@@ -34,6 +36,13 @@ def towechat_resource(request):
     wechats = paginator.page(current_page)
     return render(request, "user/items2.html", {"wechats": wechats, "title": "公众号资源"})
 
+def tonew_resource(request):
+    news = SosoSitearticle.objects.all()
+    paginator = Paginator(news, 10)
+    current_page = request.GET.get("page", 1)
+    news = paginator.page(current_page)
+    return render(request, "user/items3.html", {"news": news, "title": "新闻资源"})
+
 def to_del_video(request,Video_id):
     Video.objects.get(id=Video_id).delete()
     videos = Video.objects.all()
@@ -51,6 +60,14 @@ def to_del_wechat(request,Wechat_id):
     tfidf()
     return render(request, "user/items2.html", {"wechats": wechats, "title": "公众号资源"})
 
+def to_del_new(request,new_id):
+    SosoSitearticle.objects.get(id=new_id).delete()
+    news = SosoSitearticle.objects.all()
+    paginator = Paginator(news, 10)
+    current_page = request.GET.get("page", 1)
+    news = paginator.page(current_page)
+    return render(request, "user/items3.html", {"news": news, "title": "新闻资源"})
+
 def upload_resource(request):
     return render(request, "user/upload.html", {"title": "上传资源"})
 
@@ -58,6 +75,7 @@ def count_resource(request):
     user_num = User.objects.all().count()
     video_num = Video.objects.all().count()
     wechat_num = Wechat.objects.all().count()
+    new_num = SosoSitearticle.objects.all().count()
     rate_num = Rate.objects.all().count()
     comment_num = VideoComments.objects.all().count()
     return render(request, "user/resource_count.html", locals())
@@ -107,11 +125,25 @@ def wechat_post(request):
     else:
         return HttpResponse("程序错误，请回退重试")
 
+def new_post(request):
+    if request.method == 'POST':
+        title = request.POST.get('title', '')
+        tag = request.POST.get('tag', '')
+        url = request.POST.get('url', '')
+        content = request.POST.get('content', '')
+        now_time = datetime.datetime.now()
+        obj = SosoSitearticle(date=now_time, title=title, tag=tag, url=url, content=content)
+        obj.save()
+        tfidf()
+        return HttpResponse("新闻上传成功")
+    else:
+        return HttpResponse("程序错误，请回退重试")
+
 def words_post(request):
     if request.method == 'POST':
         content = request.POST.get('words', '')
         words_list = content.split(",")
-        with open(r"/root/SJTUsoso/static/data/words.json", "w") as f:
+        with open(r"./static/data/words.json", "w") as f:
             json.dump(words_list, f)
         return HttpResponse("关键词更新成功")
     else:
@@ -152,22 +184,45 @@ def comment_push(request,Video_id):
         return HttpResponse("程序错误，请回退重试")
 
 def check_comment(request):
+    title="欢迎来到评论监管界面"
+    comments_ad={}
+    comments_porn = {}
+    comments_flood = {}
+    comments_abuse = {}
+    comments_politics = {}
     all_comments = VideoComments.objects.values("user_nickname","content","id")
-    with open(r"/root/SJTUsoso/static/data/words.json", 'r') as load_f:
-        load_list = json.load(load_f)
+    try:
+        with open(r"./static/data/words.json", 'r') as load_f:
+            load_list = json.load(load_f)
+    except:
+        load_list=[]
     comments={}
     for i in range(len(all_comments)):
         for elem in load_list:
             if elem in all_comments[i]["content"]:
                 comments[all_comments[i]["id"]]=all_comments[i]["user_nickname"]+":"+all_comments[i]["content"]
                 break
-    return render(request, "user/check_comment.html", {"title": "欢迎来到评论监管界面","comments":comments})
+        judge_result = judge_comment(all_comments[i])
+        if judge_result=="porn":
+            comments_porn[i+1]="porn"
+        elif  judge_result=="flood":
+            comments_flood[i + 1] = "flood"
+        elif  judge_result=="politics":
+            comments_politics[i + 1] = "politics"
+        elif  judge_result=="abuse":
+            comments_abuse[i + 1] = "abuse"
+        elif  judge_result=="ad":
+            comments_ad[i + 1] = "ad"
+    return render(request, "user/check_comment.html", locals())
 
 def to_del_comment(request,comment_id):
     VideoComments.objects.get(id=comment_id).delete()
     all_comments = VideoComments.objects.values("user_nickname", "content", "id")
-    with open(r"/root/SJTUsoso/static/data/words.json", 'r') as load_f:
-        load_list = json.load(load_f)
+    try:
+        with open(r"./static/data/words.json", 'r') as load_f:
+            load_list = json.load(load_f)
+    except:
+        load_list=[]
     comments = {}
     for i in range(len(all_comments)):
         for elem in load_list:

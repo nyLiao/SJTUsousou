@@ -4,25 +4,16 @@
     {% if  not users %}
         <h3 class="text-center">对不起没有用户</h3>
     {% endif %}
-    <div class="container-fluid">
-            <div class="row clearfix">
-                <div class="col-md-7 column">
-                    <h3>
-                        <a href="#">视频标签：{{ tag }}</a>
-                    </h3>
-                </div>
-            </div>
-    </div>
-    {% for user in users %}
+    {% for m,n in users.items %}
         <div class="container-fluid">
             <div class="row clearfix">
                 <div class="col-md-7 column">
                     <h3>
-                        <a href="#">{{ user }}</a>
+                        <a href="#">{{ m }}</a>
                     </h3>
+                    <p> {{ n }}</p>
                 </div>
             </div>
         </div>
     {% endfor %}
-
 {% endblock %}

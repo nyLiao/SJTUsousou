@@ -1,0 +1,50 @@
+{% extends 'base3.html' %}
+{% block right-panel-content %}
+    <h3 class="text-center">{{ title }}</h3>
+    {% if not news %}
+        <h3 class="text-center">对不起没有新闻资源</h3>
+    {% endif %}
+
+    {% for New in news %}
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-md-7 column">
+                    <h3>
+                        <a href="{{ New.url }}"> {{ New.title }}</a>
+                    </h3>
+                    <a href="{% url 'del_new_resource' New.id %}">
+                     <button>删除</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="container-fluid">
+        <ul class="pagination" id="pager">
+            {#上一页按钮开始#}
+            {# 如果当前页有上一页#}
+            {% if news.has_previous %}
+                {#  当前页的上一页按钮正常使用#}
+                <li class="previous"><a href="{{ path }}?page={{ news.previous_page_number }}">上一页</a></li>
+            {% else %}
+                {# 当前页的不存在上一页时,上一页的按钮不可用#}
+                <li class="previous disabled"><a href="#">上一页</a></li>
+            {% endif %}
+            {#上一页按钮结束#}
+            {# 页码开始#}
+            <li class="item active"><a href="{{ path }}?page={{ news.number }}">{{ news.number }}</a></li>
+            {#页码结束#}
+            {# 下一页按钮开始#}
+            {% if news.has_next %}
+                <li class="next"><a href="{{ path }}?page={{ news.next_page_number }}">下一页</a></li>
+            {% else %}
+                <li class="next disabled"><a href="#">下一页</a></li>
+            {% endif %}
+            <li class="item"><a href="#">
+                {{ news.number }}/{{ news.paginator.num_pages }}</a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+

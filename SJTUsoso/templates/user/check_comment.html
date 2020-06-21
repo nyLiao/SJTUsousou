@@ -1,18 +1,101 @@
 {% extends 'base3.html' %}
 {% block right-panel-content %}
     <h3 class="text-center">{{ title }}</h3>
+    <form method="post" action="/post_words/">
+        {%csrf_token%}
+        敏感词列表: <input type="text" name="words" style="width:400px; height:30px;" placeholder="以逗号分隔">
+        <br/><br/>
+        <input type="submit" value="更新">
+    </form>
     <h3>
-    <a href="#"> 色情</a>
+    <a href="#"> 敏感条目</a>
     </h3>
+    {% for key,value in comments.items %}
     <div class="container-fluid">
         <div class="row clearfix">
             <div class="col-md-7 column">
-                <p>用户名：内容 </p>
-                <a href="#">
+                <p>{{ value }}</p>
+                <a href="{% url 'del_video_comment' key %}">
                  <button>删除</button>
                 </a>
             </div>
         </div>
     </div>
+    {% endfor %}
 
+    <h3>
+    <a href="#"> 广告</a>
+    </h3>
+    {% for key,value in comments_ad.items %}
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-md-7 column">
+                <p>{{ value }}</p>
+                <a href="{% url 'del_video_comment' key %}">
+                 <button>删除</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <h3>
+    <a href="#"> 色情</a>
+    </h3>
+    {% for key,value in comments_porn.items %}
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-md-7 column">
+                <p>{{ value }}</p>
+                <a href="{% url 'del_video_comment' key %}">
+                 <button>删除</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <h3>
+    <a href="#"> 反动</a>
+    </h3>
+    {% for key,value in comments_politics.items %}
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-md-7 column">
+                <p>{{ value }}</p>
+                <a href="{% url 'del_video_comment' key %}">
+                 <button>删除</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <h3>
+    <a href="#"> 辱骂</a>
+    </h3>
+    {% for key,value in comments_abuse.items %}
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-md-7 column">
+                <p>{{ value }}</p>
+                <a href="{% url 'del_video_comment' key %}">
+                 <button>删除</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <h3>
+    <a href="#"> 灌水</a>
+    </h3>
+    {% for key,value in comments_flood.items %}
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-md-7 column">
+                <p>{{ value }}</p>
+                <a href="{% url 'del_video_comment' key %}">
+                 <button>删除</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 {% endblock %}

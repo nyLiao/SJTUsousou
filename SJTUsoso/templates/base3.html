@@ -9,7 +9,7 @@
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="/static/books.png">
+    <link rel="stylesheet" href="/static/scripts/ionicons/css/ionicons.min.css">
     <title>交大搜搜后台管理系统</title>
     {% block style %}
     {% endblock %}
@@ -59,8 +59,8 @@
                 <li class="active"><a href="{% url 'myadmin' %}">欢迎界面<span class="sr-only">(current)</span></a></li>
                 <li><a href="{% url 'video_resource' %}">视频资源</a></li>
                 <li><a href="{% url 'wechat_resource' %}">公众号资源</a></li>
-                <li><a href="#">新闻资源</a></li>
-                <li><a href="{% url 'upload' %}">资源上传</a></li>
+                <li><a href="{% url 'new_resource' %}">新闻资源</a></li>
+                <li><a href="{% url 'upload' %}">资源发布</a></li>
                 <li><a href="{% url 'cluster' %}">用户聚类</a></li>
                 <li><a href="{% url 'check' %}">评论审查</a></li>
                 <li><a href="{% url 'count' %}">资源统计</a></li>

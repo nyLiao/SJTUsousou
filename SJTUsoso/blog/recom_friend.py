@@ -34,9 +34,11 @@ def search_friend(user_id):
 
     user_data = dict1[user_id]
     dict2={}
-    with open('./static/data/'+str(user_id)+'.json', 'r', encoding='utf8')as fp:
-        data1 = json.load(fp)
-
+    try:
+        with open('./static/data/'+str(user_id)+'.json', 'r', encoding='utf8')as fp:
+            data1 = json.load(fp)
+    except:
+        pass
     for i in dict1.keys():
         if i !=user_id:
              op_data = dict1[i]
@@ -47,7 +49,7 @@ def search_friend(user_id):
                   tmp2 = cal2(data2, data1)
              except:
                   tmp2=0
-             dict2[i]=  tmp1+tmp2
+             dict2[i]=  (tmp2+1) / (tmp1+1)
 
     user_dict = dict(sorted(dict2.items(), key=lambda item: item[1], reverse=True))
     return (list(user_dict.keys()))

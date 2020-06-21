@@ -7,7 +7,6 @@ import math
 from urllib.parse import urlencode
 from functools import wraps
 
-
 from django.db.models import Avg, Q, Count, F
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, JsonResponse
@@ -23,10 +22,8 @@ from soso import models as sosomodels
 from blog.models import Wechat, Video, User, Rate, VideoComments, MessageBoard, CollectBoard, BoardComment
 from . import models
 from .forms import *
-from .ucf import ItemBasedCF
+from .icf import ItemBasedCF
 from .recom_friend import *
-from .one_tfidf import *
-
 
 # Create your views here.
 def tocategory(request):
@@ -55,21 +52,6 @@ def login(request):
             except:
                 message = "用户不存在！"
         return render(request, 'login.html', locals())
-
-
-# def login_in(func):  # 验证用户是否登录
-#   @wraps(func)
-#   def wrapper(*args, **kwargs):
-#       request = args[0]
-#       is_login = request.session.get("login_in")
-#       print(is_login)
-#       if is_login:
-#           return func(*args, **kwargs)
-#       else:
-#           return redirect(reverse("login"))
-#
-#   return wrapper
-
 
 def message_boards(request, fap_id=1, pagenum=1, **kwargs):
     # 获取论坛内容
@@ -256,11 +238,11 @@ def like_collect(request):
 def tosingle(req,Wechat_id):
     user = User.objects.get(name=req.session['user_name'])
     demo1 = Wechat.objects.get(id=Wechat_id)
-    filename1 = r"/root/SJTUsoso/static/data/fenci.json"
+    filename1 = "./static/data/fenci.json"
     with open(filename1) as file_obj:
         dicts = json.load(file_obj)
 
-    filename2 = "/root/SJTUsoso/static/data/"  + str(user.id) + ".json"
+    filename2 = "./static/data/"  + str(user.id) + ".json"
     if not os.path.exists(filename2):
         user_dict={}
         for i in dicts[str(Wechat_id)].keys():
@@ -291,8 +273,8 @@ def tosingle(req,Wechat_id):
     return render(req, 'single.html',{"Wechat": demo1})
 
 def tohome(req):
+    # 处理协同过滤视频
     try:
-        #处理协同过滤视频
         user = User.objects.get(name=req.session['user_name'])
         items = models.Collection.objects.filter(user=user.name)
         itemsum = str(items.count())
@@ -307,21 +289,26 @@ def tohome(req):
             count+=1
             if (count==4):
                 break
-        num = 4-len(video_recommend_list)
-        for i in range(num):
-            video_recommend_list.append(random.randint(1,10))
 
+        num = 4-len(video_recommend_list)
+        video_num = Video.objects.all().count()
+        tmp = random.sample(range(1, video_num), num)
+        video_recommend_list+=tmp
         Videos1 = Video.objects.filter(id__in=[video_recommend_list[0], video_recommend_list[1]])
         Videos2 = Video.objects.filter(id__in=[video_recommend_list[2], video_recommend_list[3]])
-
-        #处理内容推送
-        filename = r"/root/SJTUsoso/static/data/fenci.json"
+    except:
+        pass
+    # 处理内容推送
+    try:
+        filename = "./static/data/fenci.json"
         with open(filename) as file_obj:
             dicts = json.load(file_obj)
 
-        filename = "/root/SJTUsoso/static/data/"+str(user.id)+".json" #改成user.id
+        filename = "./static/data/"+str(user.id)+".json"
+
+        wechat_num = Wechat.objects.all().count()
         if not os.path.exists(filename):
-            result_id=[random.randint(1,10),random.randint(1,10),random.randint(1,10),random.randint(1,10)]
+            result_id = random.sample(range(1, wechat_num), 4)
         else:
             with open(filename) as file_obj:
                 user_dict = json.load(file_obj)
@@ -337,13 +324,18 @@ def tohome(req):
                 if count == 4:
                     break
         Wechats = Wechat.objects.filter(id__in=result_id)
-        #处理好友推荐
+    except:
+        pass
+
+    #处理好友推荐
+    try:
         friends_id = search_friend(user.id)
         friends = []
         for id in friends_id:
             friends.append((User.objects.get(id=id)).nickname)
-    except:
-        pass
+
+    except Exception as err:
+        print(err)
 
     try:
         latest_msg_board0 = MessageBoard.objects.order_by('-create_time')[0]
@@ -369,6 +361,7 @@ def tohome(req):
         sites = SosoSitearticle.objects.filter(date__range=["2020-01-01", "2020-12-31"]).order_by('-view')[:10]
     except:
         pass
+
     return render(req, "index.html", locals())
 
 def cal(dict1,dict2):#分词与TFIDF处理后的相似度计算

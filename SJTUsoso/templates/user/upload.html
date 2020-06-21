@@ -32,5 +32,20 @@
         <br/>
         <input type="submit" value="上传公众号文章">
     </form>
+    <br/><br/>
+    <a href="#">新闻资源</a>
+    <br/><br/>
+    <form method="post" enctype="multipart/form-data" action="/post3/">
+        {%csrf_token%}
+        标题: <input type="text" name="title"/>
+        <br/><br/>
+        类别：<input type="text" name="tag"/>
+        <br/><br/>
+        网址：<input type="text" name="url"/>
+        <br/><br/>
+        内容：<br/><textarea cols="80" rows="10" name="content"></textarea>
+        <br/>
+        <input type="submit" value="上传新闻">
+    </form>
 {% endblock %}
 

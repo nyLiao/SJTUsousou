@@ -98,12 +98,19 @@ DATABASES = {
 }
 
 
+# HAYSTACK_CONNECTIONS = {
+#     'default': {
+#         # 'ENGINE': 'haystack.backends.whoosh_cn_backend.WhooshEngine',
+#         'ENGINE': 'soso.whoosh_cn_backend.WhooshEngine',
+#         'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+#     },
+# }
+
 HAYSTACK_CONNECTIONS = {
     'default': {
-        # 'ENGINE': 'haystack.backends.whoosh_cn_backend.WhooshEngine',
-        'ENGINE': 'soso.whoosh_cn_backend.WhooshEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
-    },
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    }
 }
 
 # 自动更新索引
