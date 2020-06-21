@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>部署文档.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<center>
+<strong>
+<font face='微软雅黑' size=6> SJTU_soso部署文档 </font>
+</strong>
+</center>
+<p align="right">
+<font face='微软雅黑' size=4>郭建铭/廖宁祎/刘浩文/江浩宇/郭子豪</font>
+</p>
+<h2 id="1-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%90%AD%E5%BB%BA">1 数据库搭建</h2>
+<p>  
+本项目基于B/S架构实现，所有数据通过云端数据库进行存储、读取等操作，我们通过租借Aliyun服务器的云盘自行搭建Mysql服务端，首先安装数据库服务器端等依赖项。</p>
+<pre class="hljs"><code><div>apt-get install mysql-server,mysql-client
+apt-get install libmysqlclient-dev
+</div></code></pre>
+<p>  
+为了小组成员的调试，还需要开启远程连接，在Aliyun控制台修改安全规则，开放3306端口后，源设置为0.0.0.0/0以供远程连接，修改my.cnf配置文件中的port、bind-address等字段。</p>
+<div align=center>
+	<img src="pic/deploy/1.png" width="400">
+</div>
+<p>  
+修改相应配置后为数据库创建远程用户'soft',并授权该用户相应数据库的所有权限。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">create</span> <span class="hljs-keyword">user</span> <span class="hljs-string">'soft'</span>@<span class="hljs-string">'%'</span> <span class="hljs-keyword">identified</span> <span class="hljs-keyword">by</span> pd;
+<span class="hljs-keyword">grant</span> <span class="hljs-keyword">all</span> <span class="hljs-keyword">on</span> SJTU_soso.* <span class="hljs-keyword">to</span> <span class="hljs-string">'soft'</span>@<span class="hljs-string">'%'</span>;
+</div></code></pre>
+<div align=center>
+	<img src="pic/deploy/2.png" width="400">
+</div>
+<p>  
+项目中所有的数据存放在数据库SJTUsoso中，存储的信息包括用户信息、博客数据、论坛数据、所有获取聚合的数据等。</p>
+<div align=center>
+	<img src="pic/deploy/3.png" width="350">
+</div>
+<h2 id="2-%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2">2 项目部署</h2>
+<p>  
+全项目基于B/S架构，采用Django框架搭建而成，考虑到易用性和功能性，将全项目部署在服务器上以便用户跨终端使用。服务器端部署过程如下。</p>
+<h3 id="21-%E5%BB%BA%E7%AB%8B%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83">2.1 建立虚拟环境</h3>
+<pre class="hljs"><code><div>sudo apt-get install python-virtualenv
+virtualenv virtualenv -p /usr/bin/python3.7 soso
+<span class="hljs-built_in">source</span> soso/bin/activate
+</div></code></pre>
+<h3 id="22-%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96%E9%A1%B9">2.2 安装依赖项</h3>
+<pre class="hljs"><code><div>pip install -r &lt; requirements.txt
+</div></code></pre>
+<p>项目后台部署所需依赖项如表所示：</p>
+<style>
+table {
+margin: auto;
+}
+</style>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Package</th>
+<th style="text-align:center">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">asgiref</td>
+<td style="text-align:center">3.2.8</td>
+</tr>
+<tr>
+<td style="text-align:center">Django</td>
+<td style="text-align:center">3.0.7</td>
+</tr>
+<tr>
+<td style="text-align:center">django-ckeditor</td>
+<td style="text-align:center">5.9.0</td>
+</tr>
+<tr>
+<td style="text-align:center">django-haystack</td>
+<td style="text-align:center">2.8.1</td>
+</tr>
+<tr>
+<td style="text-align:center">django-js-asset</td>
+<td style="text-align:center">1.2.2</td>
+</tr>
+<tr>
+<td style="text-align:center">django-mdeditor</td>
+<td style="text-align:center">0.1.18</td>
+</tr>
+<tr>
+<td style="text-align:center">django-ranged-response</td>
+<td style="text-align:center">0.2.0</td>
+</tr>
+<tr>
+<td style="text-align:center">django-simple-captcha</td>
+<td style="text-align:center">0.5.12</td>
+</tr>
+<tr>
+<td style="text-align:center">djangorestframework</td>
+<td style="text-align:center">3.11.0</td>
+</tr>
+<tr>
+<td style="text-align:center">jieba</td>
+<td style="text-align:center">0.42.1</td>
+</tr>
+<tr>
+<td style="text-align:center">joblib</td>
+<td style="text-align:center">0.15.1</td>
+</tr>
+<tr>
+<td style="text-align:center">mysqlclient</td>
+<td style="text-align:center">1.4.6</td>
+</tr>
+<tr>
+<td style="text-align:center">numpy</td>
+<td style="text-align:center">1.18.5</td>
+</tr>
+<tr>
+<td style="text-align:center">Pillow</td>
+<td style="text-align:center">7.1.2</td>
+</tr>
+<tr>
+<td style="text-align:center">pip</td>
+<td style="text-align:center">20.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">pkg-resources</td>
+<td style="text-align:center">0.0.0</td>
+</tr>
+<tr>
+<td style="text-align:center">PyMySQL</td>
+<td style="text-align:center">0.9.3</td>
+</tr>
+<tr>
+<td style="text-align:center">pytz</td>
+<td style="text-align:center">2020.1</td>
+</tr>
+<tr>
+<td style="text-align:center">scikit-learn</td>
+<td style="text-align:center">0.23.1</td>
+</tr>
+<tr>
+<td style="text-align:center">scipy</td>
+<td style="text-align:center">1.4.1</td>
+</tr>
+<tr>
+<td style="text-align:center">setuptools</td>
+<td style="text-align:center">47.3.1</td>
+</tr>
+<tr>
+<td style="text-align:center">setuptools-scm</td>
+<td style="text-align:center">4.1.2</td>
+</tr>
+<tr>
+<td style="text-align:center">simplejson</td>
+<td style="text-align:center">3.17.0</td>
+</tr>
+<tr>
+<td style="text-align:center">six</td>
+<td style="text-align:center">1.15.0</td>
+</tr>
+<tr>
+<td style="text-align:center">sqlparse</td>
+<td style="text-align:center">0.3.1</td>
+</tr>
+<tr>
+<td style="text-align:center">threadpoolctl</td>
+<td style="text-align:center">2.1.0</td>
+</tr>
+<tr>
+<td style="text-align:center">wheel</td>
+<td style="text-align:center">0.34.2</td>
+</tr>
+<tr>
+<td style="text-align:center">Whoosh</td>
+<td style="text-align:center">2.7.4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="23-%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E9%83%A8%E7%BD%B2">2.3 搜索引擎部署</h3>
+<p>  
+Django+Haystack+Whoosh 的搜索引擎在项目中属于已部署好的状态，且使用了对环境改动最小的实现方式。在部署过程中，有以下几点需要注意。</p>
+<ul>
+<li>Haystack 配置</li>
+</ul>
+<p>  
+在 <code>SJTUsoso/SJTUsoso/settings.py</code> 项目配置文件 <code>INSTALLED_APPS</code> 中注册 <code>'haystack'</code>，并加入如下配置信息。</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># 配置引擎和索引</span>
+HAYSTACK_CONNECTIONS = {
+    <span class="hljs-string">'default'</span>: {
+        <span class="hljs-string">'ENGINE'</span>: <span class="hljs-string">'soso.whoosh_cn_backend.WhooshEngine'</span>,
+        <span class="hljs-string">'PATH'</span>: os.path.join(os.path.dirname(__file__), <span class="hljs-string">'whoosh_index'</span>),
+    },
+}
+<span class="hljs-comment"># 自动更新索引</span>
+HAYSTACK_SIGNAL_PROCESSOR = <span class="hljs-string">'haystack.signals.RealtimeSignalProcessor'</span>
+<span class="hljs-comment"># 设置每页显示的数目</span>
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = <span class="hljs-number">5</span>
+</div></code></pre>
+<ul>
+<li>Whoosh 使用中文分词</li>
+</ul>
+<p>  
+如上所示，Haystack 使用的是 <code>SJTUsoso/soso/whoosh_cn_backend.py</code> 的自定义 Whoosh 搜索引擎。其与原 Whoosh 引擎的区别主要是 <code>TEXT</code> 内容的分析器更改为了结巴分词提供的 <code>jieba.analyse.ChineseAnalyzer()</code>。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> jieba.analyse <span class="hljs-keyword">import</span> ChineseAnalyzer
+schema_fields[field_class.index_fieldname] = TEXT(
+    stored=<span class="hljs-literal">True</span>,
+    analyzer=ChineseAnalyzer(),
+    field_boost=field_class.boost,
+    sortable=<span class="hljs-literal">True</span>,
+)
+</div></code></pre>
+<ul>
+<li>建立索引模型</li>
+</ul>
+<p>  
+在搜索模块路径下建立索引模型文件 <code>SJTUsoso/soso/search_indexes.py</code>。该文件定义了基于网页数据 Django 模型 <code>SosoSitearticle</code> 的 <code>SosoSitearticleIndex</code> 类，作为 Haystack+Whoosh 的索引模型。其中声明的各个字段属性与 <code>SosoSitearticle</code> 的字段对应，供全文搜索时检索引用。</p>
+<ul>
+<li>建立模型模板</li>
+</ul>
+<p>  
+上步索引中定义了一个 <code>text</code> 字段，其作用是根据数据模板组合建立索引文件，数据模板中写入的字段将会被建立索引，检索时会对这些字段做全文检索匹配。数据模板保存在 <code>SJTUsoso/templates/search/indexes/soso/sosositearticle_text.txt</code> 文件中。</p>
+<ul>
+<li>建立索引文件</li>
+</ul>
+<p>  
+数据库和搜索引擎均部署完成后，在目录下使用如下命令初次建立/刷新索引文件。之后运行过程中，Haystack 会根据数据的增删动态地更新索引文件。</p>
+<pre class="hljs"><code><div>python manage.py rebuild_index/update_index
+</div></code></pre>
+<h3 id="24-%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2">2.4 模型部署</h3>
+<ul>
+<li>模型概述</li>
+</ul>
+<p>  
+<a href="https://github.com/google-research/bert">Google BERT</a> 模型是 Google 发布的 NLP 模型。此处使用的是全尺寸版 BERT-Base，层数 12，隐藏层大小 768，自注意力头数 12，总参数个数 110M。BERT-Base Chinese 模型经过 Google 中文语料预训练。</p>
+<p>  
+模型使用 TensorFlow 框架实现，封装的接口参考了 <a href="https://github.com/terrifyzhao/bert-utils">terrifyzhao/bert-utils</a> 项目，通过对模型结构的微调实现了适用于句子对分类的 BERT 训练、评价、推断过程。</p>
+<ul>
+<li>模型训练</li>
+</ul>
+<p>  
+Google 发布的 BERT-Base Chinese 已经过了中文语料预训练。BERT 论文中也提到，针对具体任务可以通过 fine-tune 实现更好的性能。此处针对相似度计算任务，使用 <a href="http://icrc.hitsz.edu.cn/info/1037/1162.htm">QA Corpus</a> 数据集。其包含训练数据 100k 条，验证、测试数据各 10k 条，均为二分类的句子匹配数据。</p>
+<p>  
+模型在预训练起点上，应用上述语料进行 10 轮 fine-tune，保存每轮训练结果。训练参数 batch_size=64，learning rate=5.0e-5。模型在 NVIDIA GTX 1080 单 GPU 上训练全程约 6 小时。最终第 10 轮模型在测试集上正确率 62.64%。</p>
+<ul>
+<li>模型部署</li>
+</ul>
+<p>  
+模型与项目相关文件在项目目录 <code>bert-utils-master</code> 中，主要调用接口为 <code>bert-utils-master/similar.py</code> 文件，详见设计文档部分。</p>
+<p>  
+模型在 Intel Core i5 单 CPU 下进行相似度分析计算时，处理速率超过 10 条/秒（不计数据库存取时间，视输入句子长短略有不同），性能表现还是较好的。</p>
+<h2 id="3-%E9%A1%B9%E7%9B%AE%E8%BF%90%E8%A1%8C">3 项目运行</h2>
+<p>  
+在控制台修改规则，开放8820以供项目部署，并授权对象给0.0.0.0/0以供用户连接。
+借助django的runserver运行项目，并部署在8820端口</p>
+<pre class="hljs"><code><div>python3 manage.py runserver 0.0.0.0:8820
+</div></code></pre>
+<div align=center>
+	<img src="pic/deploy/4.png" width="500">
+</div>
+</body>
+</html>

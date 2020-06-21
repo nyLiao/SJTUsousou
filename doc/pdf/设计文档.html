@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>设计文档.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<center>
+<strong>
+<font face='微软雅黑' size=6> SJTU_soso设计文档 </font>
+</strong>
+</center>
+<p align="right">
+<font face='微软雅黑' size=4>郭建铭/廖宁祎/刘浩文/江浩宇/郭子豪</font>
+</p>
+<p>  
+项目的结构图如下所示，主要模块为<strong>信息聚合检索</strong>、<strong>智能推荐平台</strong>、<strong>社交博客平台</strong>、<strong>后台管理平台</strong>。本设计文档将按照四个模块详细展开阐述。</p>
+<div align=center>
+	<img src="pic/design/1.png" width="500">
+</div>
+<h1 id="1-%E4%BF%A1%E6%81%AF%E8%81%9A%E5%90%88%E6%A3%80%E7%B4%A2">1 信息聚合检索</h1>
+<h2 id="11-%E5%9F%BA%E4%BA%8Escrapy%E7%9A%84%E4%BF%A1%E6%81%AF%E8%8E%B7%E5%8F%96">1.1 基于scrapy的信息获取</h2>
+<h3 id="1%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6">1）实现机制</h3>
+<p>  
+Scrapy 是基于 Python 的框架，具有高层次、集成度好等特点，且能与 Django ORM 衔接，完成爬取数据、清洗整理、数据库存储的全pipeline。</p>
+<h3 id="2%E6%95%B0%E6%8D%AE%E6%9D%A5%E6%BA%90">2）数据来源</h3>
+<p>  
+需要获取的数据包括文章、视频、图片等，信息来源包括校级网站、院级网站和一些主流公众后平台。详细图示如下。</p>
+<div align=center>
+	<img src="pic/design/2.png" width="500">
+</div>
+<p>  
+针对每篇通知、公告等需要获取的具体信息包括标题、发布日期、正文、浏览量、网址、所属种类等。以教务处某篇通知为例，利用BeautifulSoup解析网页后在每个分区遍历搜索每一个子链接节点，进入详情页后利用xpath定位相关信息获取，进行简单的过滤和预处理后存储。</p>
+<div align=center>
+	<img src="pic/design/4.png" width="400">
+</div>
+<div align=center>
+	<img src="pic/design/3.png" width="400">
+</div>
+<h3 id="3%E6%A8%A1%E5%9D%97%E6%8E%A5%E5%8F%A3">3）模块接口</h3>
+<p>  
+模块为在 Django 项目目录下的 <code>SJTUsoso/crawl/</code> 目录，其亦作为一个 Scrapy 项目存在。实现以电院新闻的爬虫为例，配置在 <code>SJTUsoso/crawl/crawl/spiders/seiee.py</code> 中。</p>
+<p>  
+配置后，在 <code>SJTUsoso/crawl/</code> 目录下使用如下 Scrapy 命令运行，即可即时爬取数据并写入数据库中。</p>
+<pre class="hljs"><code><div>scrapy crawl seiee
+</div></code></pre>
+<h3 id="4%E4%B8%8E-django-%E5%AF%B9%E6%8E%A5">4）与 Django 对接</h3>
+<p>  
+为在运行 Scrapy 时启动 Django 服务，在配置文件 <code>settings.py</code> 中需要如下语句。</p>
+<pre class="hljs"><code><div>BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(BASE_DIR)
+os.environ[<span class="hljs-string">'DJANGO_SETTINGS_MODULE'</span>] = <span class="hljs-string">'SJTUsoso.settings'</span>
+django.setup()
+</div></code></pre>
+<p>  
+模型方面，Scrapy 模型直接继承 Django 对应数据模型 <code>soso.models.SosoSitearticle</code> 即可。见 <code>items.py</code>。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">from</span> scrapy_djangoitem <span class="hljs-keyword">import</span> DjangoItem
+<span class="hljs-keyword">from</span> soso.models <span class="hljs-keyword">import</span> SosoSitearticle
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ArticleItem</span><span class="hljs-params">(DjangoItem)</span>:</span>
+    django_model = SosoSitearticle
+</div></code></pre>
+<p>  
+在处理文件 <code>pipelines.py</code> 中，加入将模型实例保存到 Django 数据库中的语句。</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CrawlPipeline</span><span class="hljs-params">(object)</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_item</span><span class="hljs-params">(self, item, spider)</span>:</span>
+        item.save()
+        <span class="hljs-keyword">return</span> item
+</div></code></pre>
+<h2 id="12-%E5%9F%BA%E4%BA%8Etext-rank%E7%AE%97%E6%B3%95%E7%9A%84%E5%85%A8%E6%96%87%E5%85%B3%E9%94%AE%E8%AF%8D%E6%8F%90%E5%8F%96">1.2 基于Text-Rank算法的全文关键词提取</h2>
+<h3 id="1%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6">1）实现机制</h3>
+<p>  
+对于网页新闻数据，使用成熟的 NLP 关键词提取方法进行静态关键词分析，取最重要三者作为该条数据的关键词。</p>
+<ul>
+<li>使用经典的无监督抽取式文本摘要算法 Text-Rank，基于文中词语的相似性构建图结构，再由权重得分得到词语的重要性排序。该方法适用于大量文本的快速分析，同时基于每篇文章相似性图的提取效果也比基于语料库的算法更有针对性。</li>
+<li>调用结巴中文分词相关接口实现，分词可与其他 NLP 部分共用相同的结巴语料库。</li>
+</ul>
+<h3 id="2%E6%A8%A1%E5%9D%97%E6%8E%A5%E5%8F%A3">2）模块接口</h3>
+<p>  
+提取关键词的接口主要为 <code>SJTUsoso/soso/genKw.get_kw()</code>，输入文本字符串（一般为标题加正文），返回前三关键词列表，供建立/更新文章数据时调用。实现针对数据中常见的短文本做了专门处理，使关键词个数不少于三个。</p>
+<h2 id="13-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%BB%BA%E7%AB%8B">1.3 数据库的建立</h2>
+<p>  
+为了提高项目的功能性和兼容性，聚合获取的所有数据建立远端数据库存储。远端数据库的搭建详见部署文档。为与Django项目交互，此部分所有数据存放于表SJTUsoso.soso_siteArticle。表单解释列表如下。</p>
+<div align=center>
+	<img src="pic/design/5.png" width="500">
+</div>
+<style>
+table {
+margin: auto;
+}
+</style>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">表项</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">id</td>
+<td style="text-align:center">主码，每条记录的标识符</td>
+</tr>
+<tr>
+<td style="text-align:center">title</td>
+<td style="text-align:center">标题</td>
+</tr>
+<tr>
+<td style="text-align:center">url</td>
+<td style="text-align:center">原网站链接</td>
+</tr>
+<tr>
+<td style="text-align:center">text</td>
+<td style="text-align:center">正文内容</td>
+</tr>
+<tr>
+<td style="text-align:center">date</td>
+<td style="text-align:center">发布日期</td>
+</tr>
+<tr>
+<td style="text-align:center">view</td>
+<td style="text-align:center">浏览量</td>
+</tr>
+<tr>
+<td style="text-align:center">category</td>
+<td style="text-align:center">信息所属种类</td>
+</tr>
+<tr>
+<td style="text-align:center">kw</td>
+<td style="text-align:center">正文关键词提取</td>
+</tr>
+<tr>
+<td style="text-align:center">img_url</td>
+<td style="text-align:center">若包含图片，图片地址</td>
+</tr>
+<tr>
+<td style="text-align:center">sml</td>
+<td style="text-align:center">临时相似度缓存</td>
+</tr>
+</tbody>
+</table>
+<p>  
+为使项目与所建立数据库进行交互，在settings.py下定义数据库配置信息。</p>
+<pre class="hljs"><code><div>DATABASES = {
+    <span class="hljs-string">'default'</span>: {
+        <span class="hljs-string">'ENGINE'</span>: <span class="hljs-string">'django.db.backends.mysql'</span>,
+        <span class="hljs-string">'NAME'</span>: <span class="hljs-string">'SJTUsoso'</span>,
+        <span class="hljs-string">'USER'</span>:<span class="hljs-string">'soso'</span>,
+        <span class="hljs-string">'PASSWORD'</span>:<span class="hljs-string">'SJTUsoso'</span>,
+        <span class="hljs-string">'HOST'</span>: <span class="hljs-string">'39.100.88.210'</span>,
+        <span class="hljs-string">'PORT'</span>: <span class="hljs-string">'3306'</span>,
+        <span class="hljs-string">'TEST'</span>: {
+            <span class="hljs-string">'CHARSET'</span>: <span class="hljs-string">'utf8'</span>,
+            <span class="hljs-string">'COLLATION'</span>: <span class="hljs-string">'utf8_general_ci'</span>
+        }
+    }
+}
+</div></code></pre>
+<h2 id="14-%E5%9F%BA%E4%BA%8E-bert-%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8A%A8%E6%80%81%E8%AF%AD%E4%B9%89%E7%9B%B8%E4%BC%BC%E5%BA%A6%E5%88%86%E6%9E%90">1.4 基于 BERT 模型的动态语义相似度分析</h2>
+<h3 id="1%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6">1）实现机制</h3>
+<p>  
+语义相似度分析是对搜索请求字符串和搜索引擎返回的搜索结果各条目模型进行动态分析的数据处理。我们将语义相似度分析应用于对搜索结果的智能排序上</p>
+<ul>
+<li>语义相似度分析任务实际上是一个句子对的二分类任务，两句子相似/不相似的类别标签各为1/0，则模型对归类的输出为0至1之间的一个实数，将其作为相似度指标，越接近1则句子间越相似。</li>
+<li>调用模型的机器学习框架为 TensorFlow，与 BERT 模型的接口参考 <a href="https://github.com/terrifyzhao/bert-utils">terrifyzhao/bert-utils</a> 项目实现。</li>
+<li>NLP 模型为 <a href="https://github.com/google-research/bert">Google BERT</a>-Base Chinese 模型，针对相似度分析（句子对分类）任务，模型结构略有调整，如下所示。模型的具体训练与部署部分见部署文档。</li>
+</ul>
+<div align=center>
+	<img src="pic/design/8.jpg" width="400">
+</div>
+<h3 id="2%E6%A8%A1%E5%9D%97%E6%8E%A5%E5%8F%A3">2）模块接口</h3>
+<p>  
+由于 Django-Haystack 搜索框架的限制，搜索结果的动态分析实现较为复杂。具体而言，Haystack 框架的搜索结果类 <code>SearchQuerySet</code> 不提供 Django 原生对应类的 <code>extra()</code> 方法，因此对于分析结果列，无法使用动态的排序方法。此处经过多种实现的尝试，最后采用在网页新闻 <code>soso_sitearticle</code> 数据模型中增加一静态列 <code>sml</code> 作为临时相似度缓存来解决上述问题。</p>
+<ul>
+<li><code>bert-utils-master/similar.py</code>：参考并自行重写的相似度分析任务实现：
+<ul>
+<li>声明了相似度模型类 <code>BertSim</code>；</li>
+<li>通过调用相似度分析方法 <code>BertSim.predict()</code>，输入二字符串，输出预测的相似度值。</li>
+</ul>
+</li>
+<li><code>SJTUsoso/soso/bert_run.py</code>：主要模型调用部分：
+<ul>
+<li>在初次调用时实例化全局模型；</li>
+<li>提供封装的 <code>get_similarity()</code> 方法计算相似度。</li>
+</ul>
+</li>
+<li><code>SJTUsoso/soso/views.py</code> 中，自定义搜索结果视图类的方法 <code>mySearchView.get_queryset()</code> ：在进行相似度排序时：
+<ul>
+<li>根据 GET 参数获取搜索请求；</li>
+<li>遍历搜索结果，根据请求和结果文本调用 <code>get_similarity()</code> 计算相似度，写入 <code>sml</code> 列中；</li>
+<li>对 <code>sml</code> 列进行排序，返回排序后的搜索结果类，供前端展示。</li>
+</ul>
+</li>
+</ul>
+<h2 id="15-%E6%90%AD%E5%BB%BA%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E">1.5 搭建搜索引擎</h2>
+<h3 id="1%E5%85%A8%E6%96%87%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%A6%82%E8%BF%B0">1）全文搜索引擎概述</h3>
+<p>  
+全文检索技术以各类数据如文本、声音、图像等为对象，提供按数据的内容而不是外在特征来进行的信息检索，其特点是能对海量的数据进行有效管理和快速检索。该检索技术可跨越所有的数据源，支持多种数据和信息格式，对检索结果可按商业分类规则进行排列，也能满足用户特定的知识检索请求，将所有不同信息查询中的命中结果按相关性或分类排列，提供不同格式的信息浏览功能。</p>
+<p>  
+从搜索结果来源的角度，全文搜索引擎又可细分为两种，一种是拥有自己的检索程序，并自建网页数据库，搜索结果直接从自身的数据库中调用，如Google、Fast/AllThe Web、AltaVista、Inktomi、Teoma、WiseNut、百度等；另一种则是租用其他引擎的数据库，并按自定的格式排列搜索结果，如Lycos引擎。</p>
+<p>  
+从原理上看，在数据端，搜索引擎通过爬虫爬取所收录网站的结构化数据，清洗整理后放入文档数据库，再根据文档内容建立索引数据库。在用户进行搜索时，处理用户请求并在索引中查找匹配项，再根据索引映射关系在文档数据库中获取完整的搜索结果，对结果进行过滤、排序等处理后，作为有序的结果序列返回给用户。</p>
+<div align=center>
+	<img src="pic/design/6.png" width="500">
+</div>
+<h3 id="2%E5%8A%9F%E8%83%BD%E8%A6%81%E7%82%B9">2）功能要点</h3>
+<ul>
+<li>基于 Django-Haystack 框架和 Whoosh 引擎的全文搜索引擎搭建，基于 Jieba 的分词器</li>
+<li>搜索自动补全建议和搜索热词</li>
+<li>依据浏览量和发布时间进行搜索结果排序</li>
+<li>基于 BERT 模型的动态语义相似度分析与结果排序</li>
+</ul>
+<h3 id="3%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6">3）实现机制</h3>
+<p>  
+项目中，我们使用相关框架，<strong>自主搭建了完整的全文搜索引擎</strong>。数据库与后端方面，使用 Django 框架；与 Django 对接的搜索框架使用 <a href="http://haystacksearch.org">Haystack</a>；全文搜索引擎后端使用 <a href="https://bitbucket.org/mchaput/whoosh/src/default/docs/source/intro.rst">Whoosh</a>；搜索引擎的中文分词与分析器使用了 <a href="https://github.com/fxsjy/jieba">Jieba</a> 分词。</p>
+<p>我们的实现方案有如下几个特点：</p>
+<ul>
+<li>使用 Haystack 框架对接，与 Django 框架深度结合，提供从后端到前端的完整解决方案，且支持多种搜索引擎后端的无缝切换</li>
+<li>充分利用 Haystack 接口，实现了补全建议、结果高亮等多种优化功能与特性</li>
+<li>使用全 Python 实现的 Whoosh 后端，保证性能的同时，便于调试与编辑</li>
+<li>替换使用了 Jieba 进行中文处理，使用中文的网页数据</li>
+</ul>
+<h4 id="%E5%8A%9F%E8%83%BD%E8%A7%86%E5%9B%BE">功能视图</h4>
+<p>我们的全文搜索引擎主要考虑下列功能和特性：</p>
+<ul>
+<li><strong>全文搜索：</strong> 对用户输入的<em>搜索请求</em>进行分析，据此对给定文本数据进行全文检索，返回匹配的<em>搜索结果</em></li>
+<li><strong>补全建议：</strong> 对用户输入的非完整搜索请求进行分析，即时返回匹配的自动<em>补全建议</em></li>
+<li><strong>结果高亮：</strong> 对搜索结果进行分析，对与搜索请求匹配的部分进行高亮处理</li>
+<li><strong>过滤排序：</strong> 根据输入的过滤和排序条件，对搜索结果进行处理，返回有序的<em>搜索结果列表</em></li>
+<li><strong>视图生成：</strong> 根据搜索结果列表，生成<em>搜索视图</em>，展示搜索结果中的各项信息</li>
+</ul>
+<h4 id="%E5%BC%80%E5%8F%91%E8%A7%86%E5%9B%BE">开发视图</h4>
+<p>根据需求与设计，从开发流程上，我们的搜索引擎的搭建、部署与运行主要分为以下数个部分：</p>
+<ul>
+<li><strong>信息获取：</strong> 确定收录网站，使用 Scrapy、BeautifulSoup 等编写爬虫，获取结构化数据</li>
+<li><strong>数据模型：</strong> 建立网页数据的 Django 数据模型，使用 ORM 操作将结构化的网页数据转为数据库存储；建立 Haystack 数据模型，将 Django 数据模型映射为搜索引擎需要的数据</li>
+<li><strong>建立索引：</strong> 确定检索字段，Haystack 调用 Whoosh 分析数据，建立字段的索引文件</li>
+<li><strong>全文搜索：</strong> 编写输入时分析请求、返回结果列表的规则，调用 Whoosh 后端进行搜索</li>
+<li><strong>条件排序：</strong> 编写排序条件和规则，使用 ORM 操作生成结果列表</li>
+<li><strong>前端设计：</strong> 搜索引擎的各输入响应，搜索结果的结构化展示</li>
+</ul>
+<h3 id="4%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">4）数据结构</h3>
+<p>  
+网页数据的 Django 数据模型 <code>SosoSitearticle</code> 类定义于文件 <code>SJTUsoso/soso/models.py</code>，所对应的文档数据库为 <code>soso_siteArticle</code> 表。其主要的字段包括标题、链接、正文、发布时间、浏览量、关键词等网页的信息，此外还有其他辅助字段。</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SosoSitearticle</span><span class="hljs-params">(models.Model)</span>:</span>
+    id = models.AutoField(primary_key=<span class="hljs-literal">True</span>)
+    title = models.CharField(max_length=<span class="hljs-number">200</span>, blank=<span class="hljs-literal">True</span>, null=<span class="hljs-literal">True</span>)
+    url = models.CharField(max_length=<span class="hljs-number">200</span>, blank=<span class="hljs-literal">True</span>, null=<span class="hljs-literal">True</span>)
+    content = models.TextField(blank=<span class="hljs-literal">True</span>, null=<span class="hljs-literal">True</span>)
+    date = models.DateField()                   <span class="hljs-comment"># web date</span>
+    view = models.IntegerField()                <span class="hljs-comment"># web views times</span>
+    category = models.CharField(max_length=<span class="hljs-number">20</span>, blank=<span class="hljs-literal">True</span>, null=<span class="hljs-literal">True</span>)
+    kw1 = models.CharField(max_length=<span class="hljs-number">20</span>, blank=<span class="hljs-literal">True</span>, null=<span class="hljs-literal">True</span>)
+    kw2 = models.CharField(max_length=<span class="hljs-number">20</span>, blank=<span class="hljs-literal">True</span>, null=<span class="hljs-literal">True</span>)
+    kw3 = models.CharField(max_length=<span class="hljs-number">20</span>, blank=<span class="hljs-literal">True</span>, null=<span class="hljs-literal">True</span>)
+    img_url = models.ImageField(upload_to=<span class="hljs-string">'images'</span>, blank=<span class="hljs-literal">True</span>)
+    sml = models.IntegerField(blank=<span class="hljs-literal">True</span>, null=<span class="hljs-literal">True</span>, default=<span class="hljs-number">0</span>)
+</div></code></pre>
+<p>  
+对应的 Haystack 数据模型 <code>SosoSitearticleIndex</code> 类定义于文件 <code>SJTUsoso/soso/search_indexes.py</code>，其主要字段与 <code>SosoSitearticle</code> 相对应。此外有一些搜索引擎使用的特殊字段：</p>
+<ul>
+<li><strong><code>text</code>：</strong> 索引字段，搜索引擎根据该字段内容建立索引</li>
+<li><strong><code>content_auto</code>：</strong> 自动补全字段，分析建立补全建议的相关内容</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SosoSitearticleIndex</span><span class="hljs-params">(indexes.SearchIndex, indexes.Indexable)</span>:</span>
+   text = indexes.CharField(document=<span class="hljs-literal">True</span>, use_template=<span class="hljs-literal">True</span>)
+   title = indexes.CharField(model_attr=<span class="hljs-string">'title'</span>)            <span class="hljs-comment"># web title</span>
+   url = indexes.CharField(model_attr=<span class="hljs-string">'url'</span>)                <span class="hljs-comment"># web url</span>
+   content = indexes.CharField(model_attr=<span class="hljs-string">'text'</span>)           <span class="hljs-comment"># web content</span>
+   content_auto = indexes.NgramField(model_attr=<span class="hljs-string">'title'</span>)    <span class="hljs-comment"># autocomplete index</span>
+   date = indexes.DateField(model_attr=<span class="hljs-string">'date'</span>)              <span class="hljs-comment"># web date</span>
+   view = indexes.IntegerField(model_attr=<span class="hljs-string">'view'</span>)           <span class="hljs-comment"># web views times</span>
+</div></code></pre>
+<p>  
+上述 <code>text</code> 字段使用模版建立，实际由模版中各字段拼接而成，此处使用了标题、正文、链接三个原字段。模板保存在 <code>SJTUsoso/templates/search/indexes/soso/sosositearticle_text.txt</code> 文件中。</p>
+<pre class="hljs"><code><div>{{ object.url }}
+{{ object.title }}
+{{ object.content }}
+</div></code></pre>
+<!-- ### 数据获取 -->
+<!-- ### 数据处理 -->
+<h3 id="5%E6%A8%A1%E5%9D%97%E6%8E%A5%E5%8F%A3">5）模块接口</h3>
+<p>  
+模块接口基本基于 Haystack 框架的封装，对修改和自定义部分进行了重新设计编写。</p>
+<ul>
+<li>文档和索引数据</li>
+</ul>
+<p>  
+如前所述，文档数据库网页数据的写入使用标准的 Django 模型 ORM 操作，索引数据由 Haystack <code>SearchIndex</code> 类进行自动封装维护，均不再赘述。</p>
+<ul>
+<li>搜索请求和结果</li>
+</ul>
+<p>  
+搜索请求内容由网页 GET 方法传递，通过如下语句获取。其作为字符串传递给搜索引擎后端后，由后端自动进行分词分析等操作，形成搜索请求。</p>
+<pre class="hljs"><code><div>qry = request.GET.get(<span class="hljs-string">'q'</span>)
+</div></code></pre>
+<p>  
+搜索结果由 Haystack <code>SearchResult</code> 类封装，其属性 <code>SearchResult.object</code> 即为对应的 Django <code>SosoSitearticle</code> 模型实例，可以使用 ORM 操作进行读取。</p>
+<ul>
+<li>自动补全函数</li>
+</ul>
+<p>  
+自动补全函数定义在 <code>SJTUsoso/soso/views.py</code> 文件中。其根据当前输入的搜索请求，进行全文搜索并返回前 5 条结果，将结果列表使用 <code>HttpResponse()</code> 渲染返回。</p>
+<p>  
+处理返回结果并生成前端元素的 JS 文件为 <code>SJTUsoso/static/js/autocomplete.js</code>。其监视搜索输入框内容，并使用 <code>/search/autocomplete/</code> 路径发送请求，获取补全信息。</p>
+<ul>
+<li>搜索结果列表与视图</li>
+</ul>
+<p>  
+搜索结果视图由 Haystack <code>SearchView</code> 类封装，其定义了 <code>get_queryset()</code> 方法，以获得当前的搜索结果列表。搜索结果列表由 Haystack <code>SearchQuerySet</code> 类封装，类似 Django <code>QuerySet</code> 类，包含了搜索结果类 <code>SearchResult</code> 列表、context 内容、分页器等。</p>
+<p>  
+此处的自定义搜索视图在 <code>SJTUsoso/soso/views.py</code> 文件中，主要是重写了 <code>get_queryset(), get_context_data()</code> 方法，以实现对搜索结果的过滤排序。排序条件根据 GET 方法获取，确定条件后，使用类 <code>SearchQuerySet.order_by()</code> 方法根据对应列进行排序。语义相似度排序部分因对应列是动态赋值的，实现并不相同，详见相似度分析一节。</p>
+<pre class="hljs"><code><div>order = self.request.GET.get(<span class="hljs-string">'order'</span>)
+<span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> order:
+    order = <span class="hljs-string">"latest"</span>
+
+<span class="hljs-keyword">if</span> order == <span class="hljs-string">"smart"</span>:
+    queryset = queryset.order_by(<span class="hljs-string">'-sml'</span>)
+<span class="hljs-keyword">elif</span> order == <span class="hljs-string">"popular"</span>:
+    queryset = queryset.order_by(<span class="hljs-string">'-view'</span>)
+<span class="hljs-keyword">else</span>:
+    queryset = queryset.order_by(<span class="hljs-string">'-date'</span>)
+</div></code></pre>
+<h3 id="6%E5%89%8D%E7%AB%AF%E8%AE%BE%E8%AE%A1">6）前端设计</h3>
+<p>  
+前端模版为 <code>SJTUsoso/templates/search/search.html</code>，根据 <code>SearchView.as_view()</code> 方法生成 Django 的前端视图。</p>
+<p>  
+搜索请求的输入使用 <code>form</code> 的 GET 方法，作为 <code>q</code> 参数在 URL 中。排序标签则使用 <code>href</code> 属性传递 <code>order</code> 参数，并在页面加载时动态刷新。搜索结果高亮使用 Haystack 的 <code>highlight</code> 方法。如：</p>
+<pre class="hljs"><code><div>{% highlight sitepage.object.title with query max_length 30 %}
+</div></code></pre>
+<p>  
+前端部分，根据 Haystack 生成方法，搜索请求为变量 <code>query</code>，搜索结果列表对应变量 <code>page_obj</code>。遍历搜索结果 <code>page_obj.object_list</code>，并展示搜索结果各字段信息，如 <code>sitepage.object.title</code>。</p>
+<div align=center>
+	<img src="pic/design/7.png" width="500">
+</div>
+<h1 id="2-%E6%99%BA%E8%83%BD%E6%8E%A8%E8%8D%90%E5%B9%B3%E5%8F%B0">2 智能推荐平台</h1>
+<h2 id="21-%E6%99%BA%E8%83%BD%E6%8E%A8%E8%8D%90%E5%B9%B3%E5%8F%B0%E6%A6%82%E8%BF%B0">2.1 智能推荐平台概述</h2>
+<h3 id="1%E8%AE%BE%E8%AE%A1%E7%9B%AE%E7%9A%84">1）设计目的</h3>
+<p>  
+交大搜搜作为一个信息聚合平台，汇集了大量的信息，这往往会加大用户获取信息的难度。一方面在海量信息面前，用户可能不知道自己想要什么，另一方面用户在使用诸如搜索等主动信息获取方式时，可能会无意使用不当的关键词导致错失想要的内容，因而需要利用基于相似度的推荐系统，让用户以被动信息获取的方式得到想要信息。</p>
+<p>  
+因而希望为交大搜搜设计一套推荐系统，有助于更好的匹配海量内容和用户需求，让用户获得自己想要以及感兴趣的信息。</p>
+<h3 id="2%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95">2）设计方法</h3>
+<p>  
+如果用形式化的方式去描述推荐系统，实际上是拟合一个用户对内容满意度的函数，这个函数需要输入内容特征和用户特征作为变量。</p>
+<p>典型的推荐特征共有3类：</p>
+<ul>
+<li>
+<p><strong>第一类是相关性特征</strong>，就是评估内容的属性和与用户是否匹配。显性的匹配包括关键词匹配、分类匹配、来源匹配、主题匹配等，从用户向量与内容向量的距离可以得出。<strong>根据相关性特征设计了基于内容的公众号文章推荐。</strong></p>
+</li>
+<li>
+<p><strong>第二类是热度特征</strong>。包括全局热度、分类热度，主题热度，<strong>根据热度特征设计了新闻热搜推荐。</strong> 实现方法为根据浏览量排序，本部分不再详细论述。</p>
+</li>
+<li>
+<p><strong>第三类是协同特征</strong>，它可以在部分程度上帮助解决所谓算法越推越窄的问题。协同特征并非考虑用户已有历史。而是通过用户行为分析不同用户间相似性，比如点击相似、兴趣分类相似、兴趣词相似，从而扩展模型的探索能力。<strong>根据协同特征设计了基于行为相似度的好友推荐 和 基于物品协同过滤的视频推荐。</strong></p>
+</li>
+</ul>
+<h3 id="3%E9%A2%9D%E5%A4%96%E8%80%83%E9%87%8F">3）额外考量</h3>
+<p>  
+平台出于内容生态和社会责任的考量，支持对低俗内容的打压以及对标题党、低质内容的打压。保证新闻资源均从交大官网获取，<strong>所有公众号文章和视频都由后台管理员发布</strong>，避免了向用户推送不当的内容。同时对于用户的评论，也在<strong>后台提供了评论监管和审查的功能</strong>。</p>
+<div align=center>
+	<img src="pic/design/33.png" width="400">
+</div>
+<h2 id="22-%E5%9F%BA%E4%BA%8E%E6%B5%8F%E8%A7%88%E9%87%8F%E7%9A%84%E7%83%AD%E6%90%9C%E6%8E%A8%E8%8D%90">2.2 基于浏览量的热搜推荐</h2>
+<h3 id="1%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6">1）实现机制</h3>
+<p>  
+考虑到院级平台和校级平台的受众不同，基于浏览量的统计排序应该分开进行，此部分基于数据库SJTUsoso.soso_siteArticle进行，首先按照发布日期进行筛选得到近期发布的所有通知，并按照views来对院级网址和校级网站的信息分别排序，分别输出views记录最大的十条记录。即为所需热搜。</p>
+<h3 id="2%E6%A8%A1%E5%9D%97%E6%8E%A5%E5%8F%A3">2）模块接口</h3>
+<p>  
+Django模型中使用ORM来实现不同类型系统的数据之间的转换，通过使用描述对象和数据库之间的映射的元数据将程序中的对象自动持久化到数据库中。此模块的实现涉及文件<code>SJTUsoso\blog\views.py</code>。在具体实现中调用filter()进行筛选，调用order_by进行排序输出。如获取院级平台2020年全年中浏览量最高的十条记录查询语句如下。</p>
+<pre class="hljs"><code><div>qs = SosoSitearticle.objects.filter(date__range=[<span class="hljs-string">"2020-01-01"</span>, <span class="hljs-string">"2020-12-31"</span>]).order_by(<span class="hljs-string">'-view'</span>)][:<span class="hljs-number">10</span>]
+</div></code></pre>
+<h3 id="3%E5%89%8D%E7%AB%AF%E8%AE%BE%E8%AE%A1">3）前端设计</h3>
+<p>  
+在主页独立热搜板块，限定时间范围后按照浏览量排序选择前十条进行前端展示，每一条信息包括图片、标题、关键词、发布时间。</p>
+<div align=center>
+	<img src="pic/design/34.png" width="230">
+</div>
+<h2 id="23-%E5%9F%BA%E4%BA%8E%E7%89%A9%E5%93%81%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4icf%E7%9A%84%E8%A7%86%E9%A2%91%E6%8E%A8%E8%8D%90">2.3 基于物品协同过滤（ICF）的视频推荐</h2>
+<h3 id="1%E5%AE%9E%E7%8E%B0%E5%8A%9F%E8%83%BD">1）实现功能</h3>
+<ul>
+<li>完成了与用户系统的对接，用户只有处于登陆状态时才能获得推荐内容，同时所有推荐视频内容均匹配该用户历史行为（评分）。</li>
+<li>设计并实现了推荐算法</li>
+<li>设计了前端界面，包括主页上的视频推荐部分（显示了标签、日期、封面、时间、标题）以及视频播放界面（自动播放视频，包括观看人数、喜欢人数、收藏人数、综合评分、评分人数、评分框、评论框、其它用户评论）</li>
+<li>完成了数据库模型的建立与后端和数据库的对接工作，使用到的模型包括Video, User, Rate, VideoComments共五个，对每个属性字段都相应做了设计</li>
+<li>完成了前后端的衔接工作
+<ul>
+<li>评分系统：用户提交评分显示提交成功或失败，评分记录在数据库</li>
+<li>评论区：用户提交评论显示提交成功或失败，评论记录在数据库；从数据库读取其它用户评论，返回到前端。</li>
+<li>推荐算法：将推荐得到的视频ID返回到前端，并相应显示</li>
+</ul>
+</li>
+</ul>
+<h3 id="2%E6%8E%A8%E8%8D%90%E7%AE%97%E6%B3%95">2）推荐算法：</h3>
+<ul>
+<li>用户评分的获取</li>
+</ul>
+<p>  
+用户可以在播放界面对视频打分,并将评分记录于数据库中。</p>
+<ul>
+<li>视频相似度矩阵</li>
+</ul>
+<p>  
+基于共现矩阵和单个视频被打分的次数，通过余弦相似度构建视频之间的相似度矩阵，计算公式如下图所示。（共现矩阵描述了任意两个视频被同时打分的次数。）</p>
+<div align=center>
+	<img src="pic/design/8.png" width="200">
+</div>
+<p>  
+分子Ni ∩ Nj为共现矩阵中的元素Nij，而分母中Ni和Nj分别为第i，第j个视频被打分视频。</p>
+<ul>
+<li>视频推荐</li>
+</ul>
+<p>  
+在视频推荐时，对于用户已打分的每个视频，比如第一个视频打分为m1,通过相似度矩阵挑选出用户未打分但相似度最高的N个视频，相似度为（n1,n2,....nN）计算推荐度为m1<em>n1,m1</em>n2....对于用户其它的打分视频也依次计算，最终取推荐度最高的前四个。</p>
+<ul>
+<li>冷启动</li>
+</ul>
+<p>  
+初始时由于用户没有打分记录或较少，无法推荐。故对于不足四个推荐项的情况，随机挑选其它视频视频补足。</p>
+<h3 id="3%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0">3）算法实现</h3>
+<p>  
+这部分主要涉及 <code>SJTUsoso/blog/</code> 目录下的 <code>icf.py</code> 等数个文件。</p>
+<ul>
+<li><code>ItemSimilarity()</code>函数建立物品-物品的共现矩阵</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-keyword">for</span> user, items <span class="hljs-keyword">in</span> self.train.items():
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> items.keys():
+        buy.setdefault(i, <span class="hljs-number">0</span>)
+        buy[i] += <span class="hljs-number">1</span>
+        cooccur.setdefault(i, {})
+        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> items.keys():
+            <span class="hljs-keyword">if</span> i == j: <span class="hljs-keyword">continue</span>
+            cooccur[i].setdefault(j, <span class="hljs-number">0</span>)
+            cooccur[i][j] += <span class="hljs-number">1</span>
+</div></code></pre>
+<ul>
+<li>计算相似度矩阵</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-keyword">for</span> i, related_items <span class="hljs-keyword">in</span> cooccur.items():
+    self.similar.setdefault(i, {})
+    <span class="hljs-keyword">for</span> j, cij <span class="hljs-keyword">in</span> related_items.items():
+        self.similar[i][j] = cij / (math.sqrt(buy[i] * buy[j]))
+</div></code></pre>
+<ul>
+<li><code>Recommend()</code>函数返回给用户推荐的视频ID，包括前K个相关用户以及前N个物品</li>
+</ul>
+<pre class="hljs"><code><div>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Recommend</span><span class="hljs-params">(self, user, K=<span class="hljs-number">10</span>, N=<span class="hljs-number">10</span>)</span>:</span>
+        rank = dict()
+        action_item = self.train[user]
+        <span class="hljs-comment"># 用户user产生过行为的item和评分</span>
+        <span class="hljs-keyword">for</span> item, score <span class="hljs-keyword">in</span> action_item.items():
+            sortedItems = sorted(self.similar[item].items(), key=<span class="hljs-keyword">lambda</span> x: x[<span class="hljs-number">1</span>], reverse=<span class="hljs-literal">True</span>)[<span class="hljs-number">0</span>:K]
+            <span class="hljs-keyword">for</span> j, wj <span class="hljs-keyword">in</span> sortedItems:
+                <span class="hljs-keyword">if</span> j <span class="hljs-keyword">in</span> action_item.keys():
+                    <span class="hljs-keyword">continue</span>
+                rank.setdefault(j, <span class="hljs-number">0</span>)
+                rank[j] += score * wj
+        <span class="hljs-keyword">return</span> dict(sorted(rank.items(), key=<span class="hljs-keyword">lambda</span> x: x[<span class="hljs-number">1</span>], reverse=<span class="hljs-literal">True</span>)[<span class="hljs-number">0</span>:N])
+</div></code></pre>
+<h3 id="4%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">4）数据结构</h3>
+<p>  
+本功能模块在model.py中使用的模型类有Video, VideoComments , Rate,其中对于数值类型的字段定义为IntegerField并设置缺省值为0，对于字符类型的字段定义为CharField并设置其最大长度，同时直接在评分模型中提供返回均值的函数，便于更新视频模型中的综合评分。</p>
+<p>  
+Video中包含的字段有标题、标签、视频路径、日期、封面路径、喜欢人数、收藏人数、浏览人数、打分人数、平均分等；
+VideoComments中包含的字段有内容、用户ID、视频ID、昵称、日期；
+Rate中包含的字段有视频ID、用户ID、评分、日期</p>
+<h3 id="5%E5%90%8E%E7%AB%AF%E9%80%BB%E8%BE%91">5）后端逻辑</h3>
+<p>  
+由于django基于MVC框架，主要修改html(前端页面) / urls(根据url请求跳转页面)/ views（后端处理函数）/models（数据库模型）。主页面中视频推荐的程序逻辑实现如下图所示：</p>
+<div align=center>
+	<img src="pic/design/35.png" width="500">
+</div>
+<p>  
+视频播放的程序逻辑实现类似，不同的是：</p>
+<ul>
+<li>
+<p>数据库中维护一张视频评分表blog_videocomments，用户评分的行为是通过post请求送到后端记录的。</p>
+</li>
+<li>
+<p>视频播放页面包括视频播放、评论查看、评论编辑、用户评分、喜欢收藏浏览人数的显示，对应从数据库表格中读取，在后端以Query set、字典、列表或者元素的形式送入前端显示即可。提交评论一样使用Post请求。</p>
+</li>
+</ul>
+<h3 id="6%E5%89%8D%E7%AB%AF%E8%AE%BE%E8%AE%A1">6）前端设计</h3>
+<p>  
+使用Html/css及其相关元素实现，包括主页上的视频推荐部分（显示了标签、日期、封面、时间、标题）以及视频播放界面（自动播放视频，包括观看人数、喜欢人数、收藏人数、综合评分、评分人数、评分框、评论框、其它用户评论），对需要后端返回的部分使用{{  }}标记即可。</p>
+<center class="half">
+<img src = "pic/design/36.png"  width = "230">
+<img src = "pic/design/37.png"  width = "230" >
+</center>  
+<h2 id="23-%E5%9F%BA%E4%BA%8E%E5%86%85%E5%AE%B9%E7%9A%84%E5%85%AC%E4%BC%97%E5%8F%B7%E6%96%87%E7%AB%A0%E6%8E%A8%E8%8D%90">2.3 基于内容的公众号文章推荐</h2>
+<h3 id="1%E5%AE%9E%E7%8E%B0%E5%8A%9F%E8%83%BD">1）实现功能</h3>
+<ul>
+<li>完成了与用户系统的对接，用户只有处于登陆状态时才能获得推荐内容，同时所有推荐公众号文章内容均匹配该用户历史行为（点击）</li>
+<li>设计并实现了推荐算法</li>
+<li>设计了前端界面，包括主页上的公众号文章推荐部分（显示了标签、日期、封面、时间、标题、摘要）以及文章查看界面（标题、摘要、内容）</li>
+<li>完成了数据库模型的建立与后端和数据库的对接工作，使用到的模型包括Wechats、User，对每个属性字段都相应做了设计</li>
+<li>完成了前后端的衔接工作
+<ul>
+<li>jieba分词及关键词权重计算：该工作在管理员提交文章时进行</li>
+<li>实现了用户特征的提取：用户的点击行为伴随着用户兴趣关键词的变化</li>
+<li>推荐内容匹配度最高的文章ID返回到前端显示给用户</li>
+<li>关键词的兴趣衰减：后台周期任务</li>
+</ul>
+</li>
+</ul>
+<h3 id="2%E6%8E%A8%E8%8D%90%E7%AE%97%E6%B3%95">2）推荐算法</h3>
+<h4 id="%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86">算法原理：</h4>
+<ul>
+<li>
+<p>后台上传：<br>
+在基于内容的文章推荐中，首先对于后台上传的公众号文章内容，会将其进行预处理：</p>
+<ul>
+<li>去除特殊符号、非关键字的常用汉字、数字字母，它们在目录static\data\puntuation.txt中被指定</li>
+<li>对文本内容进行结巴分词，使用结巴的cut_for_search模式提取更多关键词</li>
+<li>利用TFIDF算法和库内其它文本一起，计算出该文本的关键词及权值。</li>
+</ul>
+</li>
+<li>
+<p>兴趣关键词
+维护每个用户的兴趣关键词及权重，兴趣关键词的获得与用户点击公众号文章相关，每查看一篇文章便会获得该文章的关键词及权重，对于关键词重复的情况将权值累加，同时每次添加兴趣关键词后，按权值排序，取前1000个。</p>
+</li>
+<li>
+<p>文章推荐
+而后便可以相应进行文章推荐，推荐方法为根据根据用户的兴趣关键词及权值和各个文本的关键词及权值，以此计算相似度，计算方法为将相同关键词的权值乘积的累加。并最终挑选4个相似度最高的进行推荐。</p>
+</li>
+<li>
+<p>兴趣衰减
+考虑到用户兴趣会随着时间推移而改变，失去兴趣的关键词依然保持高权值是不合理的，因而周期性降低各词权值。</p>
+</li>
+</ul>
+<h4 id="%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0">算法实现：</h4>
+<p>这部分主要涉及 <code>SJTUsoso/blog/</code> 目录下的 <code>renew_tfidf.py</code></p>
+<ul>
+<li>jieba分词</li>
+</ul>
+<pre class="hljs"><code><div>strs = []
+strs.append(<span class="hljs-string">' '</span>.join(jieba.cut_for_search(str)))
+
+</div></code></pre>
+<ul>
+<li>CountVectorizer.fit_transform() 函数利用文本中分词后的词语计算tfidf值</li>
+<li>TfidfTransformer.fit_transform() 将计算得到的tfidf值转换为词频矩阵，矩阵元素a[i][j] 表示j词在i个文本下的词频</li>
+<li>get_feature_names() 方法获取词袋模型中的所有词语</li>
+<li>tfidf.toarray() 方法可将tf-idf词频矩阵抽取出来</li>
+</ul>
+<h3 id="3%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">3）数据结构</h3>
+<p>  
+本功能模块在model.py中主要使用的模型类有User和Wechat,其中对于数值类型的字段定义为IntegerField并设置缺省值为0，对于字符类型的字段定义为CharField并设置其最大长度。Wechat中使用的主要字段为标题、摘要、标签、图片、日期、内容。</p>
+<h3 id="4%E5%90%8E%E7%AB%AF%E9%80%BB%E8%BE%91">4）后端逻辑</h3>
+<p>  
+实现思路框图与基于icf的视频推荐类似，不同之处在于：</p>
+<ul>
+<li><code>index.html</code>及<code>blog/views.py</code>中的tohome() 函数处理主页上关于公众号的内容推送，即后端通过上述推荐算法返回一个 queryset 对象 Wechats，前端使用for循环显示相应信息。</li>
+<li><code>upload.html</code>及<code>myadmin/views.py</code>中的wechat_post() 函数负责上传的公众号文章内容的预处理工作(包括去除符号及常用汉字去除、jieba分词、tfidf找出关键词及权重)。</li>
+<li><code>single.html</code>及<code>blog/views.py</code>中的tosingle() 函数处理用户点击行为，一方面返回相应文章内容，同时完成用户兴趣关键词更新的工作。</li>
+</ul>
+<pre class="hljs"><code><div>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.path.exists(filename2): <span class="hljs-comment">#用户兴趣关键词不存在</span>
+        <span class="hljs-comment">#直接引入文章关键词</span>
+        user_dict={}
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> dicts[str(Wechat_id)].keys():
+            <span class="hljs-keyword">if</span> i <span class="hljs-keyword">in</span> user_dict.keys():
+                user_dict[i]+=dicts[str(Wechat_id)][i]
+            <span class="hljs-keyword">else</span>:
+                user_dict[i]=dicts[str(Wechat_id)][i]
+    <span class="hljs-keyword">else</span>:   <span class="hljs-comment">#用户兴趣关键词存在</span>
+        <span class="hljs-comment">#将文章关键词补充进去</span>
+        <span class="hljs-keyword">with</span> open(filename2) <span class="hljs-keyword">as</span> file_obj:
+            user_dict = json.load(file_obj)
+        file_obj.close()
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> dicts[str(Wechat_id)].keys():
+            <span class="hljs-keyword">if</span> i <span class="hljs-keyword">in</span> user_dict.keys():<span class="hljs-comment">#相同的累加</span>
+                user_dict[i] += dicts[str(Wechat_id)][i]
+            <span class="hljs-keyword">else</span>:<span class="hljs-comment">#不同的单独放进</span>
+                user_dict[i] = dicts[str(Wechat_id)][i]
+
+        user_dict = dict(sorted(user_dict.items(), key=<span class="hljs-keyword">lambda</span> item: item[<span class="hljs-number">1</span>], reverse=<span class="hljs-literal">True</span>))
+        count=<span class="hljs-number">0</span>
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> user_dict.keys():
+            count+=<span class="hljs-number">1</span> 
+            <span class="hljs-keyword">if</span> (count&gt;<span class="hljs-number">1000</span>):<span class="hljs-comment">#将权值从大到小排序，舍去1000个后的</span>
+                <span class="hljs-keyword">del</span> user_dict[i]
+</div></code></pre>
+<h3 id="5%E5%89%8D%E7%AB%AF%E8%AE%BE%E8%AE%A1">5）前端设计</h3>
+<p>  
+主要使用html/css设计了前端界面，包括主页上的公众号文章推荐部分（显示了标签、日期、封面、时间、标题、摘要）以及文章查看界面（标题、摘要、内容）。</p>
+<center class="half">
+<img src = "pic/design/38.png"  width = "230">
+<img src = "pic/design/39.png"  width = "230" >
+</center>  
+<h2 id="24-%E5%9F%BA%E4%BA%8E%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E7%9A%84%E7%9B%B8%E4%BC%BC%E7%94%A8%E6%88%B7%E6%8E%A8%E8%8D%90">2.4 基于用户行为的相似用户推荐</h2>
+<h3 id="1%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6">1）实现机制：</h3>
+<ul>
+<li>
+<p>用户行为1：兴趣关键词</p>
+<p>α = 相同关键词的权重之积相加（越大相似度越高）</p>
+</li>
+<li>
+<p>用户行为2：视频评分</p>
+<p>对本用户和其它用户的视频打分，计算标准差，即：
+β = 差的平方的和，求均值再开根号。（越小相似度越高，未打分的视频分数为0。）</p>
+</li>
+</ul>
+<p>任意两个用户的相似度为 （α+1） / （β + 1），并取相似度最高的十个用户显示在前端。（+1是为了处理不存在相同关键词或者两用户都未对视频进行评分的情况）</p>
+<h3 id="2%E6%A8%A1%E5%9D%97%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%89%8D%E5%90%8E%E7%AB%AF">2）模块接口与前后端：</h3>
+<p>这部分主要涉及 <code>SJTUsoso/blog/</code> 目录下的 <code>recom_friend.py</code></p>
+<ul>
+<li>search_friend()实现了上述功能</li>
+<li><code>index.html</code>及<code>blog/views.py</code>中的tohome() 函数处理主页上相似好友的推荐。</li>
+</ul>
+<h1 id="3-%E7%A4%BE%E4%BA%A4%E5%8D%9A%E5%AE%A2%E5%B9%B3%E5%8F%B0">3 社交博客平台</h1>
+<h2 id="31-%E7%94%A8%E6%88%B7%E7%B3%BB%E7%BB%9F">3.1 用户系统</h2>
+<h3 id="1%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1">1）功能设计</h3>
+<p>  
+为了能够较全面地满足用户的使用需求，一套完整的用户系统是必不可少的。用户系统的设计模仿 <em><a href="https://www.csdn.net">CSDN BLOG</a></em>，有用户<strong>账户系统、博客系统、用户收藏</strong>三个部分，分别对应<strong>用户账户管理、用户思想交流、用户兴趣爱好</strong>三个需求。</p>
+<div align=center>
+	<img src="pic/design/9.png" width="450">
+</div>
+<h3 id="2%E8%B4%A6%E6%88%B7%E7%B3%BB%E7%BB%9F">2）账户系统</h3>
+<p>  
+账户系统有<strong>账户注册、用户登陆、用户登出、修改密码、用户空间</strong>等5个功能。各功能与其 <em>URL</em> 分配如下图。</p>
+<div align=center>
+	<img src="pic/design/10.png" width="450">
+</div>
+<h4 id="models--session">models &amp; session</h4>
+<p>  
+用户账户的 <strong>model</strong> 定义了用户信息在数据库中存储的数据表格式。</p>
+<div align=center>
+	<img src="pic/design/11.png" width="450">
+</div>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span><span class="hljs-params">(models.Model)</span>:</span>
+    <span class="hljs-string">'''用户表'''</span>
+    gender = (
+        (<span class="hljs-string">'private'</span>, <span class="hljs-string">'内緒だよ〜'</span>),
+        (<span class="hljs-string">'male'</span>,<span class="hljs-string">'男'</span>),
+        (<span class="hljs-string">'female'</span>,<span class="hljs-string">'女'</span>),
+    )
+    img_url = models.ImageField(upload_to=<span class="hljs-string">'images'</span>, blank=<span class="hljs-literal">True</span>)
+    name = models.CharField(max_length=<span class="hljs-number">128</span>,unique=<span class="hljs-literal">True</span>)
+    nickname = models.CharField(max_length=<span class="hljs-number">128</span>, default=<span class="hljs-string">'Freshman'</span>)
+    intro = models.CharField(max_length=<span class="hljs-number">1024</span>, default=<span class="hljs-string">'Freshman'</span>)
+    password = models.CharField(max_length=<span class="hljs-number">256</span>)
+    email = models.EmailField(unique=<span class="hljs-literal">True</span>)
+    phone = models.CharField(max_length=<span class="hljs-number">128</span>, blank=<span class="hljs-literal">True</span>)
+    sex = models.CharField(max_length=<span class="hljs-number">32</span>,choices=gender, default=<span class="hljs-string">'内緒だよ〜'</span>)
+    c_time = models.DateTimeField(auto_now_add=<span class="hljs-literal">True</span>)
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getImage</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-keyword">if</span> self.img_url:
+            <span class="hljs-keyword">return</span> self.img_url.url
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-keyword">return</span> os.path.join(<span class="hljs-string">"/media/images"</span>, <span class="hljs-string">"avatar-"</span> + str(random.randint(<span class="hljs-number">1</span>, <span class="hljs-number">8</span>)) + <span class="hljs-string">".jpg"</span>)
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__str__</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-keyword">return</span> self.name
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Meta</span>:</span>
+        ordering = [<span class="hljs-string">'c_time'</span>]
+        verbose_name = <span class="hljs-string">'user'</span>
+        verbose_name_plural = <span class="hljs-string">'user'</span>
+</div></code></pre>
+<p>  
+为了实现连接状态的保持功能，网站会通过用户的浏览器在用户机器内被限定的硬盘位置中写入一些数据，也就是所谓的 <em>Cookie</em>。通过 <em>Cookie</em> 可以保存一些诸如用户名、浏览记录、表单记录、登录和注销等各种数据。但是这种方式非常不安全，因为 <em>Cookie</em> 保存在用户的机器上，如果 <em>Cookie</em> 被伪造、篡改或删除，就会造成极大的安全威胁，因此，现代网站设计通常将 <em>Cookie</em> 用来保存一些不重要的内容，实际的用户数据和状态还是以 <em>Session</em> 会话的方式保存在服务器端。</p>
+<p>  
+<strong>Django</strong> 提供了一个通用的 <em>Session</em> 框架，并且可以使用多种 <strong>session</strong> 数据的保存方式：</p>
+<ul>
+<li>保存在数据库内</li>
+<li>保存到缓存</li>
+<li>保存到文件内</li>
+<li>保存到cookie内</li>
+</ul>
+<p>  
+本项目使用保存在数据库内的session数据的保存方式。<strong>session</strong> 保存的用户信息如下：</p>
+<div align=center>
+	<img src="pic/design/12.png" width="450">
+</div>
+<h3 id="3%E8%B4%A6%E6%88%B7%E6%B3%A8%E5%86%8C">3）账户注册</h3>
+<p>  
+用户账户注册使用邮箱认证，对密码进行哈希加密(<code>sha256</code>)后再存储到数据库中。</p>
+<p>  
+用户注册的 <code>form</code> 如下：</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RegisterForm</span><span class="hljs-params">(forms.Form)</span>:</span>
+    username = forms.CharField(label=<span class="hljs-string">"用户名"</span>, max_length=<span class="hljs-number">128</span>, widget=forms.TextInput(attrs={<span class="hljs-string">'class'</span>: <span class="hljs-string">'form-control'</span>}))
+    password1 = forms.CharField(label=<span class="hljs-string">"密码"</span>, max_length=<span class="hljs-number">256</span>, widget=forms.PasswordInput(attrs={<span class="hljs-string">'class'</span>: <span class="hljs-string">'form-control'</span>}))
+    password2 = forms.CharField(label=<span class="hljs-string">"确认密码"</span>, max_length=<span class="hljs-number">256</span>, widget=forms.PasswordInput(attrs={<span class="hljs-string">'class'</span>: <span class="hljs-string">'form-control'</span>}))
+    email = forms.EmailField(label=<span class="hljs-string">"邮箱地址"</span>, widget=forms.EmailInput(attrs={<span class="hljs-string">'class'</span>: <span class="hljs-string">'form-control'</span>}))
+    captcha = CaptchaField(label=<span class="hljs-string">'验证码'</span>)
+</div></code></pre>
+<p>  
+用户注册流程图如下：</p>
+<div align=center>
+	<img src="pic/design/13-注册.png" width="650">
+</div>
+<h5 id="%E5%89%8D%E7%AB%AF%E8%AE%BE%E8%AE%A1%E5%A6%82%E4%B8%8B%E5%9B%BE"><strong>前端设计如下图：</strong></h5>
+<div align=center>
+	<img src="pic/design/13.png" width="350">
+</div>
+<h3 id="4%E7%94%A8%E6%88%B7%E7%99%BB%E9%99%86">4）用户登陆</h3>
+<p>  
+登录时使用用户名-密码方式登陆，密码进行哈希加密(<code>sha256</code>)后再与后端数据库中的哈希值进行对比。用户登陆的 <code>form</code> 如下：</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserForm</span><span class="hljs-params">(forms.Form)</span>:</span>
+    username = forms.CharField(label=<span class="hljs-string">"用户名"</span>, max_length=<span class="hljs-number">128</span>, widget=forms.TextInput(attrs={<span class="hljs-string">'class'</span>: <span class="hljs-string">'form-control'</span>}))
+    password = forms.CharField(label=<span class="hljs-string">"密码"</span>, max_length=<span class="hljs-number">256</span>, widget=forms.PasswordInput(attrs={<span class="hljs-string">'class'</span>: <span class="hljs-string">'form-control'</span>}))
+    captcha = CaptchaField(label=<span class="hljs-string">'验证码'</span>)
+</div></code></pre>
+<p>  
+用户登陆流程图如下：</p>
+<div align=center>
+	<img src="pic/design/14-登录.png" width="650">
+</div>
+<ul>
+<li>未登陆</li>
+</ul>
+<div align=center>
+	<img src="pic/design/14-1.png" width="350">
+</div>
+<ul>
+<li>登陆界面</li>
+</ul>
+<div align=center>
+	<img src="pic/design/14-2.png" width="350">
+</div>
+<ul>
+<li>登陆后</li>
+</ul>
+<div align=center>
+	<img src="pic/design/14-3.png" width="350">
+</div>
+<h3 id="5%E7%94%A8%E6%88%B7%E7%99%BB%E5%87%BA">5）用户登出</h3>
+<p>  
+用户登出时清空所有 <strong>session</strong>。</p>
+<div align=center>
+	<img src="pic/design/15-清除.png" width="350">
+</div>
+<h3 id="6%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81">6）修改密码</h3>
+<p>  
+修改密码采用先验证当前密码，再允许修改密码的方式。</p>
+<div align=center>
+	<img src="pic/design/16-修改密码.png" width="650">
+</div>
+<h3 id="7%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4">7）用户空间</h3>
+<p>  
+用户空间是用户系统非常重要的一个模块，让用户能够管理或展示自己的个人信息。用户空间个人信息修改或展示的表单如下：</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserspaceForm</span><span class="hljs-params">(forms.Form)</span>:</span>
+    gender = (
+        (<span class="hljs-string">'private'</span>, <span class="hljs-string">'内緒だよ〜'</span>),
+        (<span class="hljs-string">'male'</span>, <span class="hljs-string">'男'</span>),
+        (<span class="hljs-string">'female'</span>, <span class="hljs-string">'女'</span>),
+    )
+    nickname = forms.CharField(label=<span class="hljs-string">"用户昵称"</span>, max_length=<span class="hljs-number">128</span>, widget=forms.TextInput(attrs={<span class="hljs-string">'class'</span>: <span class="hljs-string">'form-control'</span>}))
+    phone = forms.CharField(label=<span class="hljs-string">"电话号码"</span>, widget=forms.NumberInput(attrs={<span class="hljs-string">'class'</span>: <span class="hljs-string">'form-control'</span>}))
+    sex = forms.ChoiceField(label=<span class="hljs-string">'性别'</span>, choices=gender, widget=forms.Select(attrs={<span class="hljs-string">'class'</span>: <span class="hljs-string">'form-control'</span>}))
+    intro = forms.CharField(label=<span class="hljs-string">"个性签名"</span>, max_length=<span class="hljs-number">1024</span>, widget=forms.TextInput(attrs={<span class="hljs-string">'class'</span>: <span class="hljs-string">'form-control'</span>}), required=<span class="hljs-literal">False</span>)
+</div></code></pre>
+<p>  
+用户空间的互访是通过 <strong>GET</strong> 方式在 <em>URL</em> 中指定用户名访问指定用户的用户空间。如 <code>/userspace/?user=superuser</code> 即访问用户名为 <code>superuser</code> 的用户的个人空间。</p>
+<p>  
+此外，在用户空间中能进行用户头像的上传与修改。若用户没有自定义头像，则系统将在默认的八张头像中随机选择一张作为用户的临时头像。</p>
+<div align=center>
+	<img src="pic/design/17.png" width="350">
+</div>
+<h2 id="32-%E5%8D%9A%E5%AE%A2%E4%B8%8E%E6%94%B6%E8%97%8F%E7%B3%BB%E7%BB%9F">3.2 博客与收藏系统</h2>
+<p>  
+博客与收藏系统有 <strong>博客撰写与发布、博客列表、博客查看、博客收藏</strong> 等功能。各功能与其 <em>URL</em> 分配如下图。</p>
+<div align=center>
+	<img src="pic/design/18.png" width="450">
+</div>
+<h3 id="1models">1）models</h3>
+<p>  
+博客的 <strong>model</strong> 定义了博客在数据库中存储的数据表格式。</p>
+<div align=center>
+	<img src="pic/design/19.png" width="450">
+</div>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Blog</span><span class="hljs-params">(models.Model,ReadNumExpandMethod,LikeNumExpandMethod)</span>:</span>
+    author = models.CharField(max_length=<span class="hljs-number">128</span>, default=<span class="hljs-string">'-'</span>)
+    title = models.CharField(max_length=<span class="hljs-number">50</span>)
+    blog_type = models.CharField(max_length=<span class="hljs-number">50</span>, default=<span class="hljs-string">'-'</span>)
+    content = RichTextUploadingField()
+    created_time = models.DateTimeField(auto_now_add=<span class="hljs-literal">True</span>)
+    last_updated_time = models.DateTimeField(auto_now=<span class="hljs-literal">True</span>)
+    create_month = models.CharField(max_length=<span class="hljs-number">50</span>,blank=<span class="hljs-literal">False</span>,default=calendar.month_name[int(time.localtime().tm_mon)])
+    img_url = models.ImageField(upload_to=<span class="hljs-string">'images'</span>,blank=<span class="hljs-literal">True</span>)
+    like_num = models.IntegerField(default=<span class="hljs-number">0</span>)
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__str__</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"&lt;Blog: %s&gt;"</span> % self.title
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getImage</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-keyword">if</span> self.img_url:
+            <span class="hljs-keyword">return</span> self.img_url.url
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-keyword">return</span> os.path.join(<span class="hljs-string">"/media/images"</span>,<span class="hljs-string">"project-"</span>+str(random.randint(<span class="hljs-number">1</span>,<span class="hljs-number">8</span>))+<span class="hljs-string">".jpg"</span>)
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Meta</span>:</span>
+        ordering = [<span class="hljs-string">'-created_time'</span>]
+</div></code></pre>
+<p>  
+收藏的 <strong>model</strong> 定义了收藏在数据库中存储的数据表格式。</p>
+<div align=center>
+	<img src="pic/design/20.png" width="450">
+</div>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Collection</span><span class="hljs-params">(models.Model)</span>:</span>
+    user = models.CharField(max_length=<span class="hljs-number">128</span>)
+    itemtype = models.CharField(max_length=<span class="hljs-number">50</span>)
+    itemtitle = models.CharField(max_length=<span class="hljs-number">50</span>)
+    itempk = models.CharField(max_length=<span class="hljs-number">50</span>)
+    itemcover = models.ImageField(upload_to=<span class="hljs-string">'images'</span>, blank=<span class="hljs-literal">True</span>)
+    collect_time = models.DateTimeField(auto_now_add=<span class="hljs-literal">True</span>)
+    collect_month = models.CharField(max_length=<span class="hljs-number">50</span>, blank=<span class="hljs-literal">False</span>, default=calendar.month_name[int(time.localtime().tm_mon)])
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getImage</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-keyword">if</span> self.itemcover:
+            <span class="hljs-keyword">return</span> self.itemcover.url
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-keyword">return</span> os.path.join(<span class="hljs-string">"/media/images"</span>,<span class="hljs-string">"project-"</span>+str(random.randint(<span class="hljs-number">1</span>,<span class="hljs-number">8</span>))+<span class="hljs-string">".jpg"</span>)
+</div></code></pre>
+<h3 id="2%E5%8D%9A%E5%AE%A2%E6%92%B0%E5%86%99%E4%B8%8E%E5%8F%91%E5%B8%83">2）博客撰写与发布</h3>
+<p>博客撰写采用 <strong>Django-ckeditor</strong> 富文本编辑器，支持基本的博客撰写与发布能力。编辑器配置如下：</p>
+<pre class="hljs"><code><div>CKEDITOR_CONFIGS = {
+    <span class="hljs-string">'default'</span>: {},
+    <span class="hljs-string">'comment_ckeditor'</span>: {
+        <span class="hljs-string">'toolbar'</span>: <span class="hljs-string">'custom'</span>,
+        <span class="hljs-string">'toolbar_custom'</span>: [
+            [<span class="hljs-string">'Bold'</span>, <span class="hljs-string">'Italic'</span>, <span class="hljs-string">'Underline'</span>, <span class="hljs-string">'Strike'</span>, <span class="hljs-string">'Subscript'</span>, <span class="hljs-string">'Superscript'</span>],
+            [<span class="hljs-string">"TextColor"</span>, <span class="hljs-string">"BGColor"</span>, <span class="hljs-string">'RemoveFormat'</span>],
+            [<span class="hljs-string">'NumberedList'</span>, <span class="hljs-string">'BulletedList'</span>],
+            [<span class="hljs-string">'Link'</span>, <span class="hljs-string">'Unlink'</span>],
+            [<span class="hljs-string">"Smiley"</span>, <span class="hljs-string">"SpecialChar"</span>, <span class="hljs-string">'Blockquote'</span>],
+        ],
+        <span class="hljs-string">'width'</span>: <span class="hljs-string">'100%'</span>,
+        <span class="hljs-string">'height'</span>: <span class="hljs-string">'300'</span>,
+        <span class="hljs-string">'tabSpaces'</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-string">'removePlugins'</span>: <span class="hljs-string">'elementspath'</span>,
+        <span class="hljs-string">'resize_enabled'</span>: <span class="hljs-literal">False</span>,
+    }
+}
+</div></code></pre>
+<p>博客发布后能修改博客封面（若不修改则系统将在八张默认封面中随机挑选一张作为博客封面）。</p>
+<h3 id="3%E5%8D%9A%E5%AE%A2%E5%88%97%E8%A1%A8">3）博客列表</h3>
+<p>  
+博客列表功能支持博客分类查找，博客热度、创建时间排序，用户博客互访。通过 <strong>GET</strong> 方式，在 <em>URL</em> 中确定博客列表形式。如 <code>/blog/?typename=文学</code> 指定列出所有 <code>文学</code> 类型的博客；<code>/blog/?user=superuser</code> 指定列出作者为用户名 <code>superuser</code> 的用户的所有博客（若用户为当前登陆用户，则可以在博客空间中进行博客的增删）；<code>/blog/</code> 列出系统中所有博客。博客列表默认以创建时间排序，并在推荐栏以阅读量、收藏量排序进行热度推荐。</p>
+<ul>
+<li>首页博客推荐与博客入口</li>
+</ul>
+<div align=center>
+	<img src="pic/design/21.png" width="350">
+</div>
+<ul>
+<li>博客列表</li>
+</ul>
+<div align=center>
+	<img src="pic/design/22.png" width="350">
+</div>
+<ul>
+<li>个人博客空间</li>
+</ul>
+<div align=center>
+	<img src="pic/design/22-2.png" width="350">
+</div>
+<h3 id="4%E5%8D%9A%E5%AE%A2%E6%9F%A5%E7%9C%8B">4）博客查看</h3>
+<p>  
+<em>URL</em> 中的博客 <em>id(pk)</em> 指定特定博客查看正文。博客包括博客封面、博客类型、博客标题、博客正文、博客作者等部分。可以在博客界面收藏或取消收藏博客。博客界面还有访问作者用户空间的入口。</p>
+<div align=center>
+	<img src="pic/design/23.png" width="350">
+</div>
+<div align=center>
+	<img src="pic/design/24.png" width="350">
+</div>
+<h3 id="5%E6%94%B6%E8%97%8F%E7%B3%BB%E7%BB%9F">5）收藏系统</h3>
+<p>  
+通过 <strong>GET</strong> 方式，在 <em>URL</em> 中确定系统操作。<code>/collect/?user=superuser</code> 指定查看用户 <code>superuser</code> 的收藏夹；<code>/collect/?key=blog-1</code> 命令系统将类型为 <code>blog</code>，在 <code>blog</code> 中主键编号为 <code>1</code> 的项目加入当前用户收藏夹；<code>/decollect/?key=3</code> 命令系统将数据库的收藏表中主键编号为 <code>3</code> 的项目删去。理论上该系统不止是可以收藏博客，且可以收藏任意类型的项目，但由于未整合进其他同学的部分，目前只收藏博客。</p>
+<div align=center>
+	<img src="pic/design/25.png" width="350">
+</div>
+<h3 id="6gpt-2-%E6%A8%A1%E5%9E%8B%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E5%8D%9A%E5%AE%A2%E6%96%87%E6%9C%AC">6）GPT-2 模型自动生成博客文本</h3>
+<h4 id="%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6">实现机制</h4>
+<p>  
+项目应用了组员的小作业项目<a href="https://github.com/nyLiao/negoto">「基于 GPT-2 的文本生成器」</a>，进行博客文章的生成，以作为博客调试和展示的应用。</p>
+<ul>
+<li>使用机器学习框架 PyTorch，调用 GPT-2 模型，生成多段完整、上下关联的散文文本，适宜博客文体。</li>
+<li>生成其他相关数据，构成完整的 <code>Blog</code> 模型，使用 Django 框架进行数据管理。</li>
+<li>使用训练的中文散文模型，生成了 50 篇散文文本。以下为文本的一个例子。</li>
+</ul>
+<blockquote>
+<p><strong>《写一写经历的友人》</strong><br>
+我在想：“写一篇散文，需要一点淡淡的雅兴，就能够再度沉醉在这样宁静淡泊的氛围里，不以物喜，不以己悲，写一点小文字吧！”
+我们常常会在一个地方长久的等待。这就是我们每个人的期待，也许是生活中不可缺少的一部分。但是，我长大了，毕业了。</p>
+</blockquote>
+<h4 id="%E6%A8%A1%E5%9D%97%E6%8E%A5%E5%8F%A3">模块接口</h4>
+<p>  
+这部分主要涉及 <code>SJTUsoso/blog/</code> 目录下的 <code>genBlog.py</code> 等数个文件。</p>
+<ul>
+<li><code>generate_class.genModel</code>：negoto 项目的模型调用接口，此处重写了文本后处理方法。</li>
+<li><code>genBlog.py</code>：文本生成文件，主要接口包括：
+<ul>
+<li><code>gen_title()</code> 使用随机组合方法生成标题；</li>
+<li><code>gen_content()</code> 根据标题和上文调用 NLG 模型，生成博客内容；</li>
+<li>其他 I/O 接口。</li>
+</ul>
+</li>
+<li><code>blog_gen2.py</code>：文本处理文件，读入生成的 JSON 文件，新建 Django 的 <code>Blog</code> 模型，并写入数据库。</li>
+</ul>
+<h2 id="33-bbs%E8%AE%BA%E5%9D%9B">3.3 BBS论坛</h2>
+<p>  
+为丰富项目的功能性，在项目的社交博客平台我们搭建了一个简易的BBS小型 论坛系统。BBS论坛模块实现了一般论坛的主要功能，包括发帖，评论，评论回复，点赞，收藏，热门排序，最新排序，我的帖子管理。由于是参考blog系统独立开发，并未直接使用网络上普遍的forum论坛系统，其中消息通信、用户交互、评论提醒等功能还不太完善，但是作为一个BBS的基本功能都全部实现。其中论坛系统的总设计图如下：</p>
+<div align=center>
+	<img src="pic/design/26.png" width="450">
+</div>
+<h3 id="1%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD">1）登录注册功能</h3>
+<p>  
+其中登录注册功能是与交大搜搜项目的用户系统对接，在用户未登录之前，只能查看论坛内的帖子，只有在登录之后才能进行发帖、点赞、收藏、个人帖子管理等与用户相关的操作。</p>
+<div align=center>
+	<img src="pic/design/27.png" width="350">
+</div>
+<h3 id="2%E8%AE%BA%E5%9D%9B%E4%B8%BB%E9%A1%B5">2）论坛主页</h3>
+<p>  
+在论坛主页分为五个板块，分别是热门、最新、点赞、收藏、我的。可以显示热门帖子主题、发帖人、浏览量、点赞数等信息，下方是发帖使用的Tiny_MCE富文本编辑器，发帖方便快捷。通过get方式，判断URL处于/message_boards/1/1/，便获取论坛内容，并构建分页器，构造每一页需要渲染的数据列表，达到以下显示效果：</p>
+<div align=center>
+	<img src="pic/design/28.png" width="350">
+</div>
+<ul>
+<li>帖子的models</li>
+</ul>
+<p>  
+帖子的 model 定义了帖子在数据库中存储的数据表格式。</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MessageBoard</span><span class="hljs-params">(models.Model)</span>:</span>
+    <span class="hljs-comment"># 读书论坛</span>
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=<span class="hljs-string">"用户"</span>)
+    title = models.CharField(max_length=<span class="hljs-number">64</span>, verbose_name=<span class="hljs-string">"标题"</span>)
+    content = models.TextField(verbose_name=<span class="hljs-string">"内容"</span>)
+    look_num = models.IntegerField(verbose_name=<span class="hljs-string">'点击数'</span>, default=<span class="hljs-number">1</span>)
+    like_num = models.IntegerField(verbose_name=<span class="hljs-string">'点赞数'</span>, default=<span class="hljs-number">0</span>)
+    feebback_num = models.IntegerField(verbose_name=<span class="hljs-string">'回复数'</span>, default=<span class="hljs-number">0</span>)
+    collect_num = models.IntegerField(verbose_name=<span class="hljs-string">'收藏数'</span>, default=<span class="hljs-number">0</span>)
+    create_time = models.DateTimeField(auto_now_add=<span class="hljs-literal">True</span>)
+
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Meta</span>:</span>
+        verbose_name = <span class="hljs-string">"留言"</span>
+        verbose_name_plural = verbose_name
+</div></code></pre>
+<ul>
+<li>Tiny_MCE富文本编辑器配置</li>
+</ul>
+<p>  
+帖子编写采用 Tiny_MCE 富文本编辑器，支持基本的撰写与发布能力。编辑器配置如下：</p>
+<pre class="hljs"><code><div>&lt;script src=<span class="hljs-string">"/static/js/jquery.min.js"</span>&gt;&lt;/script&gt;
+    &lt;script src=<span class="hljs-string">'/static/tiny_mce/tiny_mce.js'</span>&gt;&lt;/script&gt;
+    &lt;script type=<span class="hljs-string">"text/javascript"</span>&gt;
+        tinyMCE.init({
+            <span class="hljs-string">'mode'</span>: <span class="hljs-string">'textareas'</span>,
+            <span class="hljs-string">'theme'</span>: <span class="hljs-string">'advanced'</span>,
+            <span class="hljs-string">'width'</span>: <span class="hljs-number">800</span>,
+            <span class="hljs-string">'height'</span>: <span class="hljs-number">300</span>,
+            <span class="hljs-string">'language'</span>: <span class="hljs-string">'zh'</span>,
+            <span class="hljs-string">'style_formats'</span>: [
+                {<span class="hljs-string">'title'</span>: <span class="hljs-string">'Bold text'</span>, <span class="hljs-string">'inline'</span>: <span class="hljs-string">'b'</span>},
+                {<span class="hljs-string">'title'</span>: <span class="hljs-string">'Red text'</span>, <span class="hljs-string">'inline'</span>: <span class="hljs-string">'span'</span>, <span class="hljs-string">'styles'</span>: {<span class="hljs-string">'color'</span>: <span class="hljs-string">'#ff0000'</span>}},
+                {<span class="hljs-string">'title'</span>: <span class="hljs-string">'Red header'</span>, <span class="hljs-string">'block'</span>: <span class="hljs-string">'h1'</span>, <span class="hljs-string">'styles'</span>: {<span class="hljs-string">'color'</span>: <span class="hljs-string">'#ff0000'</span>}},
+                {<span class="hljs-string">'title'</span>: <span class="hljs-string">'Example 1'</span>, <span class="hljs-string">'inline'</span>: <span class="hljs-string">'span'</span>, <span class="hljs-string">'classes'</span>: <span class="hljs-string">'example1'</span>},
+                {<span class="hljs-string">'title'</span>: <span class="hljs-string">'Example 2'</span>, <span class="hljs-string">'inline'</span>: <span class="hljs-string">'span'</span>, <span class="hljs-string">'classes'</span>: <span class="hljs-string">'example2'</span>},
+                {<span class="hljs-string">'title'</span>: <span class="hljs-string">'Table styles'</span>},
+                {<span class="hljs-string">'title'</span>: <span class="hljs-string">'Table row 1'</span>, <span class="hljs-string">'selector'</span>: <span class="hljs-string">'tr'</span>, <span class="hljs-string">'classes'</span>: <span class="hljs-string">'tablerow1'</span>}
+            ],
+        });
+</div></code></pre>
+<h3 id="3%E5%B8%96%E5%AD%90%E7%9A%84%E8%AF%A6%E6%83%85%E9%A1%B5%E9%9D%A2">3）帖子的详情页面</h3>
+<p>  
+点击帖子标题可进入帖子详情页面，在此可浏览帖子内容，进行点赞，收藏，写评论等相关操作。先判断是否通过用户的session获取到user_name，并通过POST.get得到点赞或收藏的message_board_id，通过判断，将like_num或者collect_num传入数据库储存。</p>
+<div align=center>
+	<img src="pic/design/29.png" width="350">
+</div>
+<h3 id="4%E5%B8%96%E5%AD%90%E8%AF%84%E8%AE%BA">4）帖子评论</h3>
+<p>  
+点击我要写短评，便可进入评论的富文本编辑框，编辑评论发布后，可在帖子详情页面查看到评论情况。通过 GET 方式，在 URL 中确定系统操作。进入/new_board_comment/发表论坛评论。</p>
+<div align=center>
+	<img src="pic/design/30.png" width="350">
+</div>
+<h3 id="5%E5%B8%96%E5%AD%90%E6%94%B6%E8%97%8F%E7%AE%A1%E7%90%86">5）帖子收藏管理</h3>
+<p>  
+在收藏界面可以查看已收藏的帖子，点击“我的”可以管理自己的帖子，在后台管理员网站可以对论坛帖子进行管理。</p>
+<div align=center>
+	<img src="pic/design/31.png" width="350">
+</div>
+<div align=center>
+	<img src="pic/design/32.png" width="350">
+</div>
+<h1 id="4-%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0">4 后台管理平台</h1>
+<p>  
+对于一个完整的信息聚合网站而言，除了用户界面，还要实现后台管理界面。包括实现管理员对资源的查看、删除、发布，以及站点资源的统计、审核，同时也希望能开展一定程度的数据挖掘用户定位的工作。</p>
+<h2 id="41-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86">4.1 资源管理</h2>
+<h3 id="1%E5%8A%9F%E8%83%BD%E8%A7%86%E5%9B%BE">1）功能视图</h3>
+<p>  
+在资源管理方面共实现了以下四种功能：</p>
+<ul>
+<li>资源查看、资源发布、资源删除</li>
+</ul>
+<p>  
+包括新闻资源、视频资源、公众号文章资源</p>
+<ul>
+<li>资源统计</li>
+</ul>
+<p>  
+包括新闻资源、视频资源、公众号文章资源、用户数、评论数、评分数的统计</p>
+<h3 id="2%E8%B5%84%E6%BA%90%E6%9F%A5%E7%9C%8B">2）资源查看</h3>
+<ul>
+<li>实现方法与主页面上推荐内容的显示，从前端标记，到urls解析，到views从models中读取相关数据并处理，继而返回前端。</li>
+<li><code>templates/user</code>中的<code>item.html</code>和<code>item2.html</code>以及<code>myadmin/views.py</code>中的tovideo_resource() towechat_resource()函数实现了公众号和视频资源的查看。使用Paginator()方法保证一页显示5个资源，并且实现翻页。</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">tovideo_resource</span><span class="hljs-params">(request)</span>:</span>
+    videos = Video.objects.all()
+    paginator = Paginator(videos, <span class="hljs-number">5</span>)
+    current_page = request.GET.get(<span class="hljs-string">"page"</span>, <span class="hljs-number">1</span>)
+    videos = paginator.page(current_page)
+    <span class="hljs-keyword">return</span> render(request, <span class="hljs-string">"user/item.html"</span>, {<span class="hljs-string">"videos"</span>: videos, <span class="hljs-string">"title"</span>: <span class="hljs-string">"视频资源"</span>})
+</div></code></pre>
+<h3 id="3%E8%B5%84%E6%BA%90%E7%BB%9F%E8%AE%A1">3）资源统计</h3>
+<ul>
+<li><code>templates/user</code>中的<code>resource_count.html</code>和<code>myadmin/views.py</code>中的count_resource函数实现了站内资源统计，包括新闻、视频、公众号、评论、用户数目的统计。实现方法为从数据库中统计各类资源的数量。</li>
+</ul>
+<h3 id="4%E8%B5%84%E6%BA%90%E5%8F%91%E5%B8%83">4）资源发布</h3>
+<ul>
+<li><code>templates/user</code>中的<code>upload.html</code>和<code>myadmin/views.py</code>中的upload_resource函数返回了资源上传页面，并通过video_post()函数和wechat_post()函数可以发布视频和公众号文章：
+<ul>
+<li>参数上传使用request.POST.get()函数</li>
+<li>文件上传使用request.FILES.get()函数,并且服务器将管理员上传的文件分块写入指定路径</li>
+</ul>
+<pre class="hljs"><code><div>    #文件上传
+    myFile1 = request.FILES.get(&quot;preload&quot;, None)
+    destination = open(&quot;/root/SJTUsoso/static/images/preload/&quot; + myFile1.name, 'wb+')  # 打开特定的文件进行二进制的写操作
+    for chunk in myFile1.chunks():  # 分块写入文件
+        destination.write(chunk)
+    destination.close()
+    #参数上传
+    title=request.POST.get('title','')
+    tag=request.POST.get('tag','')
+
+</div></code></pre>
+</li>
+</ul>
+<h3 id="5%E8%B5%84%E6%BA%90%E5%88%A0%E9%99%A4">5）资源删除</h3>
+<ul>
+<li><code>myadmin/views.py</code>中的to_del_video和to_del_wechat函数实现了资源的删除，包括使用os.remove函数进行本地的删除以及数据库中记录的删除。</li>
+</ul>
+<h3 id="6%E5%89%8D%E7%AB%AF%E8%AE%BE%E8%AE%A1">6）前端设计</h3>
+<div align=center>
+	<img src="pic/design/40.png" width="350">
+</div>
+<h2 id="42-%E7%94%A8%E6%88%B7%E8%81%9A%E7%B1%BB">4.2 用户聚类</h2>
+<h3 id="1%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6">1）实现机制</h3>
+<ul>
+<li>
+<p>评分数据读取
+将用户评分从数据库中取出，以二维np.array的形式，第一维为各个用户，第二维为对各个视频的评分，送入kmeans输入。</p>
+</li>
+<li>
+<p>Kmeans聚类
+使用sklearn当中的KMmeans函数实现：</p>
+</li>
+</ul>
+<pre class="hljs"><code><div>kmeans = KMeans(n_clusters=<span class="hljs-number">3</span>, random_state=<span class="hljs-number">0</span>).fit(X)
+</div></code></pre>
+<p>  
+其中聚类簇数的确定一方面要看轮廓系数以保证聚类质量，另一方面也要结合实际的用户定位需求，比如预期找出学习导向型用户或科研导向型用户等几类用户，就不必将簇数设的太大用户分的太细。</p>
+<ul>
+<li>
+<p>聚类输出</p>
+<ul>
+<li>
+<p>输出聚类后的各相似用户组，并根据簇心坐标（簇心坐标即为该类用户对各个视频的打分），按各个视频标签统计累加，即可发现该类用户的特征，实现用户定位。</p>
+</li>
+<li>
+<p>比如第一组用户王小花、丁丁、雷锋，假设有N个视频，则簇心有N个坐标（N个分数），对于标签为学习一类的视频将打分相加，对于标签为校园一类的视频也将打分相加，以此类推，得出该类用户对各类标签的兴趣得分，注意到第一组用户对于校园，生活等标签的兴趣得分较高，而对学习、图书馆等标签的兴趣得分较低。</p>
+</li>
+</ul>
+<p><img src="/uploads/upload_b48a0d4cb932ed2396e49b81fcc11971.png" alt=""></p>
+</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-comment">#reuslts为之前返回的聚簇结果，通过下述代码可整合为上图所示的输出</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(len(results)):
+    <span class="hljs-keyword">if</span> (i%<span class="hljs-number">2</span>==<span class="hljs-number">0</span>):
+        scores = results[i+<span class="hljs-number">1</span>]
+        tag_scores={}
+        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(len(tag)):
+            tag_scores[tag[j]]=scores[j]
+        dict_category={}
+        <span class="hljs-keyword">for</span> elem <span class="hljs-keyword">in</span> tag_diff:
+            <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> tag_scores.keys():
+                <span class="hljs-keyword">if</span> k==elem:
+                    <span class="hljs-keyword">if</span> k <span class="hljs-keyword">in</span> dict_category.keys():
+                        dict_category[k]+=tag_scores[k]
+                    <span class="hljs-keyword">else</span>:
+                        dict_category[k] = tag_scores[k]
+        users[results[i]]=dict_category
+<span class="hljs-keyword">return</span> render(request, <span class="hljs-string">"user/cluster.html"</span>, {<span class="hljs-string">"title"</span>: <span class="hljs-string">"欢迎来到用户聚类界面"</span>,<span class="hljs-string">"users"</span>: users})
+</div></code></pre>
+<h3 id="2%E6%A8%A1%E5%9D%97%E6%8E%A5%E5%8F%A3">2）模块接口</h3>
+<ul>
+<li>功能实现涉及 <code>SJTUsoso/myadmin/</code> 目录下的 <code>cluster.py</code>中的kmeans_cluster() 函数，调用sklearn.cluster中的KMeans函数进行聚类处理。</li>
+</ul>
+<h2 id="43-%E8%AF%84%E8%AE%BA%E5%AE%A1%E6%9F%A5">4.3 评论审查</h2>
+<h3 id="1%E5%8A%9F%E8%83%BD%E8%A7%86%E5%9B%BE">1）功能视图</h3>
+<ul>
+<li>敏感条目的查看与删除
+管理员可以设置敏感词并通过post提交，系统会筛选出包含该关键词的评论条目，并可根据管理员需要选择性删除。</li>
+<li>垃圾评论筛查
+使用阿里云内容安全Python SDK文本反垃圾接口对评论内容进行色情、暴恐、涉政等风险识别。并在网站中进行分类显示，并可由管理员选择性删除。</li>
+</ul>
+<h3 id="2%E6%A8%A1%E5%9D%97%E6%8E%A5%E5%8F%A3">2）模块接口</h3>
+<p>前端相关文件为<code>templates/user</code>中的<code>check_comment.html</code></p>
+<ul>
+<li>
+<p>删除功能实现为<code>myadmin/views.py</code>中的to_del_comment函数，可删除指定id的评论，并重新返回评论审查页面。</p>
+</li>
+<li>
+<p>更新敏感关键词功能的实现为words_post函数，由管理员点击更新按钮通过post触发。服务器获取到关键词后将其保存在json文件中。</p>
+</li>
+</ul>
+<pre class="hljs"><code><div>    if request.method == 'POST':
+        content = request.POST.get('words', '')
+        words_list = content.split(&quot;,&quot;)
+        with open(r&quot;./static/data/words.json&quot;, &quot;w&quot;) as f:
+            json.dump(words_list, f)
+        return HttpResponse(&quot;关键词更新成功&quot;)
+    else:
+        return HttpResponse(&quot;程序错误，请回退重试&quot;)
+</div></code></pre>
+<ul>
+<li>垃圾评论筛查的工作由<code>myadmin/sdk.py</code>实现，调用sdk判断评论类别是否为非normal类型的文本，并在前端显示类别为色情、反动、广告、灌水、辱骂类型的评论，该类评论一样可以通过to_del_comment函数进行删除。</li>
+</ul>
+<div align=center>
+	<img src="pic/design/41.png" width="350">
+</div>
+<hr>
+<h2 id="a-%E5%88%86%E5%B7%A5">A 分工</h2>
+<ul>
+<li>郭建铭</li>
+</ul>
+<p>  
+负责需求分析并完成需求文档的撰写。完成信息获取和聚合部分，爬取学校平台数据，辅助完成搜索引擎聚合数据处理部分，并租借Aliyun服务器搭建数据库，完成相关设计文档的撰写并整合修改设计文档。利用服务器部署整个项目并完成部署文档的撰写。完成搜索引擎部分功能测试和全部性能测试，撰写相关文档并完成测试文档的整合排版。制作ppt和演示视频。</p>
+<ul>
+<li>廖宁祎</li>
+</ul>
+<p>  
+搜索引擎的整体搭建与功能实现；电院网页数据的爬取处理，网页数据的关键词算法设计实现；BERT 语义相似度模型训练与部署；GPT-2 博客文章生成；部分后端整合和前端优化，项目整体代码管理；文档上述相关部分撰写。</p>
+<ul>
+<li>郭子豪</li>
+</ul>
+<p>  
+负责推荐系统、后台管理平台的前后端设计与实现，并与用户系统对接；设计文档和测试文档方面负责了推荐系统和后台管理部分的撰写；此外参与了微信公众号数据的获取与论坛部分的debug。</p>
+<ul>
+<li>刘浩文</li>
+</ul>
+<p>  
+负责用户系统、博客应用的设计与实现；搜索引擎的初步搭建；部分前端的设计与制作；相关部分设计文档、测试文档的撰写。</p>
+<ul>
+<li>江浩宇</li>
+</ul>
+<p>  
+主要负责项目中社交博客平台的BBS论坛系统搭建，独立搭建类blog系统的论坛系统，实现论坛的基本功能，并与用户系统对接，同时负责前端论坛板块。并且参与前端页面优化和微信公众号数据爬取。</p>
+<h2 id="b-%E4%BA%A4%E6%B5%81%E5%8D%8F%E4%BD%9C">B 交流协作</h2>
+<p>  
+受疫情影响，此项目的开发过程全部在线上开展，全过程利用的工具包括：</p>
+<style>
+table {
+margin: auto;
+}
+</style>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">工具</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">zoom</td>
+<td style="text-align:center">每周二晚上线上集中讨论已取得进展和下一步计划</td>
+</tr>
+<tr>
+<td style="text-align:center">github</td>
+<td style="text-align:center">代码的版本控制和协作共享</td>
+</tr>
+<tr>
+<td style="text-align:center">水源文档</td>
+<td style="text-align:center">记录讨论内容和每位成员的进展情况</td>
+</tr>
+<tr>
+<td style="text-align:center">远端数据库</td>
+<td style="text-align:center">共同调试并存储相关数据</td>
+</tr>
+<tr>
+<td style="text-align:center">云端服务器</td>
+<td style="text-align:center">共同运行并调试代码，知晓项目进度的同时寻找改进点</td>
+</tr>
+<tr>
+<td style="text-align:center">微信群</td>
+<td style="text-align:center">进行日常交流，以更好地了解其他组员的进展和技术细节</td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>测试文档.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<center>
+<strong>
+<font face='微软雅黑' size=6> SJTU_soso测试文档 </font>
+</strong>
+</center>
+<p align="right">
+<font face='微软雅黑' size=4>郭建铭/廖宁祎/刘浩文/江浩宇/郭子豪</font>
+</p>
+<h2 id="1-%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83">1 测试环境</h2>
+<ul>
+<li>服务器设备信息</li>
+</ul>
+<style>
+
+table {
+margin: auto;
+</style>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">设备信息</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">操作系统</td>
+<td style="text-align:center">Ubuntu18.04</td>
+</tr>
+<tr>
+<td style="text-align:center">CPU</td>
+<td style="text-align:center">Intel(R) Xeon(R) Platinum 8163 CPU@2.50GHz</td>
+</tr>
+<tr>
+<td style="text-align:center">带宽</td>
+<td style="text-align:center">1Mbps</td>
+</tr>
+<tr>
+<td style="text-align:center">云盘</td>
+<td style="text-align:center">40GiB(2020IOPS)</td>
+</tr>
+<tr>
+<td style="text-align:center">内存</td>
+<td style="text-align:center">4GiB</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>主机设备信息</li>
+</ul>
+<style>
+table {
+margin: auto;
+</style>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">设备信息</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">操作系统</td>
+<td style="text-align:center">Windows10专业版</td>
+</tr>
+<tr>
+<td style="text-align:center">CPU</td>
+<td style="text-align:center">Intel Core(TM) i5-7200U CPU</td>
+</tr>
+<tr>
+<td style="text-align:center">内存</td>
+<td style="text-align:center">20G</td>
+</tr>
+<tr>
+<td style="text-align:center">浏览器</td>
+<td style="text-align:center">Chrome</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95">2 功能测试</h2>
+<p>  
+项目部署完成后（部署过程详见部署文档），在本机浏览器访问IP <strong>39.100.88.210:8820</strong> 测试相关功能的运行情况。</p>
+<h3 id="21-%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E">2.1 搜索引擎</h3>
+<ul>
+<li>搜索框下会根据最近的热点搜索推荐相关词条，点击即可进行相关搜索，功能运行正常。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/1.png" width="350">
+</div>
+<ul>
+<li>输入词条会显示自动补齐建议，单击建议搜索指定词条。搜索结果包含发布日期、关键词组、标题、正文摘要、浏览量。针对搜索结果可以进行条件排序和条件过滤。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/7.png" width="450">
+</div>
+<center class="half">
+<img src = "pic/test/2.png"  width = "50%" align = left>
+<img src = "pic/test/3.png"  width = "50%" align = right>
+</center>  
+<p> </p>
+<ul>
+<li>单击搜索结果会跳转至原网址地址，展示搜索结果详情页。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/4.png" width="350">
+</div>
+<ul>
+<li>条件排序运行正常，可以根据<strong>smart</strong>,<strong>latest</strong>,<strong>popular</strong>进行排序。</li>
+</ul>
+<figure class="third">
+<img src="pic/test/5.png" width=180>
+<img src="pic/test/6.png" width=180>
+<img src="pic/test/8.png" width=180>
+</figure>
+<h3 id="22-%E6%99%BA%E8%83%BD%E6%8E%A8%E8%8D%90">2.2 智能推荐</h3>
+<ul>
+<li>基于浏览量的热搜推荐，通过分别对院级信息和校级信息进行日期过滤和浏览量的排序，功能运行正常，显示前十条记录作为热搜榜，每条记录打印标题、发布日期、关键词、图片。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/9-1.png" width="300">
+</div>
+<ul>
+<li>视频推荐 &amp; 视频播放部分：主页根据用户信息推荐相应的视频，点击视频链接可以在线播放并显示视频详情页，包括评分、视频评论等等。</li>
+</ul>
+<center class="half">
+<img src = "pic/test/9.png"  width = "230">
+<img src = "pic/test/10.png"  width = "230" >
+</center>  
+<ul>
+<li>文章推荐 &amp; 文章查看：主页根据用户信息推荐符合用户兴趣点的文章，主页显示标题、图片、摘要、发布日期等，单击链接跳转至文章详情页。</li>
+</ul>
+<center class="half">
+<img src = "pic/test/11.png"  width = "230">
+<img src = "pic/test/12.png"  width = "230" >
+</center>  
+<ul>
+<li>好友推荐：主页会根据用户之前的评分行为和兴趣关键词为其推荐匹配度较高的其他用户，主页显示十条相似度最高的十条用户昵称。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/13.png" width="200">
+</div>
+<h3 id="23-%E7%94%A8%E6%88%B7%E7%B3%BB%E7%BB%9F">2.3 用户系统</h3>
+<ul>
+<li>用户在注册入口输入用户名、密码、邮箱地址进行注册，同时需要输入验证码以防止暴力破解等攻击。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/14.png" width="350">
+</div>
+<ul>
+<li>填写表单后注册成功（出错会在注册界面提示相应错误，这里暂不展示，下同），通过管理员界面查看数据库。</li>
+</ul>
+<center class="half">
+<img src = "pic/test/15.png"  width = "230">
+<img src = "pic/test/16.png"  width = "230" >
+</center>  
+<ul>
+<li>用户在登录入口输入用户名和密码即可完成登录，在首页界面会显示用户个人信息。</li>
+</ul>
+<center class="half">
+<img src = "pic/test/18.png"  width = "230">
+<img src = "pic/test/19.png"  width = "230" >
+</center> 
+<ul>
+<li>用户可以在个人空间编辑个人信息，以供其他用户访问并更好地了解自己。</li>
+</ul>
+<center class="half">
+<img src = "pic/test/20.png"  width = "230">
+<img src = "pic/test/21.png"  width = "230" >
+</center>  
+<ul>
+<li>用户单击头像即可修改头像，数据库会更新图片地址以实现更新。</li>
+</ul>
+<center class="half">
+<img src = "pic/test/22.png"  width = "230">
+<img src = "pic/test/23.png"  width = "230" >
+</center>  
+<ul>
+<li>用户可以在主页浏览其他用户博客并进入作者个人空间，访问其他用户。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/24.png" width="350">
+</div>
+<h3 id="24-%E5%8D%9A%E5%AE%A2%E7%B3%BB%E7%BB%9F">2.4 博客系统</h3>
+<ul>
+<li>用户通过发布博客可以进入ckeditor富文本界面编辑博客内容，完成编辑后可以修改博客封面并发布博客。</li>
+</ul>
+<center class="half">
+<img src = "pic/test/25.png"  width = "230">
+<img src = "pic/test/26.png"  width = "230" >
+</center>  
+<ul>
+<li>在首页有博客推荐入口，可以显示所有的博客列表。每一条博客会显示博客封面、博客类型、博客发布时间、博客标题、博客部分正文和阅读量。单击会跳转至详情页面。所有的博客还可以按照类别分别显示列表，供用户查看。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/28.png" width="350">
+</div>
+<center class="half">
+<img src = "pic/test/27.png"  width = "230">
+<img src = "pic/test/29.png"  width = "230" >
+</center>  
+<ul>
+<li>在用户个人页面可以看到所发布的所有博客和收藏评论的所有博客，其他用户可以根据这些信息更好地了解该用户。</li>
+</ul>
+<center class="half">
+<img src = "pic/test/30.png"  width = "230">
+<img src = "pic/test/31.png"  width = "230" >
+</center>  
+<ul>
+<li>在博客的详情页，包含的信息包括博客标题、发布时间、类型、作者、封面、正文，并可以进行收藏和取消收藏，同时还能看到作者信息。在网页左侧还会推荐最新博客。</li>
+</ul>
+<center class="half">
+<img src = "pic/test/32.png"  width = "230">
+<img src = "pic/test/33.png"  width = "230" >
+</center>  
+<ul>
+<li>用户对感兴趣的博客可以收藏，在个人空间也可以看到个人收藏夹，并对指定博客进行取消收藏等操作。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/35.png" width="350">
+</div>
+<center class="half">
+<img src = "pic/test/34.png"  width = "230">
+<img src = "pic/test/36.png"  width = "230" >
+</center>  
+<h3 id="25-bbs%E8%AE%BA%E5%9D%9B">2.5 BBS论坛</h3>
+<ul>
+<li>在主页界面有论坛分区，会显示最新的帖子</li>
+</ul>
+<div align=center>
+	<img src="pic/test/37.png" width="350">
+</div>
+<ul>
+<li>在论坛界面，可以根据点赞数、发帖时间对所有的帖子进行排序</li>
+</ul>
+<center class="half">
+<img src = "pic/test/38.png"  width = "230">
+<img src = "pic/test/39.png"  width = "230" >
+</center>  
+<ul>
+<li>在界面下方调用ckeditor富文本编辑器进行主题帖编辑和发布，发帖功能运行正常，如果正文和标题为空，网页会提示错误信息</li>
+</ul>
+<center class="half">
+<img src = "pic/test/39-3.png"  width = "230">
+<img src = "pic/test/39-2.png"  width = "230" >
+</center>  
+<ul>
+<li>用户可以查看已点赞的帖子和个人收藏的帖子</li>
+</ul>
+<center class="half">
+<img src = "pic/test/40.png"  width = "230">
+<img src = "pic/test/41.png"  width = "230" >
+</center>  
+<ul>
+<li>用户可以在此界面管理自己发布的所有帖子</li>
+</ul>
+<div align=center>
+	<img src="pic/test/42.png" width="350">
+</div>
+<ul>
+<li>在帖子详情页可以看到标题、作者、发布时间、帖子正文、评论，并可以在详情页进行点赞、收藏和短评操作</li>
+</ul>
+<center class="half">
+<img src = "pic/test/43.png"  width = "230">
+<img src = "pic/test/44.png"  width = "230" >
+</center>  
+<center class="half">
+<img src = "pic/test/45.png"  width = "230">
+<img src = "pic/test/46.png"  width = "230" >
+</center>  
+<h3 id="26-%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0">2.6 后台管理平台</h3>
+<ul>
+<li>管理员可以在此界面查看所有资源，并对部分不合适的内容进行删除等操作，资源列表会显示标题、访问量、收藏量等统计数据。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/50-1.png" width="350">
+</div>
+<div align=center>
+	<img src="pic/test/50.png" width="350">
+</div>
+<div align=center>
+	<img src="pic/test/49.png" width="350">
+</div>
+<ul>
+<li>管理员可以在此平台发布视频资源，包括视频资源、封面、标题、标签等；也可以发布公众号资源，包括内容、封面、标题、标签等；还可以发布新闻资源，包括标题，内容标签等。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/56.png" width="350">
+</div>
+<div align=center>
+	<img src="pic/test/57.png" width="350">
+</div>
+<div align=center>
+	<img src="pic/test/58.png" width="350">
+</div>
+<ul>
+<li>管理员可以在此平台统计所有资源的相关数据，包括资源总数目、某信息的浏览量、收藏量、点评数等等。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/51.png" width="170">
+</div>
+<ul>
+<li>在平台还可以显示相关用户的聚类结果，包括相似用户组和各个标签的评分。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/52.png" width="300">
+</div>
+<ul>
+<li>后台管理平台还为管理员提供了评论审查的接口，以审核是否有敏感条目和垃圾文本。一方面可以指定敏感词，找出包含敏感词的条目，并选择删除操作（下图设定了敏感词“好”之后，会显示包含好字的评论）。另一方面可以筛选出属于垃圾文本的评论，并且删除。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/53.png" width="200">
+</div>
+<h2 id="3-%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95">3 性能测试</h2>
+<h3 id="31-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%B5%8B%E8%AF%95">3.1 数据库测试</h3>
+<ul>
+<li>为满足搜索的广度和实时性，获取聚合的信息要较为完整、数量较多且保持更新。目前搜集到的信息共5205条记录，全部存储与云端数据库，包含校级和院级各大主流网站和平台。</li>
+</ul>
+<div align=center>
+	<img src="pic/test/54.png" width="350">
+</div>
+<ul>
+<li>为了体现数据库的高效性，对上述5205条数据进行遍历搜索，总共耗时0.02s.</li>
+</ul>
+<div align=center>
+	<img src="pic/test/55.png" width="200">
+</div>
+<h3 id="32-%E7%BD%91%E7%AB%99%E5%93%8D%E5%BA%94%E6%97%B6%E9%97%B4%E6%B5%8B%E8%AF%95">3.2 网站响应时间测试</h3>
+<style>
+table {
+margin: auto;
+}
+</style>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">测试页面</th>
+<th style="text-align:center">测试次数</th>
+<th style="text-align:center">最大响应时间</th>
+<th style="text-align:center">平均响应时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">项目主页</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">7.47s</td>
+<td style="text-align:center">5.32s</td>
+</tr>
+<tr>
+<td style="text-align:center">登录</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">981ms</td>
+<td style="text-align:center">565 ms</td>
+</tr>
+<tr>
+<td style="text-align:center">搜索</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">6.27s</td>
+<td style="text-align:center">4.54s</td>
+</tr>
+<tr>
+<td style="text-align:center">个人空间</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">5.76s</td>
+<td style="text-align:center">4.12s</td>
+</tr>
+<tr>
+<td style="text-align:center">播客主页</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">5.74s</td>
+<td style="text-align:center">5.27s</td>
+</tr>
+<tr>
+<td style="text-align:center">论坛主页</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">3.78s</td>
+<td style="text-align:center">2.98s</td>
+</tr>
+<tr>
+<td style="text-align:center">博客详情</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">3.18s</td>
+<td style="text-align:center">2.80s</td>
+</tr>
+<tr>
+<td style="text-align:center">论坛详情</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">2.54s</td>
+<td style="text-align:center">2.99s</td>
+</tr>
+<tr>
+<td style="text-align:center">视频详情</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">10.12s</td>
+<td style="text-align:center">8.43s</td>
+</tr>
+<tr>
+<td style="text-align:center">后台管理</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">3.71s</td>
+<td style="text-align:center">2.87s</td>
+</tr>
+</tbody>
+</table>
+<h3 id="33-%E6%90%9C%E7%B4%A2%E7%BB%93%E6%9E%9C%E5%87%86%E7%A1%AE%E6%80%A7%E6%B5%8B%E8%AF%95">3.3 搜索结果准确性测试</h3>
+<p>  
+对搜索引擎进行多次、多类型的测试，测试次数超过60次，搜索结果准确性达100%，对各种类型的待搜索词条响应时间短、查询速度快、搜索结果准确、排序过滤合理，符合日常使用的需求。</p>
+<h3 id="34-%E5%B9%B6%E5%8F%91%E6%80%A7%E6%B5%8B%E8%AF%95">3.4 并发性测试</h3>
+<p>  
+网站需要满足多用户多终端同时使用，因为测试条件有限，小组五位成员同时登录5个用户进行相关操作，网站运行较为稳定，相关信息也能够及时实时地同步更新，体现了较好的性能、稳定性和并发性。</p>
+<h2 id="4-%E5%AE%89%E5%85%A8%E6%80%A7%E6%B5%8B%E8%AF%95">4 安全性测试</h2>
+<p>  
+对项目进行了简单的安全性测试，测试内容包括SQL注入、XSS攻击、暴力破解等，这几种攻击方法均无法有效达成攻击目标。项目在部署时定义了X-Frame-Option为'deny'，对跨站脚本攻击有较好的防范效果，在登录界面sql查询语句做了优化处理避免sql的数字型和字符型注入攻击，同时引入了验证码机制以放暴力破解等攻击形式，为用户的信息安全提供了一定的保障。</p>
+<p>  
+此外，由于 <code>Django</code> 自带中间件 <code>'django.middleware.csrf.CsrfViewMiddleware'</code>，在前端每次提交表单检查 <code>csrf_token</code>，可以有效防御 <code>CSRF</code> 攻击。</p>
+
+</body>
+</html>
