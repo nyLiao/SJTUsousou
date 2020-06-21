@@ -13,6 +13,7 @@ from .interest_loss import *
 from .comment_judge import *
 import datetime
 import json
+import threading
 
 def tomain(request):
     mthread = threading.Thread(target=schedule_task, args=())
